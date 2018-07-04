@@ -10,19 +10,19 @@
   "test": {
     "clients": {
       "type": "local",
-      "number": 5
+      "number": 6
     },
     "rounds": [{
       "label" : "open",
-      "txNumber" : [5, 5, 5],
-      "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 100}}, {"type": "fixed-rate", "opts": {"tps" : 200}}, {"type": "fixed-rate", "opts": {"tps" : 300}}],
+      "txNumber" : [15000, 15000, 15000],
+      "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 500}}, {"type": "fixed-rate", "opts": {"tps" : 600}}, {"type": "fixed-rate", "opts": {"tps" : 700}}],
       "arguments": {  "money": 10000 },
       "callback" : "benchmark/simple/open.js"
     },
       {
         "label" : "query",
-        "txNumber" : [5, 5],
-        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 300}}, {"type": "fixed-rate", "opts": {"tps" : 400}}],
+        "txNumber" : [15000, 15000],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 700}}, {"type": "fixed-rate", "opts": {"tps" : 800}}],
         "callback" : "benchmark/simple/query.js"
       }]
   },
