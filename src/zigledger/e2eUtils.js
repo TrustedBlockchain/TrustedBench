@@ -429,7 +429,7 @@ function getcontext(channelConfig) {
     let orgName = ORGS[userOrg].name;
     const cryptoSuite = Client.newCryptoSuite();
     const eventhubs = [];
-    const peers=[];
+    const allpeers=[];
     cryptoSuite.setCryptoKeyStore(Client.newCryptoKeyStore({path: testUtil.storePathForOrg(orgName)}));
     client.setCryptoSuite(cryptoSuite);
 
@@ -469,17 +469,18 @@ function getcontext(channelConfig) {
 
                 peers.forEach((peerInfo)=>{
                     let data = fs.readFileSync(path.join(__dirname, rootPath, peerInfo.tls_cacerts));
-                    let peer = client.newPeer(
-                        peerInfo.requests,
-                        {
-                            pem: Buffer.from(data).toString(),
-                            'ssl-target-name-override': peerInfo['server-hostname']
-                        }
-                    );
-                    channel.addPeer(peer);
-                    peers.push(peer);
+                    if (org === userOrg) {
+                        let peer = client.newPeer(
+                            peerInfo.requests,
+                            {
+                                pem: Buffer.from(data).toString(),
+                                'ssl-target-name-override': peerInfo['server-hostname']
+                            }
+                        );
+                        channel.addPeer(peer);
+                        allpeers.push(peer);
 
-                    if(org === userOrg) {
+
                         let eh = client.newEventHub();
                         eh.setPeerAddr(
                             peerInfo.events,
@@ -487,8 +488,8 @@ function getcontext(channelConfig) {
                                 pem: Buffer.from(data).toString(),
                                 'ssl-target-name-override': peerInfo['server-hostname'],
                                 //'request-timeout': 120000
-                                'grpc.keepalive_timeout_ms' : 3000, // time to respond to the ping, 3 seconds
-                                'grpc.keepalive_time_ms' : 360000   // time to wait for ping response, 6 minutes
+                                'grpc.keepalive_timeout_ms': 3000, // time to respond to the ping, 3 seconds
+                                'grpc.keepalive_time_ms': 360000   // time to wait for ping response, 6 minutes
                                 // 'grpc.http2.keepalive_time' : 15
                             }
                         );
@@ -537,7 +538,7 @@ function getcontext(channelConfig) {
                 client: client,
                 channel: channel,
                 submitter: the_user,
-                peers:peers,
+                peers:allpeers,
                 eventhubs: eventhubs});
         })
         .catch((err) => {
@@ -581,6 +582,7 @@ async function invokebycontext(context, id, version, args, timeout){
     const channel = context.channel;
     const eventHubs = context.eventhubs;
     const peers =context.peers;
+    commUtils.log(peers.length);
     const startTime = Date.now();
     const txIdObject = context.client.newTransactionID();
     const txId = txIdObject.getTransactionID().toString();
@@ -604,12 +606,15 @@ async function invokebycontext(context, id, version, args, timeout){
     // send proposal to endorser
     const f = args[0];
     args.shift();
+    let targets=[];
+    targets.push(peers[Math.floor(Math.random() * peers.length)]);
+
     const proposalRequest = {
         chaincodeId: id,
         fcn: f,
         args: args,
         txId: txIdObject,
-        targets: [peers[Math.floor(Math.random() * peers.length)]]
+        targets: targets
     };
 
     let proposalResponseObject = null;
@@ -773,6 +778,9 @@ function querybycontext(context, id, version, name) {
     //const userOrg = context.org;
     const client = context.client;
     const channel = context.channel;
+    const peers =context.peers;
+    let targets=[];
+    targets.push(peers[Math.floor(Math.random() * peers.length)]);
     //const eventhubs = context.eventhubs;
     const tx_id = client.newTransactionID();
     const invoke_status = {
@@ -789,7 +797,8 @@ function querybycontext(context, id, version, name) {
         chaincodeVersion: version,
         txId: tx_id,
         fcn: 'query',
-        args: [name]
+        args: [name],
+        targets: targets
     };
 
     if(context.engine) {
