@@ -38,6 +38,11 @@ class Blockchain {
             this.bcType = 'composer';
             this.bcObj = new composer(configPath);
         }
+        else if(config.hasOwnProperty('zigledger')) {
+            let zig = require('../zigledger/zig');
+            this.bcType = 'zigledger';
+            this.bcObj = new zig(configPath);
+        }
         else {
             this.bcType = 'unknown';
             throw new Error('Unknown blockchain config file ' + configPath);
