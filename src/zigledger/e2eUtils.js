@@ -582,7 +582,6 @@ async function invokebycontext(context, id, version, args, timeout){
     const channel = context.channel;
     const eventHubs = context.eventhubs;
     const peers =context.peers;
-    commUtils.log(peers.length);
     const startTime = Date.now();
     const txIdObject = context.client.newTransactionID();
     const txId = txIdObject.getTransactionID().toString();
