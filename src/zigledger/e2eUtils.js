@@ -429,7 +429,6 @@ function getcontext(channelConfig) {
     let orgName = ORGS[userOrg].name;
     const cryptoSuite = Client.newCryptoSuite();
     const eventhubs = [];
-    const allpeers=[];
     cryptoSuite.setCryptoKeyStore(Client.newCryptoKeyStore({path: testUtil.storePathForOrg(orgName)}));
     client.setCryptoSuite(cryptoSuite);
 
@@ -467,62 +466,33 @@ function getcontext(channelConfig) {
                     throw new Error('could not find peer of ' + org);
                 }
 
-                peers.forEach((peerInfo)=>{
-                    let data = fs.readFileSync(path.join(__dirname, rootPath, peerInfo.tls_cacerts));
-                    if (org === userOrg) {
-                        let peer = client.newPeer(
-                            peerInfo.requests,
-                            {
-                                pem: Buffer.from(data).toString(),
-                                'ssl-target-name-override': peerInfo['server-hostname']
-                            }
-                        );
-                        channel.addPeer(peer);
-                        allpeers.push(peer);
-
-
-                        let eh = client.newEventHub();
-                        eh.setPeerAddr(
-                            peerInfo.events,
-                            {
-                                pem: Buffer.from(data).toString(),
-                                'ssl-target-name-override': peerInfo['server-hostname'],
-                                //'request-timeout': 120000
-                                'grpc.keepalive_timeout_ms': 3000, // time to respond to the ping, 3 seconds
-                                'grpc.keepalive_time_ms': 360000   // time to wait for ping response, 6 minutes
-                                // 'grpc.http2.keepalive_time' : 15
-                            }
-                        );
-                        eventhubs.push(eh);
+                let peerInfo = peers[Math.floor(Math.random() * peers.length)];
+                let data = fs.readFileSync(path.join(__dirname, rootPath, peerInfo.tls_cacerts));
+                let peer = client.newPeer(
+                    peerInfo.requests,
+                    {
+                        pem: Buffer.from(data).toString(),
+                        'ssl-target-name-override': peerInfo['server-hostname']
                     }
-                });
-                // let peerInfo = peers[Math.floor(Math.random() * peers.length)];
-                // let data = fs.readFileSync(path.join(__dirname, rootPath, peerInfo.tls_cacerts));
-                // let peer = client.newPeer(
-                //     peerInfo.requests,
-                //     {
-                //         pem: Buffer.from(data).toString(),
-                //         'ssl-target-name-override': peerInfo['server-hostname']
-                //     }
-                // );
-                // channel.addPeer(peer);
+                );
+                channel.addPeer(peer);
 
                 // an event listener can only register with the peer in its own org
-                // if(org === userOrg) {
-                //     let eh = client.newEventHub();
-                //     eh.setPeerAddr(
-                //         peerInfo.events,
-                //         {
-                //             pem: Buffer.from(data).toString(),
-                //             'ssl-target-name-override': peerInfo['server-hostname'],
-                //             //'request-timeout': 120000
-                //             'grpc.keepalive_timeout_ms' : 3000, // time to respond to the ping, 3 seconds
-                //             'grpc.keepalive_time_ms' : 360000   // time to wait for ping response, 6 minutes
-                //             // 'grpc.http2.keepalive_time' : 15
-                //         }
-                //     );
-                //     eventhubs.push(eh);
-                // }
+                if(org === userOrg) {
+                    let eh = client.newEventHub();
+                    eh.setPeerAddr(
+                        peerInfo.events,
+                        {
+                            pem: Buffer.from(data).toString(),
+                            'ssl-target-name-override': peerInfo['server-hostname'],
+                            //'request-timeout': 120000
+                            'grpc.keepalive_timeout_ms' : 3000, // time to respond to the ping, 3 seconds
+                            'grpc.keepalive_time_ms' : 360000   // time to wait for ping response, 6 minutes
+                            // 'grpc.http2.keepalive_time' : 15
+                        }
+                    );
+                    eventhubs.push(eh);
+                }
             }
 
             // register event listener
@@ -538,7 +508,6 @@ function getcontext(channelConfig) {
                 client: client,
                 channel: channel,
                 submitter: the_user,
-                peers:allpeers,
                 eventhubs: eventhubs});
         })
         .catch((err) => {
@@ -581,8 +550,6 @@ async function invokebycontext(context, id, version, args, timeout){
 
     const channel = context.channel;
     const eventHubs = context.eventhubs;
-    const peers =context.peers;
-    commUtils.log(peers.length);
     const startTime = Date.now();
     const txIdObject = context.client.newTransactionID();
     const txId = txIdObject.getTransactionID().toString();
@@ -606,15 +573,11 @@ async function invokebycontext(context, id, version, args, timeout){
     // send proposal to endorser
     const f = args[0];
     args.shift();
-    let targets=[];
-    targets.push(peers[Math.floor(Math.random() * peers.length)]);
-
     const proposalRequest = {
         chaincodeId: id,
         fcn: f,
         args: args,
         txId: txIdObject,
-        targets: targets
     };
 
     let proposalResponseObject = null;
@@ -778,9 +741,6 @@ function querybycontext(context, id, version, name) {
     //const userOrg = context.org;
     const client = context.client;
     const channel = context.channel;
-    const peers =context.peers;
-    let targets=[];
-    targets.push(peers[Math.floor(Math.random() * peers.length)]);
     //const eventhubs = context.eventhubs;
     const tx_id = client.newTransactionID();
     const invoke_status = {
@@ -797,8 +757,7 @@ function querybycontext(context, id, version, name) {
         chaincodeVersion: version,
         txId: tx_id,
         fcn: 'query',
-        args: [name],
-        targets: targets
+        args: [name]
     };
 
     if(context.engine) {
