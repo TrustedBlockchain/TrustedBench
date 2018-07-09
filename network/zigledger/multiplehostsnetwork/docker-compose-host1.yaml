@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  zookeeper0:
+    image: zookeeper
+    restart: always
+    hostname: zookeeper0
+    network_mode: "host"
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+
