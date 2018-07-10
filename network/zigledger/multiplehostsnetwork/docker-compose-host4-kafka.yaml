@@ -3,7 +3,6 @@ version: '3.1'
 services:
   kafka3:
     image: hyperledger/fabric-kafka:x86_64-0.4.7
-    restart: always
     hostname: kafka3
     network_mode: "host"
     ports:

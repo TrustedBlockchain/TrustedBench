@@ -3,7 +3,6 @@ version: '3.1'
 services:
   zookeeper0:
     image: hyperledger/fabric-zookeeper:x86_64-0.4.7
-    restart: always
     hostname: zookeeper0
     network_mode: "host"
     ports:
