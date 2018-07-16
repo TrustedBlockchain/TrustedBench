@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	pb "github.com/hyperledger/fabric/protos/peer"
+	"github.com/zhigui/zigledger/core/chaincode/shim"
+	pb "github.com/zhigui/zigledger/protos/peer"
 )
 
 const ERROR_SYSTEM = "{\"code\":300, \"reason\": \"system error: %s\"}"
