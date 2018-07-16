@@ -26,16 +26,16 @@ const util = require('util');
 //const jsrsa = require('jsrsasign');
 //const KEYUTIL = jsrsa.KEYUTIL;
 
-const Client = require('fabric-client');
-const copService = require('fabric-ca-client/lib/FabricCAClientImpl.js');
-const User = require('fabric-client/lib/User.js');
-//const CryptoSuite = require('fabric-client/lib/impl/CryptoSuite_ECDSA_AES.js');
-//const KeyStore = require('fabric-client/lib/impl/CryptoKeyStore.js');
-//const ecdsaKey = require('fabric-client/lib/impl/ecdsa/key.js');
+const Client = require('zig-client');
+const copService = require('zig-ca-client/lib/FabricCAClientImpl.js');
+const User = require('zig-client/lib/User.js');
+//const CryptoSuite = require('zig-client/lib/impl/CryptoSuite_ECDSA_AES.js');
+//const KeyStore = require('zig-client/lib/impl/CryptoKeyStore.js');
+//const ecdsaKey = require('zig-client/lib/impl/ecdsa/key.js');
 const Constants = require('./constant.js');
 const commUtils = require('../comm/util');
 
-//const logger = require('fabric-client/lib/utils.js').getLogger('TestUtil');
+//const logger = require('zig-client/lib/utils.js').getLogger('TestUtil');
 
 let channels = [];
 let cryptodir;

@@ -18,7 +18,7 @@
 
 'use strict';
 
-//const utils = require('fabric-client/lib/utils.js');
+//const utils = require('zig-client/lib/utils.js');
 //const logger = utils.getLogger('E2E join-channel');
 
 //const tape = require('tape');
@@ -29,8 +29,8 @@
 const path = require('path');
 const fs = require('fs');
 
-const Client = require('fabric-client');
-const EventHub = require('fabric-client/lib/EventHub.js');
+const Client = require('zig-client');
+const EventHub = require('zig-client/lib/EventHub.js');
 
 const testUtil = require('./util.js');
 

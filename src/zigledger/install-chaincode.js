@@ -20,7 +20,7 @@
 // in a happy-path scenario
 'use strict';
 
-//const utils = require('fabric-client/lib/utils.js');
+//const utils = require('zig-client/lib/utils.js');
 //const logger = utils.getLogger('E2E install-chaincode');
 
 //const tape = require('tape');
@@ -29,7 +29,7 @@
 
 const e2eUtils = require('./e2eUtils.js');
 const testUtil = require('./util.js');
-const Client = require('fabric-client');
+const Client = require('zig-client');
 
 module.exports.run = function (config_path) {
     Client.addConfigFile(config_path);

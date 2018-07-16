@@ -19,7 +19,7 @@
 
 'use strict';
 
-const utils = require('fabric-client/lib/utils.js');
+const utils = require('zig-client/lib/utils.js');
 const logger = utils.getLogger('E2E testing');
 const commUtils = require('../comm/util');
 
@@ -27,7 +27,7 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 
-const Client = require('fabric-client');
+const Client = require('zig-client');
 const testUtil = require('./util.js');
 
 let ORGS;

@@ -23,14 +23,14 @@ if (global && global.hfc) {
 }
 
 require('nconf').reset();
-const utils = require('fabric-client/lib/utils.js');
+const utils = require('zig-client/lib/utils.js');
 //const logger = utils.getLogger('E2E create-channel');
 
 //const tape = require('tape');
 //const _test = require('tape-promise');
 //const test = _test(tape);
 
-const Client = require('fabric-client');
+const Client = require('zig-client');
 //const util = require('util');
 const fs = require('fs');
 const path = require('path');
@@ -57,7 +57,7 @@ function run(config_path) {
         let caRootsPath = ORGS.orderer.tls_cacerts;
         let data = fs.readFileSync(path.join(__dirname, '../..', caRootsPath));
         let caroots = Buffer.from(data).toString();
-        utils.setConfigSetting('key-value-store', 'fabric-client/lib/impl/FileKeyValueStore.js');
+        utils.setConfigSetting('key-value-store', 'zig-client/lib/impl/FileKeyValueStore.js');
 
         return channels.reduce((prev, channel)=>{
             return prev.then(()=>{
