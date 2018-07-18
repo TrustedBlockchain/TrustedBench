@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   kafka2:
-    image: hyperledger/fabric-kafka:x86_64-0.4.7
+    image: zhigui/zigledger-kafka:x86_64-0.4.6
     hostname: kafka2
     network_mode: "host"
     ports:

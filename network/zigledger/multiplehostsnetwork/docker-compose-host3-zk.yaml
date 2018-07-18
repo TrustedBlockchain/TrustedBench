@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   zookeeper2:
-    image: hyperledger/fabric-zookeeper:x86_64-0.4.7
+    image: zhigui/zigledger-zookeeper:x86_64-0.4.6
     hostname: zookeeper2
     network_mode: "host"
     ports:

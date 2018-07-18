@@ -4,7 +4,7 @@ services:
   peer0.org1.example.com:
     hostname: peer0.org1.example.com
     network_mode: "host"
-    image: hyperledger/fabric-peer:x86_64-1.1.0
+    image: zhigui/zigledger-peer:x86_64-1.1.2
     environment:
      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
      - CORE_PEER_ID=peer0.org1.example.com
@@ -31,7 +31,7 @@ services:
        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peer
 
   ca0:
-    image: hyperledger/fabric-ca:x86_64-1.1.0
+    image: zhigui/zigledger-ca:x86_64-1.1.1
     hostname: ca0
     network_mode: "host"
     environment:
