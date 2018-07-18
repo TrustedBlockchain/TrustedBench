@@ -37,13 +37,16 @@ class Zig extends BlockchainInterface{
     init() {
         util.init(this.configPath);
         e2eUtils.init(this.configPath);
-        return impl_create.run(this.configPath).then(() => {
-            return impl_join.run(this.configPath);
-        })
-            .catch((err) => {
-                commUtils.log('zigledger.init() failed, ' + (err.stack ? err.stack : err));
-                return Promise.reject(err);
-            });
+        return commUtils.sleep(5000).then(()=>{
+            return impl_create.run(this.configPath).then(() => {
+                return impl_join.run(this.configPath);
+            })
+                .catch((err) => {
+                    commUtils.log('zigledger.init() failed, ' + (err.stack ? err.stack : err));
+                    return Promise.reject(err);
+                });
+        }
+        );
     }
 
     /**
