@@ -17,6 +17,7 @@ services:
      - CORE_PEER_GOSSIP_ORGLEADER=false
      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
      - CORE_PEER_TLS_ENABLED=true
+     - CORE_PEER_PROFILE_ENABLED=true
      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
@@ -26,6 +27,7 @@ services:
     ports:
      - 7051:7051
      - 7053:7053
+     - 6060:6060
     volumes:
        - /var/run/:/host/var/run/
        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peer
