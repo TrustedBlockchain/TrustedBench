@@ -5,6 +5,7 @@ zookeeper.out
 node_modules/*
 package-lock.json
 output.log
+devops/bin
 
 # Ignore any generted html files
 *.html
