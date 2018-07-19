@@ -10,7 +10,7 @@
     },
     "rounds": [{
       "label" : "open",
-      "txNumber" : [15000, 15000, 15000],
+      "txNumber" : [20000, 15000, 15000],
       "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 500}}, {"type": "fixed-rate", "opts": {"tps" : 600}}, {"type": "fixed-rate", "opts": {"tps" : 700}}],
       "arguments": {  "money": 10000 },
       "callback" : "benchmark/simple/open.js"
@@ -25,7 +25,20 @@
   "monitor": {
     "type": ["docker", "process"],
     "docker":{
-      "name": ["all"]
+      "name": ["http://192.168.0.30:2375/multiplehostsnetwork_orderer.example.com_1",
+               "http://192.168.0.30:2375/multiplehostsnetwork_kafka0_1",
+               "http://192.168.0.30:2375/multiplehostsnetwork_zookeeper0_1",
+               "http://192.168.0.31:2375/multiplehostsnetwork_kafka1_1",
+               "http://192.168.0.31:2375/multiplehostsnetwork_zookeeper1_1",
+               "http://192.168.0.32:2375/multiplehostsnetwork_peer1.org2.example.com_1",
+               "http://192.168.0.32:2375/multiplehostsnetwork_kafka2_1",
+               "http://192.168.0.32:2375/multiplehostsnetwork_zookeeper2_1",
+               "http://192.168.0.33:2375/multiplehostsnetwork_peer1.org1.example.com_1",
+               "http://192.168.0.33:2375/multiplehostsnetwork_kafka3_1",
+               "http://192.168.0.34:2375/multiplehostsnetwork_ca0_1",
+               "http://192.168.0.34:2375/multiplehostsnetwork_peer0.org1.example.com_1",
+               "http://192.168.0.35:2375/multiplehostsnetwork_ca1_1",
+               "http://192.168.0.35:2375/multiplehostsnetwork_peer0.org2.example.com_1"]
     },
     "process": [
       {
