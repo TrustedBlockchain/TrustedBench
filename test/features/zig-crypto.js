@@ -3,7 +3,6 @@ var tape = require('tape');
 var _test = require('tape-promise');
 var test = _test(tape);
 
-
 test('\n\n*** #19 测试加密算法的种类 ***\n\n', (t) => {
     t.comment("使用ECDSA算法");
     testESDSA();
@@ -11,6 +10,13 @@ test('\n\n*** #19 测试加密算法的种类 ***\n\n', (t) => {
     t.comment("使用PCKS11算法");
     testPCKS11();
     t.pass("PCKS11算法验证成功")
+    t.end();
+});
+
+test('\n\n*** #20 测试加密算法的可用性 ***\n\n', (t) => {
+    t.comment("当前使用ECDSA算法");
+    testESDSA();
+    t.pass("ECDSA算法使用正常");
     t.end();
 });
 
@@ -38,7 +44,7 @@ function testESDSA(){
         var result = cryptoSuite.verify(key,signature,Buffer.from(plainText));
         endTime = Date.now();
         console.log("ECDSA_AES verification result : ",result);
-        console.log("It takes %s milliseconds to finish the crypto step.", endTime - startTime);
+        console.log("It takes %s milliseconds to finish this step.", endTime - startTime);
     }, err => {
         console.error(err);
     }).catch( exception => {
