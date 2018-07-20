@@ -227,7 +227,8 @@ fetchChannelConfig() {
 signConfigtxAsPeerOrg() {
         PEERORG=$1
         TX=$2
-        setGlobals 0 $PEERORG
+        CORE_PEER_LOCALMSPID=OrdererMSP
+        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/zhigui/zigledger/peer/crypto/ordererOrganizations/example.com/users/Admin@example.com/msp
         set -x
         peer channel signconfigtx -f "${TX}"
         set +x

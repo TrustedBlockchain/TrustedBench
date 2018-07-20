@@ -1,6 +1,19 @@
 修改配置
 --------
 
+All-in-one  操作步骤
+--------
+
+1. ./byfn.sh -m generate
+
+2. ./byfn.sh -m up
+
+
+
+
+分步操作解析
+---------------
+
 1. batch size(出块大小)
 
 2. batch timeout(出块时间)

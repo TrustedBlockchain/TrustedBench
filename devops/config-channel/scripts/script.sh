@@ -7,7 +7,7 @@ echo "\___ \    | |     / _ \   | |_) |   | |  "
 echo " ___) |   | |    / ___ \  |  _ <    | |  "
 echo "|____/    |_|   /_/   \_\ |_| \_\   |_|  "
 echo
-echo "Build your first network (BYFN) end-to-end test"
+echo "Config network"
 echo
 CHANNEL_NAME="$1"
 DELAY="$2"
@@ -31,6 +31,7 @@ echo "Channel name : "$CHANNEL_NAME
 
 # import utils
 . scripts/utils.sh
+. scripts/colour.sh
 
 createChannel() {
 	setGlobals 0 1
@@ -109,8 +110,78 @@ installChaincode 1 2
 echo "Querying chaincode on peer1.org2..."
 chaincodeQuery 1 2 90
 
+echo_b "========= Configing network  =========== "
+
+
+echo "Installing jq"
+apt-get -y update && apt-get -y install jq
+
+# Fetch the config for the channel, writing it to config.json
+fetchChannelConfig ${CHANNEL_NAME} config.json
+
+
+echo "Before configuration check block's tx number, and the number is"
+
+export MAXBATCHSIZEPATH=".channel_group.groups.Orderer.values.BatchSize.value.max_message_count"
+export MAXTIMEOUT=".channel_group.groups.Orderer.values.BatchTimeout.value.timeout"
+export MAXBATCHSIZE=".channel_group.groups.Orderer.values.BatchSize.value.max_message_count"
+
+jq $MAXTIMEOUT config.json >&log.txt
+
+echo_b `cat log.txt`
+
+sleep 5
+
+# Modify the configuration to append the new org
+set -x
+
+#echo "Config each block's TX"
+#jq ".channel_group.groups.Orderer.values.BatchSize.value.max_message_count = 20" config.json  > modified_config.json
+
+echo "Config generate blok's time"
+jq ".channel_group.groups.Orderer.values.BatchTimeout.value.timeout=\"10s\"" config.json > modified_config.json
+
+#echo "config block's size"
+#jq ".channel_group.groups.Orderer.values.BatchTimeout.value.absolute_max_bytes=10485760" config.json > modified_config.json
+
+set +x
+
+# Compute a config update, based on the differences between config.json and modified_config.json, write it as a transaction to org3_update_in_envelope.pb
+createConfigUpdate ${CHANNEL_NAME} config.json modified_config.json finally_update_in_envelope.pb
+
 echo
-echo "========= All GOOD, BYFN execution completed =========== "
+echo "========= Config transaction to config channel created ===== "
+echo
+
+echo "Signing config transaction"
+echo
+signConfigtxAsPeerOrg 1 finally_update_in_envelope.pb
+
+echo
+echo "========= Submitting transaction from a different peer (peer0.org2) which also signs it ========= "
+echo
+setGlobals 0 2
+set -x
+peer channel update -f finally_update_in_envelope.pb -c ${CHANNEL_NAME} -o orderer.example.com:7050 --tls --cafile ${ORDERER_CA}
+set +x
+
+echo "Verify================= "
+
+peer channel fetch config config_new_block.pb -o orderer.example.com:7050 -c $CHANNEL_NAME --tls --cafile $ORDERER_CA
+
+configtxlator proto_decode --input config_new_block.pb --type common.Block | jq .data.data[0].payload.data.config > config_new_block.json
+
+export MAXBATCHSIZEPATH=".channel_group.groups.Orderer.values.BatchSize.value.max_message_count"
+export MAXTIMEOUT=".channel_group.groups.Orderer.values.BatchTimeout.value.timeout"
+export MAXBATCHSIZE=".channel_group.groups.Orderer.values.BatchSize.value.max_message_count"
+
+jq $MAXTIMEOUT config_new_block.json >&log.txt
+
+echo "After change configuration, check block's tx count"
+echo_b `cat log.txt`
+
+echo
+echo "========= New channel configuration to network submitted! =========== "
 echo
 
 echo
@@ -119,6 +190,5 @@ echo "| ____| | \ | | |  _ \  "
 echo "|  _|   |  \| | | | | | "
 echo "| |___  | |\  | | |_| | "
 echo "|_____| |_| \_| |____/  "
-echo
 
 exit 0
