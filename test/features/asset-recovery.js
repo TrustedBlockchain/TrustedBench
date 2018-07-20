@@ -17,9 +17,9 @@ function testAssetRecovery(t){
     var address = wallet.getAddress();
     t.comment("地址 : " + address);
     var privatekey = wallet.getPriKey();
-    t.comment("私钥 : ", privatekey);
+    t.comment("私钥 : " + privatekey);
     var securityKey = randomstring.generate(16);
-    t.comment("安全码 : ",securityKey);
+    t.comment("安全码 : " + securityKey);
     
     var FileKeyValueStore = require("zig-client/lib/impl/FileKeyValueStore.js");
     var path = require("path")
@@ -39,7 +39,7 @@ function testAssetRecovery(t){
         var getPromise = instance.getValue(address);
         getPromise.then((value)=>{
             var decryptedText = zigcrpyto.decrypt(value, securityKey);
-            t.pass('找回私钥:', decryptedText);
+            t.pass('找回私钥:' + decryptedText);
         }).catch(error =>{
             t.error(error);
         });
