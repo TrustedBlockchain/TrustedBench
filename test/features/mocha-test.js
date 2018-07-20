@@ -8,7 +8,7 @@ describe("feature one", () => {
     it("test case one",() => {
         
     });
-    it("test case one",() => {
+    it("test case two",() => {
         
     });    
 });
