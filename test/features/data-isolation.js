@@ -48,7 +48,15 @@ test('\n\n*** #66 私有信息的加密性 ***\n\n', (t) => {
 });
 
 test('\n\n*** #67 数据传输方式 ***\n\n', (t) => {
-    t.pass("channel中的节点和非channel中的节点");
+    let queryContext = blockchain.getContext("query");
+    let channel = queryContext.channel;
+    let peers = channel.getPeers();
+	for (let i = 0; i < peers.length; i++) {
+        t.pass("有效节点传输" + peers[i]._url);
+	}    
+    query.init(blockchain,queryContext)
+    query.run();
+    blockchain.releaseContext(queryContext);
     t.end()
 });
 
