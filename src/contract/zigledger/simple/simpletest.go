@@ -3,7 +3,7 @@
 *
 * SPDX-License-Identifier: Apache-2.0
 *
-*/
+ */
 
 package main
 
@@ -11,8 +11,12 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/pkg/errors"
+	"github.com/zhigui/zigledger/bccsp"
+	"github.com/zhigui/zigledger/bccsp/factory"
 	"github.com/zhigui/zigledger/core/chaincode/shim"
-	pb "github.com/zhigui/zigledger/protos/peer"
+	"github.com/zhigui/zigledger/core/chaincode/shim/ext/entities"
+	pb "github.com/zhigui/zigledgerc/protos/peer"
 )
 
 const ERROR_SYSTEM = "{\"code\":300, \"reason\": \"system error: %s\"}"
@@ -21,10 +25,9 @@ const ERROR_ACCOUNT_EXISTING = "{\"code\":302, \"reason\": \"account already exi
 const ERROR_ACCOUT_ABNORMAL = "{\"code\":303, \"reason\": \"abnormal account\"}"
 const ERROR_MONEY_NOT_ENOUGH = "{\"code\":304, \"reason\": \"account's money is not enough\"}"
 
-
+const DEFAULT_KEY = "zigledger"
 
 type SimpleChaincode struct {
-
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
@@ -48,6 +51,12 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.Transfer(stub, args)
 	}
 
+	if function == "putPrivateData" {
+		return t.PutPrivateData(stub, args)
+	} else if function == "getPrivateData" {
+		return t.GetPrivateData(stub, args)
+	}
+
 	return shim.Error(ERROR_WRONG_FORMAT)
 }
 
@@ -57,13 +66,13 @@ func (t *SimpleChaincode) Open(stub shim.ChaincodeStubInterface, args []string) 
 		return shim.Error(ERROR_WRONG_FORMAT)
 	}
 
-	account  := args[0]
-	money,err := stub.GetState(account)
+	account := args[0]
+	money, err := stub.GetState(account)
 	if money != nil {
 		return shim.Error(ERROR_ACCOUNT_EXISTING)
 	}
 
-	_,err = strconv.Atoi(args[1])
+	_, err = strconv.Atoi(args[1])
 	if err != nil {
 		return shim.Error(ERROR_WRONG_FORMAT)
 	}
@@ -156,8 +165,76 @@ func (t *SimpleChaincode) Transfer(stub shim.ChaincodeStubInterface, args []stri
 	return shim.Success(nil)
 }
 
+func (t *SimpleChaincode) PutPrivateData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	Encrypter(stub, DEFAULT_KEY, []byte("simpletest"))
+	return shim.Success(nil)
+}
 
-func  main()  {
+func (t *SimpleChaincode) GetPrivateData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	value, err := Decrypter(stub, DEFAULT_KEY)
+	if err != nil {
+		s := fmt.Sprintf(ERROR_SYSTEM, err.Error())
+		return shim.Error(s)
+	}
+	return shim.Success(value)
+}
+
+func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter, key string) ([]byte, error) {
+	// at first we retrieve the ciphertext from the ledger
+	ciphertext, err := stub.GetState(key)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(ciphertext) == 0 {
+		return nil, errors.New("no ciphertext to decrypt")
+	}
+
+	return ent.Decrypt(ciphertext)
+}
+
+func encryptAndPutState(stub shim.ChaincodeStubInterface, ent entities.Encrypter, key string, value []byte) error {
+	ciphertext, err := ent.Encrypt(value)
+	if err != nil {
+		return err
+	}
+	return stub.PutState(key, ciphertext)
+}
+
+type EncCC struct {
+	bccspInst bccsp.BCCSP
+}
+
+// Encrypter encrypts the data and writes to the ledger
+func Encrypter(stub shim.ChaincodeStubInterface, key string, valueAsBytes []byte) error {
+	factory.InitFactories(nil)
+	encCC := EncCC{factory.GetDefault()}
+	encKey := make([]byte, 32)
+	iv := make([]byte, 16)
+	ent, err := entities.NewAES256EncrypterEntity("ID", encCC.bccspInst, encKey, iv)
+	if err != nil {
+		return err
+	}
+
+	return encryptAndPutState(stub, ent, key, valueAsBytes)
+}
+
+// Decrypter decrypts the data and writes to the ledger
+func Decrypter(stub shim.ChaincodeStubInterface, key string) ([]byte, error) {
+	factory.InitFactories(nil)
+	encCC := EncCC{factory.GetDefault()}
+	// fmt.Println(encCC)
+	decKey := make([]byte, 32)
+	iv := make([]byte, 16)
+	ent, err := entities.NewAES256EncrypterEntity("ID", encCC.bccspInst, decKey, iv)
+	if err != nil {
+		return nil, err
+	}
+
+	return getStateAndDecrypt(stub, ent, key)
+}
+
+func main() {
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
 		fmt.Printf("Error starting chaincode: %v \n", err)
