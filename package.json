@@ -1,9 +1,9 @@
 {
-  "name": "caliper",
+  "name": "zig-test",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hyperledger/caliper"
+    "url": "https://gitlab.ziggurat.cn/credible-zigledger/zig-test"
   },
   "scripts": {
     "test": "npm run lint && npm run nyc && npm run e2e",
@@ -35,7 +35,8 @@
     "systeminformation": "^3.23.7",
     "table": "^4.0.1",
     "tape": "^4.8.0",
-    "tape-promise": "^1.1.0"
+    "tape-promise": "^1.1.0",
+    "randomstring": "1.1.5"
   },
   "devDependencies": {
     "chai": "^3.5.0",
