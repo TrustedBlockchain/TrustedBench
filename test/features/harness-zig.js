@@ -11,30 +11,29 @@ var query = require("../../benchmark/simple/query.js");
 var caUtils = require("../utils/ca-helper.js");
 test('\n\n*** 初始化ZigLedger网络 ***\n\n', (t) => {
     global.tapeObj = t;
-    try {
-        var initPromise = blockchain.init();
-        initPromise.then(() => {
-            t.comment("finish the channel initialization");
-            return blockchain.installSmartContract()
-        }).then(()=>{
-            t.comment("finish the smart contract steps");
-            testSuite();
-        });
-    }catch(error){
-        t.error(error);
-    }
-    t.end()
+    var initPromise = blockchain.init();
+    initPromise.then(() => {
+        t.comment("finish the channel initialization");
+        return blockchain.installSmartContract()
+    }).then(()=>{
+        t.comment("finish the smart contract steps");
+        testSuite();
+        t.end();
+    }).catch((err) => {
+        t.error(err);
+        t.end()
+    });
 });
 
 function testSuite(){
     test('\n\n*** #64 数据存储隔离性 ***\n\n', (t) => {
         let openContext = blockchain.getContext("open");
-        open.init(blockchain,openContext)
+        open.init(blockchain,openContext,{"money": 10000 })
         open.run();
         blockchain.releaseContext(openContext);
         t.comment("finish the invoke operation");
         let queryContext = blockchain.getContext("query");
-        query.init(blockchain,openContext)
+        query.init(blockchain,queryContext,{"money": 10000 })
         query.run();
         blockchain.releaseContext(queryContext);
         t.comment("finsih the query operation");
