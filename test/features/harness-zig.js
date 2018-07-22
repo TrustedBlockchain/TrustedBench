@@ -27,21 +27,46 @@ test('\n\n*** 初始化ZigLedger网络 ***\n\n', (t) => {
 
 function testSuite(){
     test('\n\n*** #64 数据存储隔离性 ***\n\n', (t) => {
-        let openContext = blockchain.getContext("open");
-        open.init(blockchain,openContext,{"money": 10000 })
-        open.run();
-        blockchain.releaseContext(openContext);
+        let openContext;
+        blockchain.getContext("open").then((context) => {
+            openContext = context;
+            return open.init(blockchain,context,{"money": 10000 });
+        }).then((nothing) => {
+            return open.run();
+        }).then((results) => {
+            blockchain.releaseContext(openContext);
+        }).catch((exeception) => {
+            console.error(exeception);
+        });
+
         t.comment("finish the invoke operation");
-        let queryContext = blockchain.getContext("query");
-        query.init(blockchain,queryContext,{"money": 10000 })
-        query.run();
-        blockchain.releaseContext(queryContext);
+        let queryContext;
+        blockchain.getContext("query").then((context) =>{
+            queryContext = context;
+            return query.init(blockchain,queryContext);
+        }).then((nothing) => {
+            return query.run();
+        }).then((results) => {
+            blockchain.releaseContext(queryContext);
+        }).catch((error) => {
+            t.error(error);
+        });
+        
         t.comment("finsih the query operation");
-        let queryContextDifferentChannel = blockchain.getContext("query");
-        queryContextDifferentChannel.channel = "yourchannel";
-        query.init(blockchain,queryContextDifferentChannel)
-        query.run();
-        blockchain.releaseContext(queryContextDifferentChannel);
+        
+        let queryContextDifferentChannel;
+        blockchain.getContext("query").then((context) => {
+            queryContextDifferentChannel = context;
+            queryContextDifferentChannel.channel = "yourchannel";
+            return query.init(blockchain,queryContextDifferentChannel)
+        }).then((nothing) => {
+            return query.run();
+        }).then((results) => {
+            blockchain.releaseContext(queryContextDifferentChannel);
+        }).catch((error) => {
+            console.error(error);
+        });
+        
         t.end()
     });
 }
