@@ -1,0 +1,27 @@
+{
+  "host": "localhost",
+  "port": "8081",
+  "jwt_expiretime": "36000",
+  "CC_SRC_PATH": "../../../config/artifacts",
+  "keyValueStore": "/tmp/zigledger-client-kvs",
+  "eventWaitTime": "30000",
+  "admins": [
+    {
+      "username": "admin",
+      "secret": "adminpw"
+    }
+  ],
+  "channelName": "mychannel",
+  "addressPrefix": "i",
+  "maxTxNum": 10,
+  "peerName": "peer1",
+  "userName": "user2",
+  "orgName": "org1",
+  "regAdmin": {
+    "address": "iac0726c75c3a5a1879f53c9f1573d254fd9a4e60",
+    "key": "390a71a68aa1d617825fc065f58e91d813fcd64e5880205d456d66f6e955a031"
+  },
+  "tx_timeout": "5000",
+  "resend": false,
+  "resend_count": 10
+}
