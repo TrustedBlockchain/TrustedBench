@@ -72,7 +72,9 @@ module.exports.verifyUser = function(username, password,userOrg) {
                 }).then(() => {
                     return resolve(member);
                 }).catch((err) => {
-                    commUtils.log('Failed to verify user. Error: ' + (err.stack ? err.stack : err));
+                    if(err){
+                        commUtils.log("用户认证和授权失败.");
+                    }
                 });
             });
         });

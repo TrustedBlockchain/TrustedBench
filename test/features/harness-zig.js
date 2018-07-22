@@ -43,6 +43,6 @@ function testSuite(){
 test('\n\n*** 使用证书授权来维护数据安全 ***\n\n',(t) => {
     caUtils.init();
     caUtils.verifyUser("admin","adminpw","org1");
-    t.pass("the negative case");
+    t.pass("用户认证和授权成功")
     caUtils.verifyUser("admin","admin","org2");
 });
