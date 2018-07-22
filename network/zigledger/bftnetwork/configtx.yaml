@@ -116,8 +116,8 @@ Orderer: &OrdererDefaults
     Addresses:
         - orderer0.example.com:7050
         - orderer1.example.com:7050
-#        - orderer2.example.com:7050
-#        - orderer3.example.com:7050
+        - orderer2.example.com:7050
+        - orderer3.example.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 1s
@@ -157,13 +157,13 @@ Orderer: &OrdererDefaults
                 P2PLaddr: tcp://orderer1.example.com:26656
                 RpcLaddr: tcp://orderer1.example.com:26657
 
-#              - PubKey: CA044598398140C5D456D0D52D22097399AAECC5ABF601E6DAFEE6911761CEDC
-#                P2PLaddr: tcp://orderer2.example.com:26656
-#                RpcLaddr: tcp://orderer2.example.com:26657
-#
-#              - PubKey: 391FA080EE6C35006F88D2556D8325B37DB6D136A7FE10A207D0A077D654B5D7
-#                P2PLaddr: tcp://orderer3.example.com:26656
-#                RpcLaddr: tcp://orderer3.example.com:26657
+              - PubKey: CA044598398140C5D456D0D52D22097399AAECC5ABF601E6DAFEE6911761CEDC
+                P2PLaddr: tcp://orderer2.example.com:26656
+                RpcLaddr: tcp://orderer2.example.com:26657
+
+              - PubKey: 391FA080EE6C35006F88D2556D8325B37DB6D136A7FE10A207D0A077D654B5D7
+                P2PLaddr: tcp://orderer3.example.com:26656
+                RpcLaddr: tcp://orderer3.example.com:26657
 
         mychannel:
            GenesisTime: 2018-07-16T06:02:31.526Z
@@ -176,13 +176,13 @@ Orderer: &OrdererDefaults
                 P2PLaddr: tcp://orderer1.example.com:26666
                 RpcLaddr: tcp://orderer1.example.com:26667
 
-#              - PubKey: CA044598398140C5D456D0D52D22097399AAECC5ABF601E6DAFEE6911761CEDC
-#                P2PLaddr: tcp://orderer2.example.com:26666
-#                RpcLaddr: tcp://orderer2.example.com:26667
-#
-#              - PubKey: 391FA080EE6C35006F88D2556D8325B37DB6D136A7FE10A207D0A077D654B5D7
-#                P2PLaddr: tcp://orderer3.example.com:26666
-#                RpcLaddr: tcp://orderer3.example.com:26667
+              - PubKey: CA044598398140C5D456D0D52D22097399AAECC5ABF601E6DAFEE6911761CEDC
+                P2PLaddr: tcp://orderer2.example.com:26666
+                RpcLaddr: tcp://orderer2.example.com:26667
+
+              - PubKey: 391FA080EE6C35006F88D2556D8325B37DB6D136A7FE10A207D0A077D654B5D7
+                P2PLaddr: tcp://orderer3.example.com:26666
+                RpcLaddr: tcp://orderer3.example.com:26667
 
     # Organizations is the list of orgs which are defined as participants on
     # the orderer side of the network

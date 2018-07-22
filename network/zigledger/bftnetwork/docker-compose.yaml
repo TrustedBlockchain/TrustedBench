@@ -44,8 +44,8 @@ services:
 
   orderer0.example.com:
     container_name: orderer0.example.com
-    image: zhigui/zigledger-orderer
-#    image: zhigui/zigledger-orderer:x86_64-1.1.1
+#    image: zhigui/zigledger-orderer
+    image: zhigui/zigledger-orderer:x86_64-1.1.7
     environment:
 #      - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -77,8 +77,8 @@ services:
 
   orderer1.example.com:
     container_name: orderer1.example.com
-    image: zhigui/zigledger-orderer
-#    image: zhigui/zigledger-orderer:x86_64-1.1.1
+#    image: zhigui/zigledger-orderer
+    image: zhigui/zigledger-orderer:x86_64-1.1.7
     environment:
 #      - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -107,76 +107,76 @@ services:
         - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel/:/var/zhigui/production/tendermint/mychannel/config
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/zhigui/msp/peerOrg1
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/zhigui/msp/peerOrg2
-#
-#  orderer2.example.com:
-#    container_name: orderer2.example.com
+
+  orderer2.example.com:
+    container_name: orderer2.example.com
 #    image: zhigui/zigledger-orderer
-##    image: zhigui/zigledger-orderer:x86_64-1.1.1
-#    environment:
-##      - ORDERER_GENERAL_LOGLEVEL=debug
-#      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
-#      - ORDERER_GENERAL_GENESISMETHOD=file
-#      - ORDERER_GENERAL_GENESISFILE=/etc/zhigui/configtx/twoorgs.genesis.block
-#      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
-#      - ORDERER_GENERAL_LOCALMSPDIR=/etc/zhigui/msp/orderer/msp
-#      - ORDERER_GENERAL_TLS_ENABLED=true
-#      - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/zhigui/msp/orderer/tls/server.key
-#      - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/zhigui/msp/orderer/tls/server.crt
-#      - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/zhigui/msp/orderer/tls/ca.crt, /etc/zhigui/msp/peerOrg1/tls/ca.crt, /etc/zhigui/msp/peerOrg2/tls/ca.crt]
-#      - ORDERER_TENDERMINT_ROOTDIR=/etc/zhigui/tendermint/orderer/
-#      - GODEBUG=netdns=go
-#    working_dir: /opt/gopath/src/github.com/zhigui/zigledger/orderer
-#    command: orderer
-#    ports:
-#      - 9050:7050
-#      - 26856:26656
-#      - 26857:26657
-#      - 26866:26666
-#      - 26867:26667
-#    volumes:
-#        - ./:/etc/zhigui/configtx
-#        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/:/etc/zhigui/msp/orderer
-#        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid/:/var/zhigui/production/tendermint/testchainid/config
-#        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel/:/var/zhigui/production/tendermint/mychannel/config
-#        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/zhigui/msp/peerOrg1
-#        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/zhigui/msp/peerOrg2
-#
-#  orderer3.example.com:
-#    container_name: orderer3.example.com
+    image: zhigui/zigledger-orderer:x86_64-1.1.7
+    environment:
+#      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/etc/zhigui/configtx/twoorgs.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/zhigui/msp/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/zhigui/msp/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/zhigui/msp/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/zhigui/msp/orderer/tls/ca.crt, /etc/zhigui/msp/peerOrg1/tls/ca.crt, /etc/zhigui/msp/peerOrg2/tls/ca.crt]
+      - ORDERER_TENDERMINT_ROOTDIR=/etc/zhigui/tendermint/orderer/
+      - GODEBUG=netdns=go
+    working_dir: /opt/gopath/src/github.com/zhigui/zigledger/orderer
+    command: orderer
+    ports:
+      - 9050:7050
+      - 26856:26656
+      - 26857:26657
+      - 26866:26666
+      - 26867:26667
+    volumes:
+        - ./:/etc/zhigui/configtx
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/:/etc/zhigui/msp/orderer
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid/:/var/zhigui/production/tendermint/testchainid/config
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel/:/var/zhigui/production/tendermint/mychannel/config
+        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/zhigui/msp/peerOrg1
+        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/zhigui/msp/peerOrg2
+
+  orderer3.example.com:
+    container_name: orderer3.example.com
 #    image: zhigui/zigledger-orderer
-##    image: zhigui/zigledger-orderer:x86_64-1.1.1
-#    environment:
-##      - ORDERER_GENERAL_LOGLEVEL=debug
-#      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
-#      - ORDERER_GENERAL_GENESISMETHOD=file
-#      - ORDERER_GENERAL_GENESISFILE=/etc/zhigui/configtx/twoorgs.genesis.block
-#      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
-#      - ORDERER_GENERAL_LOCALMSPDIR=/etc/zhigui/msp/orderer/msp
-#      - ORDERER_GENERAL_TLS_ENABLED=true
-#      - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/zhigui/msp/orderer/tls/server.key
-#      - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/zhigui/msp/orderer/tls/server.crt
-#      - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/zhigui/msp/orderer/tls/ca.crt, /etc/zhigui/msp/peerOrg1/tls/ca.crt, /etc/zhigui/msp/peerOrg2/tls/ca.crt]
-#      - ORDERER_TENDERMINT_ROOTDIR=/etc/zhigui/tendermint/orderer/
-#      - GODEBUG=netdns=go
-#    working_dir: /opt/gopath/src/github.com/zhigui/zigledger/orderer
-#    command: orderer
-#    ports:
-#      - 10050:7050
-#      - 26956:26656
-#      - 26957:26657
-#      - 26966:26666
-#      - 26967:26667
-#    volumes:
-#        - ./:/etc/zhigui/configtx
-#        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/:/etc/zhigui/msp/orderer
-#        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid/:/var/zhigui/production/tendermint/testchainid/config
-#        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel/:/var/zhigui/production/tendermint/mychannel/config
-#        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/zhigui/msp/peerOrg1
+    image: zhigui/zigledger-orderer:x86_64-1.1.7
+    environment:
+#      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/etc/zhigui/configtx/twoorgs.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/zhigui/msp/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/zhigui/msp/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/zhigui/msp/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/zhigui/msp/orderer/tls/ca.crt, /etc/zhigui/msp/peerOrg1/tls/ca.crt, /etc/zhigui/msp/peerOrg2/tls/ca.crt]
+      - ORDERER_TENDERMINT_ROOTDIR=/etc/zhigui/tendermint/orderer/
+      - GODEBUG=netdns=go
+    working_dir: /opt/gopath/src/github.com/zhigui/zigledger/orderer
+    command: orderer
+    ports:
+      - 10050:7050
+      - 26956:26656
+      - 26957:26657
+      - 26966:26666
+      - 26967:26667
+    volumes:
+        - ./:/etc/zhigui/configtx
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/:/etc/zhigui/msp/orderer
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid/:/var/zhigui/production/tendermint/testchainid/config
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel/:/var/zhigui/production/tendermint/mychannel/config
+        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/zhigui/msp/peerOrg1
 #        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/zhigui/msp/peerOrg2
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
-    image: zhigui/zigledger-peer
+    image: zhigui/zigledger-peer:x86_64-1.1.2
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.org1.example.com
@@ -205,12 +205,12 @@ services:
     depends_on:
       - orderer0.example.com
       - orderer1.example.com
-#      - orderer2.example.com
-#      - orderer3.example.com
+      - orderer2.example.com
+      - orderer3.example.com
 
   peer1.org1.example.com:
     container_name: peer1.org1.example.com
-    image: zhigui/zigledger-peer
+    image: zhigui/zigledger-peer:x86_64-1.1.2
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer1.org1.example.com
@@ -239,13 +239,13 @@ services:
     depends_on:
       - orderer0.example.com
       - orderer1.example.com
-#      - orderer2.example.com
-#      - orderer3.example.com
+      - orderer2.example.com
+      - orderer3.example.com
       - peer0.org1.example.com
 
   peer0.org2.example.com:
     container_name: peer0.org2.example.com
-    image: zhigui/zigledger-peer
+    image: zhigui/zigledger-peer:x86_64-1.1.2
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.org2.example.com
@@ -273,12 +273,12 @@ services:
     depends_on:
       - orderer0.example.com
       - orderer1.example.com
-#      - orderer2.example.com
-#      - orderer3.example.com
+      - orderer2.example.com
+      - orderer3.example.com
 
   peer1.org2.example.com:
     container_name: peer1.org2.example.com
-    image: zhigui/zigledger-peer
+    image: zhigui/zigledger-peer:x86_64-1.1.2
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer1.org2.example.com
@@ -306,8 +306,8 @@ services:
     depends_on:
       - orderer0.example.com
       - orderer1.example.com
-#      - orderer2.example.com
-#      - orderer3.example.com
+      - orderer2.example.com
+      - orderer3.example.com
 
 #  couchdb:
 #    container_name: couchdb
