@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/pkg/errors"
 	"github.com/zhigui/zigledger/bccsp"
 	"github.com/zhigui/zigledger/bccsp/factory"
 	"github.com/zhigui/zigledger/core/chaincode/shim"
@@ -187,7 +186,7 @@ func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter
 	}
 
 	if len(ciphertext) == 0 {
-		return nil, errors.New("no ciphertext to decrypt")
+		return nil, fmt.Errorf("no ciphertext to decrypt")
 	}
 
 	return ent.Decrypt(ciphertext)
