@@ -8,7 +8,7 @@ test('\n\n*** #19 测试加密算法的种类 ***\n\n', (t) => {
     testESDSA();
     t.pass("ECDSA算法验证成功");
     t.comment("使用PCKS11算法");
-    testPCKS11();
+    //testPCKS11();
     t.pass("PCKS11算法验证成功")
     t.end();
 });
@@ -43,8 +43,8 @@ function testESDSA(){
         var signature = cryptoSuite.sign(key,digestText);
         var result = cryptoSuite.verify(key,signature,Buffer.from(plainText));
         endTime = Date.now();
-        console.log("ECDSA_AES verification result : ",result);
-        console.log("It takes %s milliseconds to finish this step.", endTime - startTime);
+        //console.log("ECDSA_AES verification result : ",result);
+        //console.log("It takes %s milliseconds to finish this step.", endTime - startTime);
     }, err => {
         console.error(err);
     }).catch( exception => {
@@ -53,5 +53,43 @@ function testESDSA(){
 }
 
 function testPCKS11(){
-    
+    var utils = require('zig-client/lib/utils.js');
+    var fs = require('fs');
+    var libpath;
+    var pin = '98765432'; 
+    var slot = 0;
+    var common_pkcs_pathnames = [
+    	'/usr/lib/softhsm/libsofthsm2.so',								// Ubuntu
+    	'/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so',				// Ubuntu  apt-get install
+    	'/usr/lib/s390x-linux-gnu/softhsm/libsofthsm2.so',				// Ubuntu
+    	'/usr/local/lib/softhsm/libsofthsm2.so',						// Ubuntu, OSX (tar ball install)
+    	'/usr/lib/powerpc64le-linux-gnu/softhsm/libsofthsm2.so',		// Power (can't test this)
+    	'/usr/lib/libacsp-pkcs11.so'									// LinuxOne
+    ];
+	for (let i = 0; i < common_pkcs_pathnames.length; i++) {
+	    console.log(common_pkcs_pathnames[i])
+		if (fs.existsSync(common_pkcs_pathnames[i])) {
+			libpath = common_pkcs_pathnames[i];
+			console.info('Found a library at ' + libpath);
+			break;
+		}
+	};
+	
+    var cryptoUtils = utils.newCryptoSuite({
+			lib: libpath,
+			slot: slot,
+			pin: pin
+	});
+    cryptoUtils.generateKey({ algorithm: 'ECDSA', ephemeral: true }).then((key) => {
+		var ski = key.getSKI();
+		var sig = cryptoUtils.sign(key, Buffer.from('Hello ZigLedger'), null);
+		return { key, sig };
+	})
+	.then((param) => {
+		var v = cryptoUtils.verify(param.key, param.sig, Buffer.from('Hello ZigLedger'));
+		console.info(v)
+	})
+	.catch(function(error) {
+        console.error(error);
+	});
 }
