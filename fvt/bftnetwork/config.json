@@ -1,0 +1,28 @@
+{
+  "host": "localhost",
+  "port": "8081",
+  "jwt_expiretime": "36000",
+  "CC_SRC_PATH": "./",
+  "keyValueStore": "/tmp/zigledger-client-kvs",
+  "eventWaitTime": "30000",
+  "admins": [
+    {
+      "username": "admin",
+      "secret": "adminpw"
+    }
+  ],
+  "channelName": "mychannel",
+  "addressPrefix": "i",
+  "maxTxNum": 10,
+  "peerName": "peer1",
+  "userName": "user1",
+  "orgName": "org1",
+  "dbHost": "localhost",
+  "dbUserName": "root",
+  "dbPassword": "zhigui",
+  "dbPort": "3306",
+  "dbName": "explore",
+  "tx_timeout": "5000",
+  "resend": false,
+  "resend_count": 10
+}
