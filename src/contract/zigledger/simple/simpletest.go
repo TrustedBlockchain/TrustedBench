@@ -15,7 +15,7 @@ import (
 	"github.com/zhigui/zigledger/bccsp/factory"
 	"github.com/zhigui/zigledger/core/chaincode/shim"
 	"github.com/zhigui/zigledger/core/chaincode/shim/ext/entities"
-	pb "github.com/zhigui/zigledgerc/protos/peer"
+	pb "github.com/zhigui/zigledger/protos/peer"
 )
 
 const ERROR_SYSTEM = "{\"code\":300, \"reason\": \"system error: %s\"}"
