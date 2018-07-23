@@ -106,6 +106,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, args []string)
 		return shim.Error(ERROR_WRONG_FORMAT)
 	}
 
+	if args[0] == "getPrivateData" {
+		return t.GetPrivateData(stub, args)
+	}
 	money, err := stub.GetState(args[0])
 	if err != nil {
 		s := fmt.Sprintf(ERROR_SYSTEM, err.Error())

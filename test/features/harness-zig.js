@@ -26,51 +26,31 @@ test('\n\n*** 初始化ZigLedger网络 ***\n\n', (t) => {
 });
 
 function testSuite(){
-    test('\n\n*** #64 数据存储隔离性 ***\n\n', (t) => {
+    test('\n\n*** #69 用户数据解密 ***\n\n', (t) => {
         let openContext;
         blockchain.getContext("open").then((context) => {
             openContext = context;
-            return open.init(blockchain,context,{"money": 10000 });
-        }).then((nothing) => {
-            return open.run();
+            return blockchain.invokeSmartContract(context, 'simple', 'v0', {verb: 'putPrivateData'}, 30);
         }).then((results) => {
             blockchain.releaseContext(openContext);
         }).catch((exeception) => {
             console.error(exeception);
         });
 
-        t.comment("finish the invoke operation");
         let queryContext;
         blockchain.getContext("query").then((context) =>{
             queryContext = context;
-            return query.init(blockchain,queryContext);
-        }).then((nothing) => {
-            return query.run();
+            return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
         }).then((results) => {
             blockchain.releaseContext(queryContext);
         }).catch((error) => {
             t.error(error);
         });
-        
-        t.comment("finsih the query operation");
-        
-        let queryContextDifferentChannel;
-        blockchain.getContext("query").then((context) => {
-            queryContextDifferentChannel = context;
-            queryContextDifferentChannel.channel = "yourchannel";
-            return query.init(blockchain,queryContextDifferentChannel)
-        }).then((nothing) => {
-            return query.run();
-        }).then((results) => {
-            blockchain.releaseContext(queryContextDifferentChannel);
-        }).catch((error) => {
-            console.error(error);
-        });
-        
+                
+        t.pass("加密和解密数据");
         t.end()
     });
 }
-
 /*
 test('\n\n*** 使用证书授权来维护数据安全 ***\n\n',(t) => {
     caUtils.init();
