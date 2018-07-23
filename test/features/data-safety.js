@@ -10,7 +10,7 @@ var open = require("../../benchmark/simple/open.js");
 var query = require("../../benchmar/simple/query.js");
 var caUtils = require("../utils/ca-helper.js");
 
-test('\n\n*** 初始化ZigLedger网络 ***\n\n', (t) => {
+test('\n\n*** 初始化通道和安装智能合约 ***\n\n', (t) => {
     global.tapeObj = t;
     var initPromise = blockchain.init();
     initPromise.then(() => {
