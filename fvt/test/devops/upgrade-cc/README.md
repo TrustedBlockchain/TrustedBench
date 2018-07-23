@@ -7,8 +7,6 @@ all-in-one
 
 ./byfn.sh -m up
 
-./eyfn.sh up
-
 分步操作
 ------------------
 
