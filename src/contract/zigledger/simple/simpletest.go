@@ -189,6 +189,7 @@ func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter
 	// at first we retrieve the ciphertext from the ledger
 	ciphertext, err := stub.GetState(key)
 	if err != nil {
+		fmt.Println("The get error is ", err)
 		return nil, err
 	}
 	fmt.Println(">>> The ciphertext from state is " + string(ciphertext))
@@ -202,9 +203,10 @@ func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter
 func encryptAndPutState(stub shim.ChaincodeStubInterface, ent entities.Encrypter, key string, value []byte) error {
 	ciphertext, err := ent.Encrypt(value)
 	if err != nil {
+		fmt.Println("The  encrpt error is ", err)
 		return err
 	}
-	fmt.Println(">>> The ciphertext is " + string(ciphertext))
+	fmt.Println(">>> The ciphertext to be putted is " + string(ciphertext))
 	return stub.PutState(key, ciphertext)
 }
 
@@ -230,7 +232,6 @@ func Encrypter(stub shim.ChaincodeStubInterface, key string, valueAsBytes []byte
 func Decrypter(stub shim.ChaincodeStubInterface, key string) ([]byte, error) {
 	factory.InitFactories(nil)
 	encCC := EncCC{factory.GetDefault()}
-	// fmt.Println(encCC)
 	decKey := make([]byte, 32)
 	iv := make([]byte, 16)
 	ent, err := entities.NewAES256EncrypterEntity("ID", encCC.bccspInst, decKey, iv)
