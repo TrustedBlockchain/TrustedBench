@@ -11,9 +11,48 @@
       "secret": "adminpw"
     }
   ],
+  "endorsementPolicy": {
+    "identities": [
+      {
+        "role": {
+          "name": "peer",
+          "mspId": "Org1MSP"
+        }
+      },
+      {
+        "role": {
+          "name": "peer",
+          "mspId": "Org2MSP"
+        }
+      }
+    ],
+    "policy": {
+      "2-of": [
+        {
+          "signed-by": 0
+        },
+        {
+          "signed-by": 1
+        }
+      ]
+    }
+  },
+  "endorsementPeers": [
+    {
+      "org": "org1",
+      "peers": [
+        "peer1"
+      ]
+    },
+    {
+      "org": "org2",
+      "peers": [
+        "peer1"
+      ]
+    }
+  ],
   "channelName": "mychannel",
   "addressPrefix": "i",
-  "maxTxNum": 10,
   "peerName": "peer1",
   "userName": "user2",
   "orgName": "org1",

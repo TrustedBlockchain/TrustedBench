@@ -134,13 +134,13 @@ services:
 
   zigerface-fullserver.org1:
       container_name: zigerface-fullserver-org1
-      image: zhigui/zigerface-fullserver:x86_64-0.1.2
+      image: zhigui/zigerface-fullserver:x86_64-0.1.3
       ports:
         - 8081:8081
       volumes:
         - ../config/artifacts:/work/config/artifacts
         - ../config/network-config.json:/work/config/network-config.json
-        - ../config/zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
+#        - ../config/zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
         - ../config/config.json:/work/config/config.json
       depends_on:
         - peer1.org1.example.com
