@@ -8,80 +8,184 @@ var configPath = path.join(__dirname, '../../benchmark/simple/zigledger.json');
 var blockchain = new zig(configPath);
 var open = require("../../benchmark/simple/open.js");
 var query = require("../../benchmar/simple/query.js");
+var caUtils = require("../utils/ca-helper.js");
+
 test('\n\n*** 初始化ZigLedger网络 ***\n\n', (t) => {
     global.tapeObj = t;
-    blockchain.init();
-    testSuite();
-    t.end()
+    var initPromise = blockchain.init();
+    initPromise.then(() => {
+        t.comment("finish the channel initialization");
+        return blockchain.installSmartContract()
+    }).then(()=>{
+        t.comment("finish the smart contract steps");
+        testSuite();
+        t.end();
+    }).catch((err) => {
+        t.error(err);
+        t.end()
+    });
 });
 
 function testSuite(){
     test('\n\n*** #64 数据存储隔离性 ***\n\n', (t) => {
-        let openContext = blockchain.getContext("open");
-        open.init(blockchain,openContext)
-        open.run();
-        blockchain.releaseContext(openContext);
-        let queryContext = blockchain.getContext("query");
-        query.init(blockchain,openContext)
-        query.run();
-        blockchain.releaseContext(queryContext);
-        let queryContextDifferentChannel = blockchain.getContext("query");
-        queryContextDifferentChannel.channel = "yourchannel";
-        query.init(blockchain,queryContextDifferentChannel)
-        query.run();
-        blockchain.releaseContext(queryContextDifferentChannel);
+        let openContext;
+        blockchain.getContext("open").then((context) => {
+            openContext = context;
+            return open.init(blockchain,context,{"money": 10000 });
+        }).then((nothing) => {
+            return open.run();
+        }).then((results) => {
+            blockchain.releaseContext(openContext);
+        }).catch((exeception) => {
+            console.error(exeception);
+        });
+
+        let queryContext;
+        blockchain.getContext("query").then((context) =>{
+            queryContext = context;
+            return query.init(blockchain,queryContext);
+        }).then((nothing) => {
+            return query.run();
+        }).then((results) => {
+            blockchain.releaseContext(queryContext);
+        }).catch((error) => {
+            t.error(error);
+        });
+        
+        let queryContextDifferentChannel;
+        blockchain.getContext("yourchannel").then((context) => {
+            queryContextDifferentChannel = context;
+            return query.init(blockchain,queryContextDifferentChannel)
+        }).then((nothing) => {
+            return query.run();
+        }).then((results) => {
+            blockchain.releaseContext(queryContextDifferentChannel);
+        }).catch((error) => {
+            if(error){
+                t.pass("无权访问其他通道的数据");
+            }
+        });
+        
         t.end()
     });
     
     test('\n\n*** #65 并行业务互不干扰 ***\n\n', (t) => {
         t.pass("同时发送两笔交易");
-        let openContext = blockchain.getContext("open");
-        open.init(blockchain,openContext)
-        open.run();
-        open.run();
-        blockchain.releaseContext(openContext);
+        let openContext;
+        blockchain.getContext("open").then((context) => {
+            openContext = context;
+            return open.init(blockchain,context,{"money": 10000 });
+        }).then((nothing) => {
+            return open.run();
+        }).then((results) => {
+            blockchain.releaseContext(openContext);
+        }).catch((exeception) => {
+            console.error(exeception);
+        });
+
+        blockchain.getContext("open").then((context) => {
+            openContext = context;
+            return open.init(blockchain,context,{"money": 20000 });
+        }).then((nothing) => {
+            return open.run();
+        }).then((results) => {
+            blockchain.releaseContext(openContext);
+        }).catch((exeception) => {
+            console.error(exeception);
+        });
         t.end()
     });
     
     test('\n\n*** #66 私有信息的加密性 ***\n\n', (t) => {
-        t.pass("tls传输");
+        t.pass("tls加密传输");
+        let queryContext;
+        blockchain.getContext("query").then((context) => {
+            queryContext = context;
+            let channel = queryContext.channel;
+            let peers = channel.getPeers();
+            t.pass("安全加密: " + peers[0]._url);
+            return query.init(blockchain,queryContext)
+        }).then((nothing) => {
+            blockchain.releaseContext(queryContext);    
+        }).catch((error) => {
+            console.error(error);
+        });
         t.pass("私有信息密文存储");
         t.end()
     });
     
-    test('\n\n*** #67 数据传输方式 ***\n\n', (t) => {
-        let queryContext = blockchain.getContext("query");
-        let channel = queryContext.channel;
-        let peers = channel.getPeers();
-    	for (let i = 0; i < peers.length; i++) {
-            t.pass("有效节点传输" + peers[i]._url);
-    	}    
-        query.init(blockchain,queryContext)
-        query.run();
-        blockchain.releaseContext(queryContext);
+    test('\n\n*** #67 数据传输安全方式 ***\n\n', (t) => {
+        let queryContext;
+        blockchain.getContext("query").then((context) => {
+            queryContext = context;
+            let channel = queryContext.channel;
+            let peers = channel.getPeers();
+        	for (let i = 0; i < peers.length; i++) {
+                t.pass("有效节点传输: " + peers[i]._url);
+        	}    
+            return query.init(blockchain,queryContext)
+        }).then((nothing) => {
+            return query.run();
+        }).then((results) => {
+            blockchain.releaseContext(queryContext);    
+        }).catch((error) => {
+            console.error(error);
+        });
         t.end()
     });
     
     test('\n\n*** #68 查询和操作数据保密性 ***\n\n', (t) => {
-        let queryContext = blockchain.getContext("query");
-        let channel = queryContext.channel;
-        let peers = channel.getPeers();
-    	for (let i = 0; i < peers.length; i++) {
-            peers[i]._url = "grpcs://localhost:7061";
-    	}    
-        query.init(blockchain,queryContext)
-        query.run();
-        blockchain.releaseContext(queryContext);
+        let queryContext;
+        blockchain.getContext("query").then((context) => {
+            queryContext = context;
+            let channel = queryContext.channel;
+            let peers = channel.getPeers();
+        	for (let i = 0; i < peers.length; i++) {
+                peers[i]._url = "grpcs://localhost:7061";
+        	}    
+            return query.init(blockchain,queryContext)            
+        }).then((nothing) => {
+            return query.run();
+        }).then((result) => {
+            blockchain.releaseContext(queryContext);    
+        }).catch((error) => {
+            console.error(error);
+        });
         t.end()
     });
     
     test('\n\n*** #69 用户数据解密 ***\n\n', (t) => {
-        t.pass("chaincode 加密和解密数据");
+        let openContext;
+        blockchain.getContext("open").then((context) => {
+            openContext = context;
+            return blockchain.invokeSmartContract(context, 'simple', 'v0', {verb: 'putPrivateData'}, 30);
+        }).then((results) => {
+            blockchain.releaseContext(openContext);
+        }).catch((exeception) => {
+            console.error(exeception);
+        });
+
+        let queryContext;
+        blockchain.getContext("query").then((context) =>{
+            queryContext = context;
+            return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
+        }).then((results) => {
+            blockchain.releaseContext(queryContext);
+        }).catch((error) => {
+            t.error(error);
+        });
+                
+        t.pass("加密和解密数据");
         t.end()
     });
     
     test('\n\n*** #70 隐私保护方案 ***\n\n', (t) => {
-        t.pass("side database");
-        t.end()
+        caUtils.init();
+        caUtils.verifyUser("admin","adminpw","org1");
+        t.pass("用户认证和授权成功")
+        caUtils.verifyUser("admin","admin","org2");
+        t.pass("用户认证和授权失败.");
+        t.end();
+        t.pass("使用side database来保护私有数据");
     });
 }

@@ -113,8 +113,19 @@ class Zig extends BlockchainInterface{
      * @return {Promise<object>} The promise for the result of the execution.
      */
     invokeSmartContract(context, contractID, contractVer, args, timeout) {
+        let arg;   // compatible with old version
+        if(Array.isArray(args)) {
+            arg = args;
+        }
+        else if(typeof args === 'object') {
+            arg = [args];
+        }
+        else {
+            return Promise.reject(new Error('Invalid args for invokeSmartContract()'));
+        }
+        
         let promises = [];
-        args.forEach((item, index)=>{
+        arg.forEach((item, index)=>{
             let simpleArgs = [];
             for(let key in item) {
                 simpleArgs.push(item[key]);

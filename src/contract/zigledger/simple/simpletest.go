@@ -36,7 +36,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
-
+	fmt.Println(">>> The function is " + function)
 	if function == "open" {
 		return t.Open(stub, args)
 	}
@@ -52,7 +52,9 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	if function == "putPrivateData" {
 		return t.PutPrivateData(stub, args)
-	} else if function == "getPrivateData" {
+	}
+
+	if function == "getPrivateData" {
 		return t.GetPrivateData(stub, args)
 	}
 
@@ -106,6 +108,10 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, args []string)
 		return shim.Error(ERROR_WRONG_FORMAT)
 	}
 
+	if args[0] == "getPrivateData" {
+		fmt.Println(">>> The first argument is getPrivateData")
+		return t.GetPrivateData(stub, args)
+	}
 	money, err := stub.GetState(args[0])
 	if err != nil {
 		s := fmt.Sprintf(ERROR_SYSTEM, err.Error())
@@ -113,7 +119,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, args []string)
 	}
 
 	if money == nil {
-		return shim.Error(ERROR_ACCOUT_ABNORMAL)
+		// return shim.Error(ERROR_ACCOUT_ABNORMAL)
+		return shim.Success([]byte("0"))
 	}
 
 	return shim.Success(money)
@@ -165,7 +172,7 @@ func (t *SimpleChaincode) Transfer(stub shim.ChaincodeStubInterface, args []stri
 }
 
 func (t *SimpleChaincode) PutPrivateData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	Encrypter(stub, DEFAULT_KEY, []byte("simpletest"))
+	Encrypter(stub, DEFAULT_KEY, []byte("simpletext"))
 	return shim.Success(nil)
 }
 
@@ -182,9 +189,10 @@ func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter
 	// at first we retrieve the ciphertext from the ledger
 	ciphertext, err := stub.GetState(key)
 	if err != nil {
+		fmt.Println("The get error is ", err)
 		return nil, err
 	}
-
+	fmt.Println(">>> The ciphertext from state is " + string(ciphertext))
 	if len(ciphertext) == 0 {
 		return nil, fmt.Errorf("no ciphertext to decrypt")
 	}
@@ -195,8 +203,10 @@ func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter
 func encryptAndPutState(stub shim.ChaincodeStubInterface, ent entities.Encrypter, key string, value []byte) error {
 	ciphertext, err := ent.Encrypt(value)
 	if err != nil {
+		fmt.Println("The encrpt error is ", err)
 		return err
 	}
+	fmt.Println("The key for ciphertext is " + key)
 	return stub.PutState(key, ciphertext)
 }
 
@@ -222,7 +232,6 @@ func Encrypter(stub shim.ChaincodeStubInterface, key string, valueAsBytes []byte
 func Decrypter(stub shim.ChaincodeStubInterface, key string) ([]byte, error) {
 	factory.InitFactories(nil)
 	encCC := EncCC{factory.GetDefault()}
-	// fmt.Println(encCC)
 	decKey := make([]byte, 32)
 	iv := make([]byte, 16)
 	ent, err := entities.NewAES256EncrypterEntity("ID", encCC.bccspInst, decKey, iv)
