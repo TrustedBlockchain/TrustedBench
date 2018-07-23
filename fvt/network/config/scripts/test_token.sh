@@ -8,7 +8,7 @@
 
 # Detecting whether can import the header file to render colorful cli output
 if [ -f ./header.sh ]; then
- source ./header.sh
+ source header.sh
 elif [ -f scripts/header.sh ]; then
  source scripts/header.sh
 else
