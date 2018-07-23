@@ -172,7 +172,7 @@ func (t *SimpleChaincode) Transfer(stub shim.ChaincodeStubInterface, args []stri
 }
 
 func (t *SimpleChaincode) PutPrivateData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	Encrypter(stub, DEFAULT_KEY, []byte("simpletest"))
+	Encrypter(stub, DEFAULT_KEY, []byte("simpletext"))
 	return shim.Success(nil)
 }
 
@@ -203,10 +203,10 @@ func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter
 func encryptAndPutState(stub shim.ChaincodeStubInterface, ent entities.Encrypter, key string, value []byte) error {
 	ciphertext, err := ent.Encrypt(value)
 	if err != nil {
-		fmt.Println("The  encrpt error is ", err)
+		fmt.Println("The encrpt error is ", err)
 		return err
 	}
-	fmt.Println(">>> The ciphertext to be putted is " + string(ciphertext))
+	fmt.Println("The key for ciphertext is " + key)
 	return stub.PutState(key, ciphertext)
 }
 
