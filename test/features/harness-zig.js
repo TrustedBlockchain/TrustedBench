@@ -9,6 +9,7 @@ var blockchain = new zig(configPath);
 var open = require("../../benchmark/simple/open.js");
 var query = require("../../benchmark/simple/query.js");
 var caUtils = require("../utils/ca-helper.js");
+var commUtils = require("../../src/comm/util.js");
 test('\n\n*** 初始化通道和安装智能合约 ***\n\n', (t) => {
     global.tapeObj = t;
     var initPromise = blockchain.init();
@@ -37,16 +38,21 @@ function testSuite(){
             console.error(exeception);
         });
 
-        let queryContext;
-        blockchain.getContext("query").then((context) =>{
-            queryContext = context;
-            return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
-        }).then((results) => {
-            blockchain.releaseContext(queryContext);
+        var sleepPromise = commUtils.sleep(10000);
+        sleepPromise.then((nothing) =>{
+            let queryContext;
+            blockchain.getContext("query").then((context) =>{
+                queryContext = context;
+                return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
+            }).then((results) => {
+                blockchain.releaseContext(queryContext);
+            }).catch((error) => {
+                t.error(error);
+            });            
         }).catch((error) => {
-            t.error(error);
+            console.error(error);
         });
-                
+      
         t.pass("加密和解密数据");
         t.end()
     });
