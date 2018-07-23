@@ -309,28 +309,15 @@ services:
       - orderer2.example.com
       - orderer3.example.com
 
-  zigerface-mysql:
-    container_name: zigerface-mysql
-    image: zhigui/zigerface-mysql:x86_64-0.1.0
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=zhigui
-    ports:
-      - 3306:3306
-    volumes:
-#      - /tmp/data/mysql/:/var/lib/mysql
-      - ./explore.sql:/usr/local/work/explore.sql
-      - ./init_peer.sql:/usr/local/work/init_peer.sql
-
   zigerface-fullserver.org1:
       container_name: zigerface-fullserver-org1
-      image: zhigui/zigerface-fullserver:x86_64-0.1.1
+      image: zhigui/zigerface-fullserver:x86_64-0.1.2
       ports:
         - 8081:8081
       volumes:
         - ./:/work/config/artifacts
         - ./network-config.json:/work/config/network-config.json
-#        - ./zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
+        - ./zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
         - ./config.json:/work/config/config.json
       depends_on:
         - peer0.org1.example.com
