@@ -165,14 +165,17 @@ function testSuite(){
                 queryContext = context;
                 return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
             }).then((results) => {
-                blockchain.releaseContext(queryContext);
+                console.info(results);
             }).catch((error) => {
                 t.error(error);
-            });            
+            });
+            var waitPromise = commUtils.sleep(10000);
+            waitPromise.then((nothing) => {
+                blockchain.releaseContext(queryContext);
+            })
         }).catch((error) => {
             console.error(error);
         });
-                
         t.pass("加密和解密数据");
         t.end()
     });
