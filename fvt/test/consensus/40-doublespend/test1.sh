@@ -9,24 +9,19 @@
 
 starttime=$(date +%s)
 
-echo "STOP one orderer"
-echo
-docker stop orderer3.example.com
-echo
-
-echo "POST invoke transfer"
+echo "POST two invoke transfer"
 echo
 curl -s -X POST \
   http://localhost:8081/transfer \
   -H "content-type: application/json" \
   -d '{
-	"to_address":"iac0726c75c3a5a1879f53c9f1573d254fd9a4e60",
+	"to_address":"i4230a12f5b0693dd88bb35c79d7e56a68614b199",
 	"from_address":"i411b6f8f24f28caafe514c16e11800167f8ebd89",
 	"coin_type":"INK",
-	"amount":"100000000000",
+	"amount":"9999999990000000000",
 	"message":"test",
 	"fee_limit":"100000000000",
-	"sig":"c9e9f1c099699d10868e0a9c7da65299152f6fac85be3b55a051abb3de958139527bc44e5ebdba31d8ad6e83da42e25b0d7efeb11a8ba2382dfbd3e68e5a005600"
+	"sig":"96ea7fc0cac77eefaedbe66abea5ef7f552699712767fec3097a9ddff1ff4e2753325f80fc7dab3967b578ba94b8dec40474f0d6a8273282791e6ead392ee71301"
 }'
 echo
 echo

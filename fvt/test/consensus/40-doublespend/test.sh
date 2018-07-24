@@ -9,12 +9,7 @@
 
 starttime=$(date +%s)
 
-echo "STOP one orderer"
-echo
-docker stop orderer3.example.com
-echo
-
-echo "POST invoke transfer"
+echo "POST two invoke transfer"
 echo
 curl -s -X POST \
   http://localhost:8081/transfer \
@@ -28,5 +23,6 @@ curl -s -X POST \
 	"fee_limit":"100000000000",
 	"sig":"c9e9f1c099699d10868e0a9c7da65299152f6fac85be3b55a051abb3de958139527bc44e5ebdba31d8ad6e83da42e25b0d7efeb11a8ba2382dfbd3e68e5a005600"
 }'
+
 echo
 echo
