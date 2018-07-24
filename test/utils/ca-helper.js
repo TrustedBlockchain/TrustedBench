@@ -73,7 +73,7 @@ module.exports.verifyUser = function(username, password,userOrg) {
                     return resolve(member);
                 }).catch((err) => {
                     if(err){
-                        commUtils.log("用户认证和授权失败.");
+                        //commUtils.log("用户认证和授权失败.");
                     }
                 });
             });

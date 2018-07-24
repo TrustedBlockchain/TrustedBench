@@ -112,6 +112,7 @@ chaincodeQuery 1 2 90
 
 echo_b "========= Configing network  =========== "
 
+sleep 10
 
 echo "Installing jq"
 apt-get -y update && apt-get -y install jq
