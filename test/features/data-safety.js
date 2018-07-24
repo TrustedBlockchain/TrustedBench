@@ -9,15 +9,14 @@ var blockchain = new zig(configPath);
 var open = require("../../benchmark/simple/open.js");
 var query = require("../../benchmark/simple/query.js");
 var caUtils = require("../utils/ca-helper.js");
+var commUtils = require("../../src/comm/util.js");
 
 test('\n\n*** 初始化通道和安装智能合约 ***\n\n', (t) => {
     global.tapeObj = t;
     var initPromise = blockchain.init();
     initPromise.then(() => {
-        t.comment("finish the channel initialization");
         return blockchain.installSmartContract()
     }).then(()=>{
-        t.comment("finish the smart contract steps");
         testSuite();
         t.end();
     }).catch((err) => {
@@ -51,7 +50,7 @@ function testSuite(){
         }).catch((error) => {
             t.error(error);
         });
-        
+        t.pass("授权数据通道可以正常的执行数据存储和查询");
         let queryContextDifferentChannel;
         blockchain.getContext("yourchannel").then((context) => {
             queryContextDifferentChannel = context;
@@ -165,14 +164,19 @@ function testSuite(){
             console.error(exeception);
         });
 
-        let queryContext;
-        blockchain.getContext("query").then((context) =>{
-            queryContext = context;
-            return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
-        }).then((results) => {
-            blockchain.releaseContext(queryContext);
+        var sleepPromise = commUtils.sleep(5000);
+        sleepPromise.then((nothing) =>{
+            let queryContext;
+            blockchain.getContext("query").then((context) =>{
+                queryContext = context;
+                return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
+            }).then((results) => {
+                blockchain.releaseContext(queryContext);
+            }).catch((error) => {
+                t.error(error);
+            });            
         }).catch((error) => {
-            t.error(error);
+            console.error(error);
         });
                 
         t.pass("加密和解密数据");
