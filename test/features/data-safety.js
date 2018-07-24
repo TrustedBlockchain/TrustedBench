@@ -7,7 +7,7 @@ var path = require("path")
 var configPath = path.join(__dirname, '../../benchmark/simple/zigledger.json');
 var blockchain = new zig(configPath);
 var open = require("../../benchmark/simple/open.js");
-var query = require("../../benchmar/simple/query.js");
+var query = require("../../benchmark/simple/query.js");
 var caUtils = require("../utils/ca-helper.js");
 
 test('\n\n*** 初始化通道和安装智能合约 ***\n\n', (t) => {
