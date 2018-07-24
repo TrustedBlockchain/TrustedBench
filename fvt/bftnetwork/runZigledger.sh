@@ -53,22 +53,22 @@ function networkUp() {
 	echo
 
 	echo Copy tendermint orderer config
-	cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/mychannel;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/mychannel;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid;
-    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel;
+	cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/mychannel/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/mychannel/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/node_key.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid/config;
+    cp ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/priv_validator.json ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel/config;
 	echo
 
 	echo Start the network
@@ -95,14 +95,22 @@ function networkDown() {
     rm -rf ./zigledger-client-kvs_peerOrg1/*
 
     echo Clean tendermint config
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/mychannel/*;
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/testchainid/*;
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel/*;
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/testchainid/*;
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel/*;
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid/*;
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel/*;
-    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/mychannel/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/testchainid/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/testchainid/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid/config/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/mychannel/data/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tendermint/testchainid/data/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/mychannel/data/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tendermint/testchainid/data/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/mychannel/data/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tendermint/testchainid/data/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/mychannel/data/*;
+    rm -rf ./crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tendermint/testchainid/data/*;
 }
 
 function networkRestart() {

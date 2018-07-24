@@ -9,11 +9,6 @@
 
 starttime=$(date +%s)
 
-echo "STOP one orderer"
-echo
-docker stop orderer3.example.com
-echo
-
 echo "POST invoke transfer"
 echo
 curl -s -X POST \
