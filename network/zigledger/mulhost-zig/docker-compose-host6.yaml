@@ -36,13 +36,13 @@ services:
     hostname: ca1
     network_mode: "host"
     environment:
-      - FABRIC_CA_HOME=/etc/zhigui/zigledger-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-org2
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/zhigui/zigledger-ca-server-config/bf56c23fc917c718d3461b2c9de54e75c36575e883e808091e25e4d64520c4f9_sk
-      - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/zhigui/zigledger-ca-server-config/bf56c23fc917c718d3461b2c9de54e75c36575e883e808091e25e4d64520c4f9_sk
+      - ZIGLEDGER_CA_HOME=/etc/zhigui/zigledger-ca-server
+      - ZIGLEDGER_CA_SERVER_CA_NAME=ca-org2
+      - ZIGLEDGER_CA_SERVER_CA_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org2.example.com-cert.pem
+      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/zhigui/zigledger-ca-server-config/bf56c23fc917c718d3461b2c9de54e75c36575e883e808091e25e4d64520c4f9_sk
+      - ZIGLEDGER_CA_SERVER_TLS_ENABLED=true
+      - ZIGLEDGER_CA_SERVER_TLS_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org2.example.com-cert.pem
+      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/zhigui/zigledger-ca-server-config/bf56c23fc917c718d3461b2c9de54e75c36575e883e808091e25e4d64520c4f9_sk
       - GODEBUG=netdns=go
     ports:
       - "7054:7054"
