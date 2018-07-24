@@ -28,3 +28,5 @@ zookeeper.out
 
 # Ignore IDE files
 .vscode/*
+
+fvt/test/devops/bin/
