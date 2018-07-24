@@ -56,9 +56,7 @@ function testSuite(){
             queryContextDifferentChannel = context;
             return query.init(blockchain,queryContextDifferentChannel)
         }).then((nothing) => {
-            return query.run();
-        }).then((results) => {
-            blockchain.releaseContext(queryContextDifferentChannel);
+            return blockchain.releaseContext(queryContextDifferentChannel);
         }).catch((error) => {
             if(error){
                 t.pass("无权访问其他通道的数据");
@@ -123,8 +121,6 @@ function testSuite(){
                 t.pass("有效节点传输: " + peers[i]._url);
         	}    
             return query.init(blockchain,queryContext)
-        }).then((nothing) => {
-            return query.run();
         }).then((results) => {
             blockchain.releaseContext(queryContext);    
         }).catch((error) => {
@@ -143,8 +139,6 @@ function testSuite(){
                 peers[i]._url = "grpcs://localhost:7061";
         	}    
             return query.init(blockchain,queryContext)            
-        }).then((nothing) => {
-            return query.run();
         }).then((result) => {
             blockchain.releaseContext(queryContext);    
         }).catch((error) => {
