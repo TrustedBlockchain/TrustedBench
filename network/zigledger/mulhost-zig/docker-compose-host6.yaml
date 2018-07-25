@@ -9,6 +9,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.org2.example.com
       - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_MSPCONFIGPATH=/etc/zhigui/msp/peer/msp/
       - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
       - CORE_PEER_ENDORSER_ENABLED=true
