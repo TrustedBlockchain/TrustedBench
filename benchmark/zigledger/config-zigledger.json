@@ -1,0 +1,43 @@
+{
+  "blockchain": {
+    "type": "zigledger",
+    "config": "benchmark/simple/zigledger.json"
+  },
+  "command" : {
+    "start": "docker-compose -f network/zigledger/simplenetwork/docker-compose.yaml up -d",
+    "end" : "docker-compose -f network/zigledger/simplenetwork/docker-compose.yaml down;docker rm $(docker ps -aq)"
+  },
+  "test": {
+    "clients": {
+      "type": "local",
+      "number": 6
+    },
+    "rounds": [{
+      "label" : "open",
+      "txNumber" : [15000, 15000, 15000],
+      "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 500}}, {"type": "fixed-rate", "opts": {"tps" : 600}}, {"type": "fixed-rate", "opts": {"tps" : 700}}],
+      "arguments": {  "money": 10000 },
+      "callback" : "benchmark/simple/open.js"
+    },
+      {
+        "label" : "query",
+        "txNumber" : [15000, 15000],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 700}}, {"type": "fixed-rate", "opts": {"tps" : 800}}],
+        "callback" : "benchmark/simple/query.js"
+      }]
+  },
+  "monitor": {
+    "type": ["docker", "process"],
+    "docker":{
+      "name": ["all"]
+    },
+    "process": [
+      {
+        "command" : "node",
+        "arguments" : "local-client.js",
+        "multiOutput" : "avg"
+      }
+    ],
+    "interval": 1
+  }
+}
