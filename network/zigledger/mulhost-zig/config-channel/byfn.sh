@@ -149,7 +149,7 @@ function checkPrereqs() {
 function networkUp () {
 
   # now run the end to end script
-  docker exec cli scripts/script.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT
+  docker exec mulhost-zig_cli_1 scripts/script.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Test failed"
     exit 1
