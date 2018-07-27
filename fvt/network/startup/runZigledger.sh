@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright IBM Corp. All Rights Reserved.
+# Copyright Ziggurat Corp. All Rights Reserved.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -53,11 +53,15 @@ function networkUp() {
 	echo
 	echo Start the network
 	docker-compose -f docker-compose-network.yaml up -d
-#	sleep 5
-#	createChannel
-#	joinChannel
-#	sleep 5
-#	docker-compose -f docker-compose-listener.yaml up -d
+	sleep 3
+	createChannel
+	joinChannel 1
+	joinChannel 2
+	echo
+	echo Waiting 10s for db initialization
+	echo
+    sleep 10
+	docker-compose -f docker-compose-listener.yaml up -d
 	echo
 }
 
@@ -65,7 +69,7 @@ function networkDown() {
 	echo
     echo teardown the network and clean the containers and intermediate images
 	docker-compose -f docker-compose-network.yaml down
-#	docker-compose -f docker-compose-listener.yaml down
+	docker-compose -f docker-compose-listener.yaml down
 	dkcl
 	dkrm
 
@@ -81,28 +85,30 @@ function networkRestart() {
 }
 
 function createChannel () {
-    echo "POST request Create channel  ..."
+    echo
+    echo "POST request Create channel"
     curl -s -X POST \
       http://localhost:8081/create-channel \
       -H "content-type: application/json" \
       -d "{
     	\"channelName\":\"mychannel\",
-    	\"channelConfigPath\":\"../../../config/artifacts/channel/mychannel.tx\"
+    	\"channelConfigPath\":\"../../config/artifacts/channel/mychannel.tx\"
     }"
-    echo
     echo
 }
 
 function joinChannel () {
+    org=$1
+    echo
     echo "POST request Join channel on Org1"
     curl -s -X POST \
       http://localhost:8081/join-channel \
       -H "content-type: application/json" \
       -d "{
     	\"channelName\":\"mychannel\",
+    	\"org\":\"org$org\",
     	\"peers\":[\"peer1\",\"peer2\"]
     }"
-    echo
     echo
 }
 

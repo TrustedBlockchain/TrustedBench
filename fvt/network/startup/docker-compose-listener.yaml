@@ -1,0 +1,16 @@
+#
+# Copyright INK Labs. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+version: '2'
+
+services:
+  zigerface-listener.org1:
+    container_name: zigerface-listener-org1
+    image: zhigui/zigerface-listener:x86_64-0.1.2
+    volumes:
+      - ../config/artifacts:/work/config/artifacts
+      - ../config/network-config.json:/work/config/network-config.json
+      - ../config/zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
+      - ../config/config.json:/work/config/config.json
