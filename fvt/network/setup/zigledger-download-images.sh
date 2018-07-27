@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-export VERSION=1.1.2
+export VERSION=1.1.3
 export BASEIMAGE_RELEASE=0.4.6
 
 #Set MARCH variable i.e x86_64

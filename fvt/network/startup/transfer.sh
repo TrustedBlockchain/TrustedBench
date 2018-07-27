@@ -1,27 +1,40 @@
 #!/bin/bash
 #
-# Copyright IBM Corp. All Rights Reserved.
+# Copyright Ziggurat Corp. All Rights Reserved.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Language defaults to "golang"
-
-starttime=$(date +%s)
-
-echo "POST invoke transfer"
 echo
+echo "POST request Create tx sign and id"
+result=$(curl -s -X POST \
+  http://localhost:8081/transaction-sign?user=issue \
+  -H "content-type: application/json" \
+  -d '{
+	"ccId":"token",
+	"fcn":"transfer",
+	"args":["i8d49c182fce06146934e6a534c902ba3c5d9bde8","INK","100000000000"],
+	"msg":"test",
+    "feeLimit":"100000000000",
+	"priKey":"bab0c1204b2e7f344f9d1fbe8ad978d5355e32b8fa45b10b600d64ca970e0dc9"
+}')
+echo $result | jq '.'
+signature=$(echo $result | jq ".data.signature")
+tx_id=$(echo $result | jq ".data.tx_id")
+
+echo
+echo "Post request Send transfer tx"
 curl -s -X POST \
-  http://localhost:8081/transfer \
+  http://localhost:8081/transfer?user=issue \
   -H "content-type: application/json" \
   -d "{
-	\"to_address\":\"i4230a12f5b0693dd88bb35c79d7e56a68614b199\",
-	\"from_address\":\"i411b6f8f24f28caafe514c16e11800167f8ebd89\",
-	\"coin_type\":\"INK\",
-	\"amount\":\"100000000000\",
-	\"message\":\"test\",
-	\"fee_limit\":\"100000000000\",
-	\"sig\":\"0d3eb9bb1e18ae340201924b35f832470534dcaa412daffac7cdb9fe4edbf6d4037fc559b5f78682fc9b9bc893ebd6c6308584e2d15499af230d302ecb4e5f9500\"
-}"
-echo
+    \"to_address\":\"i8d49c182fce06146934e6a534c902ba3c5d9bde8\",
+    \"from_address\":\"i411b6f8f24f28caafe514c16e11800167f8ebd89\",
+    \"coin_type\":\"INK\",
+    \"amount\":\"100000000000\",
+    \"message\":\"test\",
+    \"fee_limit\":\"100000000000\",
+    \"tx_id\":$tx_id,
+    \"sig\":$signature
+}" | jq '.'
 echo
