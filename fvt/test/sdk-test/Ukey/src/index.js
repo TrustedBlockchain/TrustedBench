@@ -84,27 +84,23 @@ function getHashSign(key, rawData) {
     });
 }
 
-function transfer(fcn, args, key, address) {
-    let sigHash = hashHandler.sha256(config.chaincodeId, fcn, args, "", config.feeLimit, address);
-    return verifyHandler.signTx(key, sigHash).then((res) => {
+async function transfer(fcn, args, key, address) {
+    try {
+        let txID = await verifyHandler.getTxID();
+        let sigHash = hashHandler.sha256(config.chaincodeId, fcn, args, "", config.feeLimit, address, txID.data.tx_id);
+        let res = verifyHandler.signTx(key, sigHash);
         let apdu = res.apdu;
         let code = apdu.slice(apdu.length - 4);
         if (code === '9000') {
             let sig = apdu.slice(0, apdu.length - 4);
-            return queryHandler.invoke(address, config.chaincodeId, fcn, args, '',
-                config.feeLimit, sig.toLowerCase()).then((results) => {
-                return Promise.resolve(results);
-            }, (err) => {
-                return Promise.reject(err);
-            });
+            let results = queryHandler.invoke(address, config.chaincodeId, fcn, args, '', config.feeLimit, sig.toLowerCase());
+            return Promise.resolve(results);
         } else {
             return Promise.reject(apdu);
         }
-    }, (err) => {
-        return Promise.reject(err);
-    }).catch(err => {
-        return Promise.reject(err);
-    });
+    } catch (e) {
+        return Promise.reject(e);
+    }
 }
 
 module.exports.getHashSign = getHashSign;

@@ -9,6 +9,7 @@ SPDX-License-Identifier: Apache-2.0
  */
 
 var config = require('../config.json');
+
 // var hardware_address = 'https://localhost.xiaoqiao.cat:21727';
 
 function listKeys() {
@@ -119,6 +120,14 @@ function signTx(key, dataHash) {
     });
 }
 
+function getTxID() {
+    return fetch(config.server_address + "/transaction-id", {
+        method: "GET"
+    }).then((result) => {
+        return result.json();
+    });
+}
+
 function _fetch(fetch, timeout) {
     return Promise.race([
         fetch,
@@ -147,4 +156,5 @@ module.exports.verifyPIN = verifyPIN;
 module.exports.changePIN = changePIN;
 module.exports.getPublicKeyAndAddress = getPublicKeyAndAddress;
 module.exports.signTx = signTx;
+module.exports.getTxID = getTxID;
 

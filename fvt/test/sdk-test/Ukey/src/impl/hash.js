@@ -17,13 +17,14 @@ let root = protobufRoot.fromJSON(chaincode);
 var SignContent = root.lookupType('SignContent');
 var ChaincodeSpec = root.lookupType('ChaincodeSpec');
 
-function sha256(ccId, fcn, arg, msg, feeLimit, senderAddress) {
+function sha256(ccId, fcn, arg, msg, feeLimit, senderAddress, txId) {
     var args = [];
     var senderSpec = {
         sender: Buffer.from(senderAddress),
-        inkLimit: Buffer.from(feeLimit)
+        feeLimit: Buffer.from(feeLimit),
+        txId: Buffer.from(txId)
     };
-    if (msg && msg != "")  {
+    if (msg && msg != "") {
         senderSpec.msg = Buffer.from(msg)
     }
 

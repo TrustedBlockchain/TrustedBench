@@ -74,13 +74,17 @@
               "type": "bytes",
               "id": 1
             },
-            "inkLimit": {
+            "feeLimit": {
               "type": "bytes",
               "id": 2
             },
             "msg": {
               "type": "bytes",
               "id": 3
+            },
+            "txId": {
+              "type": "bytes",
+              "id": 4
             }
           }
         },
