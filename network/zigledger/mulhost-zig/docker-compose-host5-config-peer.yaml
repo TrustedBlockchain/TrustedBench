@@ -58,24 +58,24 @@ services:
         - /var/run/:/host/var/run/
         - ./chaincode/:/opt/gopath/src/github.com/chaincode
         - ./crypto-config:/opt/gopath/src/github.com/zhigui/zigledger/peer/crypto/
-        - ./scripts:/opt/gopath/src/github.com/zhigui/zigledger/peer/scripts/
+        - ./config-channel/scripts:/opt/gopath/src/github.com/zhigui/zigledger/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/zhigui/zigledger/peer/channel-artifacts
 
-  ca0:
-    image: zhigui/zigledger-ca:x86_64-1.1.1
-    hostname: ca0
-    network_mode: "host"
-    environment:
-      - ZIGLEDGER_CA_HOME=/etc/zhigui/zigledger-ca-server
-      - ZIGLEDGER_CA_SERVER_CA_NAME=ca-org1
-      - ZIGLEDGER_CA_SERVER_CA_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org1.example.com-cert.pem
-      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/zhigui/zigledger-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
-      - ZIGLEDGER_CA_SERVER_TLS_ENABLED=true
-      - ZIGLEDGER_CA_SERVER_TLS_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org1.example.com-cert.pem
-      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/zhigui/zigledger-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
-      - GODEBUG=netdns=go
-    ports:
-      - "7054:7054"
-    command: sh -c 'zigledger-ca-server start -b admin:adminpw -d'
-    volumes:
-      - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/zhigui/zigledger-ca-server-config
+#  ca0:
+#    image: zhigui/zigledger-ca:x86_64-1.1.1
+#    hostname: ca0
+#    network_mode: "host"
+#    environment:
+#      - ZIGLEDGER_CA_HOME=/etc/zhigui/zigledger-ca-server
+#      - ZIGLEDGER_CA_SERVER_CA_NAME=ca-org1
+#      - ZIGLEDGER_CA_SERVER_CA_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org1.example.com-cert.pem
+#      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/zhigui/zigledger-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
+#      - ZIGLEDGER_CA_SERVER_TLS_ENABLED=true
+#      - ZIGLEDGER_CA_SERVER_TLS_CERTFILE=/etc/zhigui/zigledger-ca-server-config/ca.org1.example.com-cert.pem
+#      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/zhigui/zigledger-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
+#      - GODEBUG=netdns=go
+#    ports:
+#      - "7054:7054"
+#    command: sh -c 'zigledger-ca-server start -b admin:adminpw -d'
+#    volumes:
+#      - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/zhigui/zigledger-ca-server-config
