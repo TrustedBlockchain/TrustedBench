@@ -12,6 +12,7 @@
     }
   ],
   "regAdmin": {
+    "user": "admin",
     "address": "i411b6f8f24f28caafe514c16e11800167f8ebd89",
     "key": "bab0c1204b2e7f344f9d1fbe8ad978d5355e32b8fa45b10b600d64ca970e0dc9"
   },
