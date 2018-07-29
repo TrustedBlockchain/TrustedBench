@@ -34,8 +34,10 @@ echo
 
 echo start setup docker-compose
 echo
-sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+sudo apt-get -y install python-pip
+export LC_ALL=C
+sudo pip install --upgrade pip
+sudo pip install docker-compose
 echo end setup docker-compose
 echo
 
