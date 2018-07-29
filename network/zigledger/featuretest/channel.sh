@@ -24,7 +24,7 @@ function createChannel () {
       -H "content-type: application/json" \
       -d "{
     	\"channelName\":\"mychannel\",
-    	\"channelConfigPath\":\"../../config/artifacts/channel/mychannel.tx\"
+    	\"channelConfigPath\":\"./mychannel.tx\"
     }"
     echo
 }
