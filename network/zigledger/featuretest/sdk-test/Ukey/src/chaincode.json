@@ -1,0 +1,187 @@
+{
+  "nested": {
+    "protos": {
+      "options": {
+        "java_package": "org.inklabsfoundation.inkchain.protos.peer",
+        "go_package": "github.com/inklabsfoundation/inkchain/protos/peer"
+      },
+      "nested": {
+        "ConfidentialityLevel": {
+          "values": {
+            "PUBLIC": 0,
+            "CONFIDENTIAL": 1
+          }
+        },
+        "ChaincodeID": {
+          "fields": {
+            "path": {
+              "type": "string",
+              "id": 1
+            },
+            "name": {
+              "type": "string",
+              "id": 2
+            },
+            "version": {
+              "type": "string",
+              "id": 3
+            }
+          }
+        },
+        "ChaincodeInput": {
+          "fields": {
+            "args": {
+              "rule": "repeated",
+              "type": "bytes",
+              "id": 1
+            }
+          }
+        },
+        "ChaincodeSpec": {
+          "fields": {
+            "type": {
+              "type": "Type",
+              "id": 1
+            },
+            "chaincodeId": {
+              "type": "ChaincodeID",
+              "id": 2
+            },
+            "input": {
+              "type": "ChaincodeInput",
+              "id": 3
+            },
+            "timeout": {
+              "type": "int32",
+              "id": 4
+            }
+          },
+          "nested": {
+            "Type": {
+              "values": {
+                "UNDEFINED": 0,
+                "GOLANG": 1,
+                "NODE": 2,
+                "CAR": 3,
+                "JAVA": 4
+              }
+            }
+          }
+        },
+        "SenderSpec": {
+          "fields": {
+            "sender": {
+              "type": "bytes",
+              "id": 1
+            },
+            "feeLimit": {
+              "type": "bytes",
+              "id": 2
+            },
+            "msg": {
+              "type": "bytes",
+              "id": 3
+            },
+            "txId": {
+              "type": "bytes",
+              "id": 4
+            }
+          }
+        },
+        "SignContent": {
+          "fields": {
+            "chaincodeSpec": {
+              "type": "ChaincodeSpec",
+              "id": 1
+            },
+            "idGenerationAlg": {
+              "type": "string",
+              "id": 2
+            },
+            "senderSpec": {
+              "type": "SenderSpec",
+              "id": 3
+            }
+          }
+        },
+        "ChaincodeDeploymentSpec": {
+          "fields": {
+            "chaincodeSpec": {
+              "type": "ChaincodeSpec",
+              "id": 1
+            },
+            "effectiveDate": {
+              "type": "google.protobuf.Timestamp",
+              "id": 2
+            },
+            "codePackage": {
+              "type": "bytes",
+              "id": 3
+            },
+            "execEnv": {
+              "type": "ExecutionEnvironment",
+              "id": 4
+            }
+          },
+          "nested": {
+            "ExecutionEnvironment": {
+              "values": {
+                "DOCKER": 0,
+                "SYSTEM": 1
+              }
+            }
+          }
+        },
+        "ChaincodeInvocationSpec": {
+          "fields": {
+            "chaincodeSpec": {
+              "type": "ChaincodeSpec",
+              "id": 1
+            },
+            "idGenerationAlg": {
+              "type": "string",
+              "id": 2
+            },
+            "senderSpec": {
+              "type": "SenderSpec",
+              "id": 3
+            },
+            "sig": {
+              "type": "bytes",
+              "id": 4
+            }
+          }
+        }
+      }
+    },
+    "google": {
+      "nested": {
+        "protobuf": {
+          "options": {
+            "csharp_namespace": "Google.Protobuf.WellKnownTypes",
+            "cc_enable_arenas": true,
+            "go_package": "github.com/golang/protobuf/ptypes/timestamp",
+            "java_package": "com.google.protobuf",
+            "java_outer_classname": "TimestampProto",
+            "java_multiple_files": true,
+            "objc_class_prefix": "GPB"
+          },
+          "nested": {
+            "Timestamp": {
+              "fields": {
+                "seconds": {
+                  "type": "int64",
+                  "id": 1
+                },
+                "nanos": {
+                  "type": "int32",
+                  "id": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

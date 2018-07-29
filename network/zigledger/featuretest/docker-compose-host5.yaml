@@ -31,7 +31,7 @@ services:
 #        - ./channel-artifacts:/opt/gopath/src/github.com/zhigui/zigledger/peer/channel-artifacts
     depends_on:
       - peer0.org1.example.com
-      - peer1.org1.example.com
+#      - peer1.org1.example.com
 
   peer0.org1.example.com:
     hostname: peer0.org1.example.com
