@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  zookeeper2:
+    image: zhigui/zigledger-zookeeper:x86_64-0.4.6
+    hostname: zookeeper2
+    network_mode: "host"
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=0.0.0.0:2888:3888
+      ZOO_TICK_TIME: 2000
+      ZOO_INIT_LIMIT: 10
+      ZOO_SYNC_LIMIT: 2
