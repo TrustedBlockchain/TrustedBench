@@ -22,5 +22,6 @@ services:
       volumes:
         - ./:/work/config/artifacts
         - ./network-config.json:/work/config/network-config.json
-#        - ../config/zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
+        - ./zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
+        - ./zigledger-client-kvs_peerOrg2:/tmp/zigledger-client-kvs_peerOrg2
         - ./config.json:/work/config/config.json

@@ -61,8 +61,14 @@ docker pull zhigui/zigledger-peer:x86_64-1.1.3
 docker pull zhigui/zigledger-ccenv:x86_64-1.1.3
 docker pull zhigui/zigledger-tools:x86_64-1.1.3
 docker pull zhigui/zigledger-ca:x86_64-1.1.1
-docker pull zhigui/zigerface-fullserver:x86_64-0.1.4
+docker pull zhigui/zigerface-fullserver:x86_64-0.1.5
 docker pull zhigui/zigerface-mysql:x86_64-0.1.0
 docker pull zhigui/zigerface-listener:x86_64-0.1.2
 echo end pull images
+echo
+
+echo start setup jq
+echo
+apt install jq
+echo end setup jq
 echo

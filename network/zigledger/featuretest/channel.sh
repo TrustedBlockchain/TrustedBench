@@ -24,9 +24,10 @@ function createChannel () {
       -H "content-type: application/json" \
       -d "{
     	\"channelName\":\"mychannel\",
-    	\"channelConfigPath\":\"./mychannel.tx\"
+    	\"channelConfigPath\":\"../../config/artifacts/channel/mychannel.tx\"
     }"
     echo
+    sleep 6
 }
 
 function joinChannel () {
@@ -42,6 +43,7 @@ function joinChannel () {
     	\"peers\":[\"peer1\",\"peer2\"]
     }"
     echo
+    sleep 6
 }
 
 networkUp
