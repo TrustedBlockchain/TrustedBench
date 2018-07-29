@@ -1,0 +1,7 @@
+{
+  "server_address": "http://zigerface-fullserver.org1:8081",
+  "hardware_address": "http://192.168.2.83:21727",
+  "addressPrefix": "i",
+  "chaincodeId": "token",
+  "feeLimit": "100000000000"
+}
