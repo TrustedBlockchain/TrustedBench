@@ -46,7 +46,7 @@ cat <<EOT >> /etc/hosts
 192.168.0.44    zookeeper1 kafka1
 192.168.0.45    zookeeper2 kafka2 peer1.org2.example.com
 192.168.0.46    kafka3 peer1.org1.example.com
-192.168.0.47    ca0 peer0.org1.example.com
+192.168.0.47    ca0 peer0.org1.example.com zigerface-mysql zigerface-fullserver.org1 zigerface-listener.org1
 192.168.0.48    peer0.org2.example.com ca1
 EOT
 echo end update hosts
@@ -61,5 +61,8 @@ docker pull zhigui/zigledger-peer:x86_64-1.1.3
 docker pull zhigui/zigledger-ccenv:x86_64-1.1.3
 docker pull zhigui/zigledger-tools:x86_64-1.1.3
 docker pull zhigui/zigledger-ca:x86_64-1.1.1
+docker pull zhigui/zigerface-fullserver:x86_64-0.1.4
+docker pull zhigui/zigerface-mysql:x86_64-0.1.0
+docker pull zhigui/zigerface-listener:x86_64-0.1.2
 echo end pull images
 echo
