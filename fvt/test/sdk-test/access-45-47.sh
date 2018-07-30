@@ -99,7 +99,7 @@ curl -s -X POST \
   http://localhost:8081/user/access?user=admin \
   -H "content-type: application/json" \
   -d "{
-	\"username\":\"zhigui\",
+	\"username\":\"$username\",
 	\"state\":\"2\",
 	\"tx_id\":$tx_id,
 	\"sig\":$signature
@@ -139,19 +139,3 @@ curl -s -X POST \
     \"tx_id\":$tx_id,
     \"sig\":$signature
 }" | jq '.'
-
-#echo
-#echo "test 4"
-#echo "request User logout..."
-#curl -s -X POST \
-#  http://localhost:8081/user/logout \
-#  -H "content-type: application/json" \
-#  -d "{
-#	\"username\":\"zhigui\"
-#}"
-#echo
-#
-#echo
-#echo "request Query User info..."
-#curl -s -X GET http://localhost:8081/user/info/zhigui
-#echo

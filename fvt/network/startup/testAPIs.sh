@@ -6,7 +6,7 @@
 #
 
 #echo
-#echo "POST request Create channel  ..."
+#echo "POST request Create channel"
 #curl -s -X POST \
 #  http://localhost:8081/create-channel \
 #  -H "content-type: application/json" \
@@ -94,20 +94,21 @@ parse_json(){
 echo "${1//\"/}" | sed "s/.*$2:\([^,}]*\).*/\1/"
 }
 
+username=\"admin\"
 echo
 echo "POST request Register issue token account"
 token=$(curl -s -X POST \
   http://localhost:8081/user/register/token \
   -H "content-type: application/json" \
   -d '{
-	"username":"issue"
+	"username":'$username'
 }' | jq '.data')
 
 curl -s -X POST \
   http://localhost:8081/user/register \
   -H "content-type: application/json" \
   -d '{
-	"username":"issue",
+	"username":'$username',
 	"token":'$token'
 }' | jq '.'
 
@@ -117,7 +118,7 @@ curl -s -X POST \
   http://localhost:8081/account/register \
   -H "content-type: application/json" \
   -d '{
-	"username":"issue",
+	"username":'$username',
 	"address":"i411b6f8f24f28caafe514c16e11800167f8ebd89"
 }' | jq '.'
 echo
