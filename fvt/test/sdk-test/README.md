@@ -29,5 +29,5 @@ zig-test/fvt/network/config/artifacts/src/github.com/token/token.go
 ```
 #### 7.账户注销
 ```
-./logout-4.sh
+./logout-4-5-6.sh
 ```
