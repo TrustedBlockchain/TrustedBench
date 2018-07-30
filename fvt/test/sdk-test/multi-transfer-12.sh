@@ -7,6 +7,17 @@
 username=admin
 
 echo
+echo "need register two account"
+curl -s -X POST \
+  http://localhost:8081/account/register \
+  -H "content-type: application/json" \
+  -d "{
+	\"username\":\"zhigui\",
+	\"address\":\"i3c97f146e8de9807ef723538521fcecd5f64c79a\"
+}" | jq '.'
+echo
+
+echo
 echo "Get request Query sender account balance"
 curl -s -X GET http://localhost:8081/get-account/i411b6f8f24f28caafe514c16e11800167f8ebd89?user=$username | jq '.'
 

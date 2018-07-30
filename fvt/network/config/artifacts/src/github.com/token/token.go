@@ -7,16 +7,16 @@ SPDX-License-Identifier: Apache-2.0
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/zhigui/zigledger/core/chaincode/shim"
 	pb "github.com/zhigui/zigledger/protos/peer"
-	"time"
-	"strconv"
-	"bytes"
 )
 
 const (
@@ -26,6 +26,7 @@ const (
 	Transfer                      string = "transfer"
 	Sender                        string = "sender"
 	CalcFee                       string = "calcFee"
+	MultiTransfer                 string = "multiTransfer"
 	GetAccountHistory             string = "getAccountHistory"
 	GetStateByPartialCompositeKey string = "getStateByPartialCompositeKey"
 	SetAccessState                string = "setAccessState"
@@ -111,6 +112,12 @@ func (t *tokenChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error("Incorrect number of arguments. Expecting 1")
 		}
 		return t.getAccessState(stub, args)
+
+	case MultiTransfer:
+		if len(args) <= 1 {
+			return shim.Error("Incorrect number of arguments. At least 1")
+		}
+		return t.multiTransfer(stub, args)
 	}
 
 	return shim.Error("Invalid invoke function name. Expecting \"getBalance\", \"getAccount\", \"transfer\", \"sender\", \"calcFee\".")
@@ -207,6 +214,48 @@ func (t *tokenChaincode) transfer(stub shim.ChaincodeStubInterface, args []strin
 	}
 
 	return shim.Success(nil)
+}
+
+//multiTransfer
+//Send tokens to some address
+func (t *tokenChaincode) multiTransfer(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	transferSet := make([][]string, 0)
+	toUser := map[string]string{}
+	for idx, item := range args {
+		itemArgs := strings.Split(item, ":")
+		if len(itemArgs) != 3 {
+			return shim.Error("transfer args error")
+		}
+		address := strings.TrimSpace(itemArgs[0])
+		if len(address) <= 0 {
+			return shim.Error(fmt.Sprintf("Recipient must be non-empty str in  %dth transfer data", idx))
+		}
+		amount := big.NewInt(0)
+		_, good := amount.SetString(itemArgs[1], 10)
+		if !good {
+			return shim.Error(fmt.Sprintf("Expecting integer value for amount in %dth transfer data", idx))
+		}
+		tokenType := strings.TrimSpace(itemArgs[2])
+		if len(tokenType) <= 0 {
+			return shim.Error(fmt.Sprintf("TokenType must be non-empty str in  %dth transfer data", idx))
+		}
+		if _, ok := toUser[address]; !ok {
+			toUser[address] = address
+		} else {
+			return shim.Error(fmt.Sprintf("Please don't transfer to same student"))
+		}
+		tmp := []string{address, amount.String(), tokenType}
+		transferSet = append(transferSet, tmp)
+	}
+	if len(transferSet) <= 0 {
+		return shim.Error("transfer set must be non-empty")
+	}
+	fmt.Println(transferSet)
+	err := stub.MultiTransfer(transferSet)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success([]byte("success"))
 }
 
 func (t *tokenChaincode) calcFee(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -405,7 +454,9 @@ func (t *tokenChaincode) getStateByPartialCompositeKey(stub shim.ChaincodeStubIn
 
 		buffer.WriteString(", \"timestamp\":")
 		buffer.WriteString("\"")
-		buffer.WriteString(compositeKeyParts[4])
+        timestamp, _ :=strconv.ParseInt(compositeKeyParts[4], 10, 64)
+        tm := time.Unix(timestamp, 0)
+        buffer.WriteString(tm.Format("2006-01-02 03:04:05 PM"))
 		buffer.WriteString("\"")
 
 		buffer.WriteString(", \"txID\":")
@@ -429,7 +480,7 @@ func (t *tokenChaincode) setAccessState(stub shim.ChaincodeStubInterface, args [
 		return shim.Error("Incorrect arguments 1")
 	}
 
-	access := accountState{int8(right)}
+	access := &accountState{int8(right)}
 	JSONasByte, err := json.Marshal(access)
 	if err != nil {
 		return shim.Error(err.Error())

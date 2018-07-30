@@ -64,7 +64,7 @@
   "tx_timeout": "5000",
   "resend": false,
   "resend_count": 10,
-  "accessControl": false,
+  "accessControl": true,
   "maxTxNum": 10,
   "dbHost": "zigerface-mysql",
   "dbUserName": "root",
