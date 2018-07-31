@@ -10,10 +10,15 @@ const caUtils = require("../utils/ca-helper.js");
 const commUtils = require("../../src/comm/util.js");
 var configPath = path.join(__dirname, '../../benchmark/simple/zigledger-remote.json');
 var blockchain = new zig(configPath);
-
+var isChannelExisted = true;
 test('\n*** ZigLedger seurity,safety and privay tests ***\n', (t) => {
     global.tapeObj = t;
-    let initPromise = blockchain.init();
+    let initPromise;
+    if(isChannelExisted){
+        initPromise = blockchain.initConfig()
+    }else{
+        initPromise = blockchain.init();
+    }
     initPromise.then((resolved) => {
         return blockchain.installSmartContract();
     },(rejected)=>{

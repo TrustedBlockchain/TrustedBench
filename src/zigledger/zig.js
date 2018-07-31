@@ -49,6 +49,21 @@ class Zig extends BlockchainInterface{
         );
     }
 
+    initConfig(){
+        util.init(this.configPath);
+        e2eUtils.init(this.configPath);
+        return Promise.resolve();
+    }
+    
+    instantiateChainCode(){
+        return impl_instantiate.run(this.configPath).then(()=>{
+            return Promise.resolve();
+        }).catch((err) => {
+            commUtils.log('zigledger.instantiateChainCode() failed, ' + (err.stack ? err.stack : err));
+            return Promise.reject(err);
+        });
+    }
+    
     /**
      * Deploy the chaincode specified in the network configuration file to all peers.
      * @return {Promise} The return promise.
