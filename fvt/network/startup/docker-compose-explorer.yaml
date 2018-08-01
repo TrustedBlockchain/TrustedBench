@@ -1,0 +1,17 @@
+#
+# Copyright INK Labs. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+version: '2'
+
+services:
+  zig-explorer:
+    container_name: zig-explorer
+    image: zhigui/zig-explorer:x86_64-0.1.0
+    ports:
+      - 80:80
+    volumes:
+      - ../config/explore.conf:/etc/nginx/conf.d/explore.conf
+
+
