@@ -10,13 +10,14 @@ SPDX-License-Identifier: Apache-2.0
 
 var config = require('../config.json');
 
-function invoke(sender, ccId, fcn, args, msg, feeLimit, sig) {
+function invoke(sender, ccId, fcn, args, msg, txid, feeLimit, sig) {
     let data = {
         cc_id: ccId,
         fcn: fcn,
         sender: sender,
         args: args,
         message: msg,
+        tx_id: txid,
         fee_limit: feeLimit,
         sig: sig
     };
