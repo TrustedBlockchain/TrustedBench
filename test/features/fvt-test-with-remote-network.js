@@ -8,9 +8,19 @@ const open = require("../../benchmark/simple/open.js");
 const query = require("../../benchmark/simple/query.js");
 const caUtils = require("../utils/ca-helper.js");
 const commUtils = require("../../src/comm/util.js");
-var configPath = path.join(__dirname, '../../benchmark/simple/zigledger-remote.json');
+var configPath = path.join(__dirname, '../../benchmark/simple/zigledger-featuretest.json');
 var blockchain = new zig(configPath);
 var isChannelExisted = true;
+var isChainCodeExisted = false;
+
+function setUpChainCode(){
+    if(isChainCodeExisted){
+        return blockchain.installSmartContract();
+    }else{
+        return Promise.resolve();
+    }
+}
+
 test('\n*** ZigLedger seurity,safety and privay tests ***\n', (t) => {
     global.tapeObj = t;
     let initPromise;
