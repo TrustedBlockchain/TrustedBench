@@ -19,7 +19,7 @@ echo
 for i in `seq 1 8`
 do
     sleep 1
-    data=$(cat /dev/random | tr -dc "[:alpha:]" | head -c $(expr $i \* 8))
+    data=$(cat /dev/urandom | tr -dc "[:alpha:]" | head -c $(expr $i \* 8))
     echo "The data is $data"
     curl -s -X POST http://localhost:8081/crypto/ecdsa/verify \
       -H "content-type: application/json" \
