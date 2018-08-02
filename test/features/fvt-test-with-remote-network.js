@@ -10,14 +10,16 @@ const caUtils = require("../utils/ca-helper.js");
 const commUtils = require("../../src/comm/util.js");
 var configPath = path.join(__dirname, '../../benchmark/simple/zigledger-featuretest.json');
 var blockchain = new zig(configPath);
-var isChannelExisted = true;
+var isChannelExisted = false;
 var isChainCodeExisted = false;
+var key = "simpletest";
+var value = "Love is forever";
 
 function setUpChainCode(){
     if(isChainCodeExisted){
-        return blockchain.installSmartContract();
-    }else{
         return Promise.resolve();
+    }else{
+       return blockchain.installSmartContract(); 
     }
 }
 
@@ -30,9 +32,9 @@ test('\n*** ZigLedger seurity,safety and privay tests ***\n', (t) => {
         initPromise = blockchain.init();
     }
     initPromise.then((resolved) => {
-        return blockchain.installSmartContract();
+        return setUpChainCode();
     },(rejected)=>{
-        return blockchain.installSmartContract();
+        return setUpChainCode();
     }).then((resolved)=>{
         return testDataIsolation();
     },(rejected)=>{
@@ -71,8 +73,8 @@ function testDataIsolation(){
         //    return open.run();
         }).then((results) => {
             return blockchain.releaseContext(openContext);
-        }).catch((exeception) => {
-            console.error(exeception);
+        }).catch((error) => {
+            console.error(error);
             return Promise.resolve();
         });
 
@@ -98,7 +100,7 @@ function testDataIsolation(){
             return blockchain.releaseContext(queryContextDifferentChannel);
         }).catch((error) => {
             if(error){
-                global.tapeObj.pass("无权访问其他通道的数据");
+                global.tapeObj.fail("无权访问其他通道的数据");
             }
             return Promise.resolve();
         });
@@ -123,7 +125,6 @@ function testDataIsolation(){
 function testParallelOperation(){
     global.tapeObj.comment('\n\n*** #65 并行业务互不干扰 ***\n\n');
     return new Promise(function(resolve,reject){
-        global.tapeObj.pass("同时发送两笔交易");
         let openContext;
         let txOne = blockchain.getContext("open").then((context) => {
             openContext = context;
@@ -132,8 +133,8 @@ function testParallelOperation(){
             return open.run();
         }).then((results) => {
             return blockchain.releaseContext(openContext);
-        }).catch((exeception) => {
-            console.error(exeception);
+        }).catch((error) => {
+            console.error(error);
             return Promise.resolve();
         });
         let openContextTwo;
@@ -144,11 +145,12 @@ function testParallelOperation(){
             return open.run();
         }).then((results) => {
             return blockchain.releaseContext(openContextTwo);
-        }).catch((exeception) => {
-            console.error(exeception);
+        }).catch((error) => {
+            console.error(error);
             return Promise.resolve();
         });
         return Promise.all([txOne,txTwo]).then(()=>{
+            global.tapeObj.pass("同时发送两笔交易成功");
             return resolve();
         },()=>{
             return reject();
@@ -169,13 +171,12 @@ function testParallelOperation(){
 function testTLSEncryption(){
     global.tapeObj.comment('\n\n*** #66 私有信息的加密性 ***\n\n');
     return new Promise(function(resolve,reject){
-        global.tapeObj.pass("TLS加密传输");
         let queryContext;
-        let txPromise = blockchain.getContext("query").then((context) => {
+        let queryPromise = blockchain.getContext("query").then((context) => {
             queryContext = context;
             let channel = queryContext.channel;
             let peers = channel.getPeers();
-            global.tapeObj.pass("安全加密: " + peers[0]._url);
+            global.tapeObj.comment("TLS安全加密传输: " + peers[0]._url);
             return query.init(blockchain,queryContext)
         }).then((nothing) => {
             return blockchain.releaseContext(queryContext);    
@@ -183,8 +184,36 @@ function testTLSEncryption(){
             console.error(error);
             return Promise.resolve();
         });
-        global.tapeObj.pass("私有信息密文存储");
-        return Promise.all([txPromise]).then(()=>{
+        
+        let openContext;
+        global.tapeObj.comment("将要保存的私有信息:" + value);
+        let txPromise = blockchain.getContext("open").then((context) => {
+            openContext = context;
+            let argsDict = {verb:'putPrivateData',key:key,value:value};
+            return blockchain.invokeSmartContract(context, 'simple', 'v0', argsDict, 30);
+        }).then((results) => {
+           return blockchain.releaseContext(openContext);
+        }).catch((exeception) => {
+            console.error(exeception);
+            return Promise.resolve();
+        });
+        
+        let txQueryContext;
+        var txQuery = commUtils.sleep(5000).then((nothing) =>{
+            return blockchain.getContext("open").then((context) =>{
+                txQueryContext = context;
+                let argsDict = {verb:'getPrivateData',key:key,raw:'yes'};
+                return blockchain.invokeSmartContract(context, 'simple', 'v0', argsDict, 30);
+                //return blockchain.queryState(context, 'simple', 'v0', "getPrivateData",key);
+            }).then((results) => {
+                global.tapeObj.comment("ZigLedger底层中保存的值:" + results[0].result.toString());
+                return Promise.resolve();
+            }).catch((error) => {
+                console.error(error);
+                return Promise.resolve();
+            });
+        });
+        return Promise.all([queryPromise,txPromise,txQuery]).then(()=>{
             return resolve();
         },()=>{
             return reject();
@@ -248,7 +277,7 @@ function testTxOperationPrivacy(){
             let peers = channel.getPeers();
         	for (let i = 0; i < peers.length; i++) {
                 peers[i]._url = "grpcs://localhost:7061";
-                global.tapeObj.pass("无效节点不能传输: " + peers[i]._url);
+                global.tapeObj.fail("无效节点不能传输: " + peers[i]._url);
         	}    
             return query.init(blockchain,queryContext)            
         }).then((result) => {
@@ -281,30 +310,20 @@ function testDataEncryptAndDecrypt(){
         let openContext;
         let txPromise = blockchain.getContext("open").then((context) => {
             openContext = context;
-            return blockchain.invokeSmartContract(context, 'simple', 'v0', {verb: 'putPrivateData'}, 30);
+            let argsDict = {verb:'getPrivateData',key:key};
+            return blockchain.invokeSmartContract(context, 'simple', 'v0', argsDict, 30);
         }).then((results) => {
-           return blockchain.releaseContext(openContext);
+           global.tapeObj.comment("数据解密后的值是:" + results[0].result.toString()); 
+           return results;
         }).catch((exeception) => {
             console.error(exeception);
             return Promise.resolve();
         });
-        let queryContext;
-        var queryPromise = commUtils.sleep(5000).then((nothing) =>{
-            return blockchain.getContext("query").then((context) =>{
-                queryContext = context;
-                return blockchain.queryState(context, 'simple', 'v0', "getPrivateData");
-            }).then((results) => {
-                return Promise.resolve();
-            }).catch((error) => {
-                console.error(error);
-                return Promise.resolve();
-            });
-        });
         var waitPromise = commUtils.sleep(10000).then((nothing) => {
-            return blockchain.releaseContext(queryContext);
+            return blockchain.releaseContext(openContext);
         })
-        global.tapeObj.pass("加密和解密数据");
-        return Promise.all([txPromise,queryPromise,waitPromise]).then(()=>{
+        
+        return Promise.all([txPromise,waitPromise]).then(()=>{
             return resolve();
         },()=>{
             return reject();
@@ -329,7 +348,7 @@ function testPrivacyProtection(){
         let caseOne = caUtils.verifyUser("admin","adminpw","org1");
         global.tapeObj.pass("用户认证和授权成功")
         let caseTwo = caUtils.verifyUser("admin","admin","org2");
-        global.tapeObj.pass("用户认证和授权失败.");
+        global.tapeObj.fail("用户认证和授权失败.");
         global.tapeObj.pass("使用side database来保护私有数据");
         return Promise.all([caseOne,caseTwo]).then(()=>{
             return resolve();
