@@ -122,7 +122,7 @@ function testDataPermission(){
                 let argsDict = {verb:'getPrivateData',key:key};
                 return blockchain.invokeSmartContract(context, 'simple', 'v0', argsDict, 30);
             }).then((results) => {
-               global.tapeObj.comment("Bob获得的数据值是 :" + results[0].result.toString()); 
+               global.tapeObj.pass("Bob获得的数据值是 :" + results[0].result.toString()); 
                return results;
             }).catch((error) => {
                 console.error(error);
