@@ -12,8 +12,10 @@
 scripts 改名为 add-scripts
 
 ```bash
-cd ~/official/zig-test/network/zigledger/node-add/mulhost-zig/org3-artifacts/
-scp -r root@192.168.0.39:/root/zig-test/network/zigledger/node-add/mulhost-zig/org3-artifacts/crypto-config .
+cd /root/official/zig-test/network/zigledger/featuretestbft/peer-manage/node-add/org3-artifacts
+
+scp -r root@47.106.221.204:/root/zig-test/network/zigledger/featuretestbft/peer-manage/node-add/org3-artifacts/crypto-config .
+
 ```
 
 ./org3-up.sh up
