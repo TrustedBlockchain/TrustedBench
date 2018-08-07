@@ -8,6 +8,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 
@@ -28,7 +29,7 @@ type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	// nothing to do
+	fmt.Println(">>> run the init function")
 	return shim.Success(nil)
 }
 
@@ -54,6 +55,32 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	if function == "getPrivateData" {
 		return t.GetPrivateData(stub, args)
+	}
+
+	if function == "grantPermission" {
+		var buffer bytes.Buffer
+		buffer.WriteString(args[0])
+		buffer.WriteString(".")
+		buffer.WriteString(args[1])
+		key := buffer.String()
+		err := stub.PutState(key, []byte("Y"))
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		return shim.Success([]byte("success"))
+	}
+
+	if function == "hasPermission" {
+		var buffer bytes.Buffer
+		buffer.WriteString(args[0])
+		buffer.WriteString(".")
+		buffer.WriteString(args[1])
+		key := buffer.String()
+		value, err := stub.GetState(key)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		return shim.Success(value)
 	}
 
 	return shim.Error(ERROR_WRONG_FORMAT)
