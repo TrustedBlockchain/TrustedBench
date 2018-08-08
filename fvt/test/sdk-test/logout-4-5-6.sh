@@ -16,7 +16,7 @@ function transfer () {
       -d '{
     	"ccId":"token",
     	"fcn":"transfer",
-    	"args":["i411b6f8f24f28caafe514c16e11800167f8ebd89","INK","100"],
+    	"args":["i411b6f8f24f28caafe514c16e11800167f8ebd89","ZIG","100"],
     	"msg":"test",
         "feeLimit":"100000000000",
     	"priKey":"390fd29828e5e029a0c948e17c3a20d98b66ab771803b7ca5e89a3fcc65783d7"
@@ -32,7 +32,7 @@ function transfer () {
       -d "{
         \"to_address\":\"i411b6f8f24f28caafe514c16e11800167f8ebd89\",
         \"from_address\":\"i8d49c182fce06146934e6a534c902ba3c5d9bde8\",
-        \"coin_type\":\"INK\",
+        \"coin_type\":\"ZIG\",
         \"amount\":\"100\",
         \"message\":\"test\",
         \"fee_limit\":\"100000000000\",

@@ -147,7 +147,7 @@ services:
 
   zigerface-fullserver.org1:
       container_name: zigerface-fullserver-org1
-      image: zhigui/zigerface-fullserver:x86_64-0.1.6
+      image: zhigui/zigerface-fullserver:x86_64-0.1.9
       ports:
         - 8081:8081
       volumes:

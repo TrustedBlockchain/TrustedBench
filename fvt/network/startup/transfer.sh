@@ -13,7 +13,7 @@ result=$(curl -s -X POST \
   -d '{
 	"ccId":"token",
 	"fcn":"transfer",
-	"args":["i8d49c182fce06146934e6a534c902ba3c5d9bde8","INK","100000000000"],
+	"args":["i8d49c182fce06146934e6a534c902ba3c5d9bde8","ZIG","100000000000"],
 	"msg":"test",
     "feeLimit":"100000000000",
 	"priKey":"bab0c1204b2e7f344f9d1fbe8ad978d5355e32b8fa45b10b600d64ca970e0dc9"
@@ -30,7 +30,7 @@ curl -s -X POST \
   -d "{
     \"to_address\":\"i8d49c182fce06146934e6a534c902ba3c5d9bde8\",
     \"from_address\":\"i411b6f8f24f28caafe514c16e11800167f8ebd89\",
-    \"coin_type\":\"INK\",
+    \"coin_type\":\"ZIG\",
     \"amount\":\"100000000000\",
     \"message\":\"test\",
     \"fee_limit\":\"100000000000\",
