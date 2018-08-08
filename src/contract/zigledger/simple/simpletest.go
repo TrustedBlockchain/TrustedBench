@@ -8,6 +8,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 
@@ -24,13 +25,11 @@ const ERROR_ACCOUNT_EXISTING = "{\"code\":302, \"reason\": \"account already exi
 const ERROR_ACCOUT_ABNORMAL = "{\"code\":303, \"reason\": \"abnormal account\"}"
 const ERROR_MONEY_NOT_ENOUGH = "{\"code\":304, \"reason\": \"account's money is not enough\"}"
 
-const DEFAULT_KEY = "zigledger"
-
 type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	// nothing to do
+	fmt.Println(">>> run the init function")
 	return shim.Success(nil)
 }
 
@@ -56,6 +55,32 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	if function == "getPrivateData" {
 		return t.GetPrivateData(stub, args)
+	}
+
+	if function == "grantPermission" {
+		var buffer bytes.Buffer
+		buffer.WriteString(args[0])
+		buffer.WriteString(".")
+		buffer.WriteString(args[1])
+		key := buffer.String()
+		err := stub.PutState(key, []byte("Y"))
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		return shim.Success([]byte("success"))
+	}
+
+	if function == "hasPermission" {
+		var buffer bytes.Buffer
+		buffer.WriteString(args[0])
+		buffer.WriteString(".")
+		buffer.WriteString(args[1])
+		key := buffer.String()
+		value, err := stub.GetState(key)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		return shim.Success(value)
 	}
 
 	return shim.Error(ERROR_WRONG_FORMAT)
@@ -172,17 +197,27 @@ func (t *SimpleChaincode) Transfer(stub shim.ChaincodeStubInterface, args []stri
 }
 
 func (t *SimpleChaincode) PutPrivateData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	Encrypter(stub, DEFAULT_KEY, []byte("simpletext"))
+	key := args[0]
+	Encrypter(stub, key, []byte(args[1]))
 	return shim.Success(nil)
 }
 
 func (t *SimpleChaincode) GetPrivateData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	value, err := Decrypter(stub, DEFAULT_KEY)
-	if err != nil {
-		s := fmt.Sprintf(ERROR_SYSTEM, err.Error())
-		return shim.Error(s)
+	if len(args) == 2 {
+		ciphertext, err := stub.GetState(args[0])
+		if err != nil {
+			s := fmt.Sprintf(ERROR_SYSTEM, err.Error())
+			return shim.Error(s)
+		}
+		return shim.Success(ciphertext)
+	} else {
+		value, err := Decrypter(stub, args[0])
+		if err != nil {
+			s := fmt.Sprintf(ERROR_SYSTEM, err.Error())
+			return shim.Error(s)
+		}
+		return shim.Success(value)
 	}
-	return shim.Success(value)
 }
 
 func getStateAndDecrypt(stub shim.ChaincodeStubInterface, ent entities.Encrypter, key string) ([]byte, error) {
