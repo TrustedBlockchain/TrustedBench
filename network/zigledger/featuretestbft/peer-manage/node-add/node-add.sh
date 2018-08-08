@@ -131,23 +131,23 @@ function networkUp () {
 
 # Tear down running network
 function networkDown () {
-  docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 down --volumes
-  docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH down --volumes
+  #docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 down --volumes
+  #docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH down --volumes
   # Don't remove containers, images, etc if restarting
   if [ "$MODE" != "restart" ]; then
     #Cleanup the chaincode containers
-    clearContainers
+    #clearContainers
     #Cleanup images
-    removeUnwantedImages
+    #removeUnwantedImages
     # remove orderer block and other channel configuration transactions and certs
     rm -rf ./org3-artifacts/crypto-config/ channel-artifacts/org3.json
     # remove the docker-compose yaml file that was customized to the example
-    rm -f docker-compose-e2e.yaml
+    #rm -f docker-compose-e2e.yaml
   fi
 
   # For some black-magic reason the first docker-compose down does not actually cleanup the volumes
-  docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 down --volumes
-  docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH down --volumes
+  #docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 down --volumes
+  #docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH down --volumes
 }
 
 # Use the CLI container to create the configuration transaction needed to add
