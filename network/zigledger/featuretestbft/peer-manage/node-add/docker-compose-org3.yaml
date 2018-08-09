@@ -56,5 +56,6 @@ services:
         - /var/run/:/host/var/run/
         - ./src/github.com:/opt/gopath/src/github.com/chaincode/
         #- ./chaincode/:/opt/gopath/src/github.com/chaincode
+        - ../../src/github.com:/opt/gopath/src/github.com/chaincode/
         - ./org3-artifacts/crypto-config:/etc/zhigui/msp/crypto/
         - ./add-scripts:/opt/gopath/src/github.com/zhigui/zigledger/peer/add-scripts

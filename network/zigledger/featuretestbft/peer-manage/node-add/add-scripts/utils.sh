@@ -48,8 +48,8 @@ setGlobals () {
 
 	elif [ $ORG -eq 3 ] ; then
 		CORE_PEER_LOCALMSPID="Org3MSP"
-		CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/zhigui/zigledger/peer/crypto/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
-		CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/zhigui/zigledger/peer/crypto/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
+		CORE_PEER_TLS_ROOTCERT_FILE=/etc/zhigui/msp/crypto/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
+		CORE_PEER_MSPCONFIGPATH=/etc/zhigui/msp/crypto/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
 		if [ $PEER -eq 0 ]; then
 			CORE_PEER_ADDRESS=peer0.org3.example.com:7051
 		else
@@ -195,7 +195,7 @@ tokenupgradeChaincode () {
 
     set -x
     #peer chaincode upgrade -o orderer0.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n token -v 2.0 -c '{"Args":["init"]}' -P "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
-    peer chaincode upgrade -o orderer0.example.com:7050 --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n token -v 2.0 -c '{"Args":["init"]}'
+    peer chaincode upgrade -o orderer0.example.com:7050 --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n token -v 2.0 -c '{"Args":["init"]}' -P "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
     res=$?
 	set +x
     cat log.txt
@@ -253,7 +253,7 @@ tokenchaincodeQuery () {
   echo "Attempting to Query peer${PEER}.org${ORG} ...$(($(date +%s)-starttime)) secs"
   set -x
   #peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}' >&log.txt
-  peer chaincode query -C mychannel -n token -c '{"Args":["getBalance","i411b6f8f24f28caafe514c16e11800167f8ebd89","INK"]}' >&log.txt
+  peer chaincode query -C mychannel -n token -c '{"Args":["getBalance","i411b6f8f24f28caafe514c16e11800167f8ebd89","ZIG"]}' >&log.txt
   res=$?
   set +x
   echo
@@ -354,13 +354,13 @@ tokenchaincodeInvoke () {
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
                 set -x
 		#peer chaincode invoke -o orderer0.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}' -i "1000000000" -z bc4bcb06a0793961aec4ee377796e050561b6a84852deccea5ad4583bb31eebe >&log.txt
-		peer chaincode invoke -o orderer0.example.com:7050  -C ${CHANNEL_NAME} -n token -c '{"Args":["transfer","i07caf88941eafcaaa3370657fccc261acb75dfba","INK","9999999999960"]}' -i "10000000" -z bc4bcb06a0793961aec4ee377796e050561b6a84852deccea5ad4583bb31eebe >&log.txt
+		peer chaincode invoke -o orderer0.example.com:7050  -C ${CHANNEL_NAME} -n token -c '{"Args":["transfer","i07caf88941eafcaaa3370657fccc261acb75dfba","ZIG","9999999999960"]}' -i "10000000" -z bc4bcb06a0793961aec4ee377796e050561b6a84852deccea5ad4583bb31eebe >&log.txt
 		res=$?
                 set +x
 	else
                 set -x
 		#peer chaincode invoke -o orderer0.example.com:7050  --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}' -i "1000000000" -z bc4bcb06a0793961aec4ee377796e050561b6a84852deccea5ad4583bb31eebe >&log.txt
-		peer chaincode invoke -o orderer0.example.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C ${CHANNEL_NAME} -n token -c '{"Args":["transfer","i07caf88941eafcaaa3370657fccc261acb75dfba","INK","1000000000000"]}' -i "10000000" -z bc4bcb06a0793961aec4ee377796e050561b6a84852deccea5ad4583bb31eebe>&log.txt
+		peer chaincode invoke -o orderer0.example.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C ${CHANNEL_NAME} -n token -c '{"Args":["transfer","i07caf88941eafcaaa3370657fccc261acb75dfba","ZIG","1000000000000"]}' -i "10000000" -z bc4bcb06a0793961aec4ee377796e050561b6a84852deccea5ad4583bb31eebe>&log.txt
 		res=$?
                 set +x
 	fi
@@ -378,12 +378,12 @@ systemChaincodeInvoke () {
 	# lets supply it directly as we know it using the "-o" option
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
                 set -x
-		peer chaincode invoke -o orderer0.example.com:7050 -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","INK","1000000000000000000","9","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}' >&log.txt
+		peer chaincode invoke -o orderer0.example.com:7050 -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","ZIG","1000000000000000000","9","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}' >&log.txt
 		res=$?
                 set +x
 	else
                 set -x
-		peer chaincode invoke -o orderer0.example.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","INK","1000000000000000000","18","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}'  >&log.txt
+		peer chaincode invoke -o orderer0.example.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","ZIG","1000000000000000000","18","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}'  >&log.txt
 		res=$?
                 set +x
 	fi

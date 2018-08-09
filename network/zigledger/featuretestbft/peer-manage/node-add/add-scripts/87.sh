@@ -37,22 +37,28 @@ fi
 . add-scripts/utils.sh
 
 echo "===================== Installing chaincode 2.0 on peer0.org1 ===================== "
-installChaincode 0 1 2.0
+installChaincode 0 1 3.0
 
 echo "===================== Installing chaincode 2.0 on peer1.org1 ===================== "
-installChaincode 1 1 2.0
+installChaincode 1 1 3.0
 
 echo "===================== Installing chaincode 2.0 on peer0.org2 ===================== "
-installChaincode 0 2 2.0
+installChaincode 0 2 3.0
 
 echo "===================== Installing chaincode 2.0 on peer1.org2 ===================== "
-installChaincode 1 2 2.0
+installChaincode 1 2 3.0
+
+echo "===================== Installing chaincode 2.0 on peer0.org3 ===================== "
+installChaincode 0 3 3.0
 
 echo "===================== Upgrading chaincode on peer0.org1 ===================== "
 tokenupgradeChaincode 0 1
 
+echo "======================Query on peer0.org3===================="
+tokenchaincodeQuery 0 3
+
 echo
-echo "========= Finished adding Org3 to your first network! ========= "
+echo "========= Finished upgrading! ========= "
 echo
 
 exit 0

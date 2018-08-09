@@ -283,12 +283,12 @@ systemChaincodeInvoke () {
 	# lets supply it directly as we know it using the "-o" option
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
                 set -x
-		peer chaincode invoke -o orderer0.example.com:7050 -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","INK","1000000000000000000","9","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}' >&log.txt
+		peer chaincode invoke -o orderer0.example.com:7050 -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","ZIG","1000000000000000000","9","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}' >&log.txt
 		res=$?
                 set +x
 	else
                 set -x
-		peer chaincode invoke -o orderer0.example.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","INK","1000000000000000000","18","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}'  >&log.txt
+		peer chaincode invoke -o orderer0.example.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n ascc -c '{"Args":["registerAndIssueToken","ZIG","1000000000000000000","18","i4230a12f5b0693dd88bb35c79d7e56a68614b199"]}'  >&log.txt
 		res=$?
                 set +x
 	fi

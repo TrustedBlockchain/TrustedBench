@@ -24,7 +24,7 @@ COUNTER=1
 MAX_RETRY=5
 ORDERER_CA=/etc/zhigui/msp/crypto/ordererOrganizations/example.com/orderers/orderer0.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
-CC_SRC_PATH="github.com/chaincode/token/go/"
+CC_SRC_PATH="github.com/chaincode/token/"
 
 # import utils
 . add-scripts/utils.sh
