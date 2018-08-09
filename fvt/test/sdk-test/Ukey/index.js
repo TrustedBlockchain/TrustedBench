@@ -28,7 +28,7 @@ impl.checkUKey().then((res) => {
         console.log(util.format("get Ukey public_key and address: %s\n", JSON.stringify(res)));
 
         var uAddress = res.address;
-        impl.transfer('transfer', ['i4230a12f5b0693dd88bb35c79d7e56a68614b199', 'INK', '1000'], key, uAddress).then((res) => {
+        impl.transfer('transfer', ['i4230a12f5b0693dd88bb35c79d7e56a68614b199', 'ZIG', '1000'], key, uAddress).then((res) => {
             console.log(util.format("invoke a transfer transaction: %s\n", JSON.stringify(res)));
         });
     });

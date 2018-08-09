@@ -8,7 +8,7 @@ version: '2'
 services:
   zig-explorer:
     container_name: zig-explorer
-    image: zhigui/zig-explorer:x86_64-0.1.0
+    image: zhigui/zig-explorer:x86_64-0.1.1
     ports:
       - 80:80
     volumes:

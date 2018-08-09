@@ -29,7 +29,7 @@ result=$(curl -s -X POST \
   -d '{
 	"ccId":"token",
 	"fcn":"multiTransfer",
-	"args":["i8d49c182fce06146934e6a534c902ba3c5d9bde8:100000000:INK","i3c97f146e8de9807ef723538521fcecd5f64c79a:100000000:INK"],
+	"args":["i8d49c182fce06146934e6a534c902ba3c5d9bde8:100000000:ZIG","i3c97f146e8de9807ef723538521fcecd5f64c79a:100000000:ZIG"],
 	"msg":"test",
     "feeLimit":"100000000000",
 	"priKey":"bab0c1204b2e7f344f9d1fbe8ad978d5355e32b8fa45b10b600d64ca970e0dc9"
@@ -47,7 +47,7 @@ curl -s -X POST \
         \"cc_id\": \"token\",
         \"fcn\": \"multiTransfer\",
         \"sender\": \"i411b6f8f24f28caafe514c16e11800167f8ebd89\",
-        \"args\": [\"i8d49c182fce06146934e6a534c902ba3c5d9bde8:100000000:INK\",\"i3c97f146e8de9807ef723538521fcecd5f64c79a:100000000:INK\"],
+        \"args\": [\"i8d49c182fce06146934e6a534c902ba3c5d9bde8:100000000:ZIG\",\"i3c97f146e8de9807ef723538521fcecd5f64c79a:100000000:ZIG\"],
         \"message\": \"test\",
         \"fee_limit\": \"100000000000\",
         \"tx_id\":$tx_id,

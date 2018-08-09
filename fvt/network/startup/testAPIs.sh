@@ -83,7 +83,7 @@ curl -s -X POST \
   http://localhost:8081/issue-token \
   -H "content-type: application/json" \
   -d '{
-	"coin_name":"INK",
+	"coin_name":"ZIG",
 	"totalSupply":"10000000000000000000",
 	"decimals":"9",
 	"publish_address":"i411b6f8f24F28CaAFE514c16E11800167f8EBd89"

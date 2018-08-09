@@ -213,7 +213,7 @@ func (t *tokenChaincode) transfer(stub shim.ChaincodeStubInterface, args []strin
 		return shim.Error(err.Error())
 	}
 
-	return shim.Success(nil)
+	return shim.Success([]byte("Transfer success!"))
 }
 
 //multiTransfer
