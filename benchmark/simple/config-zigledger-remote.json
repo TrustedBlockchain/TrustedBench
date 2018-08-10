@@ -20,7 +20,14 @@
         "txNumber" : [15000, 15000],
         "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 700}}, {"type": "fixed-rate", "opts": {"tps" : 800}}],
         "callback" : "benchmark/simple/query.js"
-      }]
+      },
+      {
+        "label" : "transfer",
+        "txNumber" : [15000],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 700}}],
+        "callback" : "benchmark/simple/transfer.js"
+      }
+    ]
   },
   "monitor": {
     "type": ["docker", "process"],
