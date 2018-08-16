@@ -1,0 +1,76 @@
+{
+  "host": "localhost",
+  "port": "8081",
+  "jwt_expiretime": "36000",
+  "CC_SRC_PATH": "../../config/artifacts",
+  "keyValueStore": "/tmp/zigledger-client-kvs",
+  "eventWaitTime": "30000",
+  "admins": [
+    {
+      "username": "admin",
+      "secret": "adminpw"
+    }
+  ],
+  "regAdmin": {
+    "user": "admin",
+    "address": "i411b6f8f24f28caafe514c16e11800167f8ebd89",
+    "key": "bab0c1204b2e7f344f9d1fbe8ad978d5355e32b8fa45b10b600d64ca970e0dc9"
+  },
+  "endorsementPolicy": {
+    "identities": [
+      {
+        "role": {
+          "name": "peer",
+          "mspId": "Org1MSP"
+        }
+      },
+      {
+        "role": {
+          "name": "peer",
+          "mspId": "Org2MSP"
+        }
+      }
+    ],
+    "policy": {
+      "1-of": [
+        {
+          "signed-by": 0
+        },
+        {
+          "signed-by": 1
+        }
+      ]
+    }
+  },
+  "endorsementPeers": [
+    {
+      "org": "org1",
+      "peers": [
+        "peer1",
+        "peer2"
+      ]
+    },
+    {
+      "org": "org2",
+      "peers": [
+        "peer1",
+        "peer2"
+      ]
+    }
+  ],
+  "channelName": "mychannel",
+  "addressPrefix": "i",
+  "peerName": "peer1",
+  "userName": "user2",
+  "orgName": "org1",
+  "tx_timeout": "10000",
+  "resend": false,
+  "resend_count": 10,
+  "accessControl": false,
+  "maxTxNum": 10,
+  "dbHost": "127.0.0.1",
+  "dbUserName": "root",
+  "dbPassword": "zhigui",
+  "dbPort": "3306",
+  "dbName": "explore"
+}
