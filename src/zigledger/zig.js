@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 /**
  * Modifications Copyright 2018 ZIGGURAT
  * Copyright 2017 HUAWEI. All Rights Reserved.
@@ -21,7 +22,7 @@ const commUtils = require('../comm/util');
 /**
  * Implements {BlockchainInterface} for a Zig backend.
  */
-class Zig extends BlockchainInterface{
+class Zig extends BlockchainInterface {
     /**
      * Create a new instance of the {Zig} class.
      * @param {string} config_path The path of the Zig network configuration file.
@@ -37,7 +38,7 @@ class Zig extends BlockchainInterface{
     init() {
         util.init(this.configPath);
         e2eUtils.init(this.configPath);
-        return commUtils.sleep(5000).then(()=>{
+        return commUtils.sleep(5000).then(() => {
             return impl_create.run(this.configPath).then(() => {
                 return impl_join.run(this.configPath);
             })
@@ -49,21 +50,21 @@ class Zig extends BlockchainInterface{
         );
     }
 
-    initConfig(){
+    initConfig() {
         util.init(this.configPath);
         e2eUtils.init(this.configPath);
         return Promise.resolve();
     }
-    
-    instantiateChainCode(){
-        return impl_instantiate.run(this.configPath).then(()=>{
+
+    instantiateChainCode() {
+        return impl_instantiate.run(this.configPath).then(() => {
             return Promise.resolve();
         }).catch((err) => {
             commUtils.log('zigledger.instantiateChainCode() failed, ' + (err.stack ? err.stack : err));
             return Promise.reject(err);
         });
     }
-    
+
     /**
      * Deploy the chaincode specified in the network configuration file to all peers.
      * @return {Promise} The return promise.
@@ -89,17 +90,17 @@ class Zig extends BlockchainInterface{
         util.init(this.configPath);
         e2eUtils.init(this.configPath);
 
-        let config  = require(this.configPath);
+        let config = require(this.configPath);
         let context = config.zigledger.context;
         let channel;
-        if(typeof context === 'undefined') {
+        if (typeof context === 'undefined') {
             channel = util.getDefaultChannel();
         }
-        else{
+        else {
             channel = util.getChannel(context[name]);
         }
 
-        if(!channel) {
+        if (!channel) {
             return Promise.reject(new Error('could not find context\'s information in config file'));
         }
 
@@ -125,27 +126,28 @@ class Zig extends BlockchainInterface{
      * @param {string} contractVer The version of the chaincode.
      * @param {Array} args array of JSON formatted arguments for multiple transactions
      * @param {number} timeout The timeout to set for the execution in seconds.
+     * @param {object} ext The extension argument
      * @return {Promise<object>} The promise for the result of the execution.
      */
-    invokeSmartContract(context, contractID, contractVer, args, timeout) {
+    invokeSmartContract(context, contractID, contractVer, args, timeout, ext) {
         let arg;   // compatible with old version
-        if(Array.isArray(args)) {
+        if (Array.isArray(args)) {
             arg = args;
         }
-        else if(typeof args === 'object') {
+        else if (typeof args === 'object') {
             arg = [args];
         }
         else {
             return Promise.reject(new Error('Invalid args for invokeSmartContract()'));
         }
-        
+
         let promises = [];
-        arg.forEach((item, index)=>{
+        arg.forEach((item, index) => {
             let simpleArgs = [];
-            for(let key in item) {
+            for (let key in item) {
                 simpleArgs.push(item[key]);
             }
-            promises.push(e2eUtils.invokebycontext(context, contractID, contractVer, simpleArgs, timeout));
+            promises.push(e2eUtils.invokebycontext(context, contractID, contractVer, simpleArgs, timeout, ext));
         });
         return Promise.all(promises);
     }
@@ -173,48 +175,49 @@ class Zig extends BlockchainInterface{
         let minDelayE2O = 100000, maxDelayE2O = 0, sumDelayE2O = 0; // time from endorsed to ordered
         let minDelayO2V = 100000, maxDelayO2V = 0, sumDelayO2V = 0; // time from ordered to recorded
         let hasValue = true;
-        for(let i = 0 ; i < results.length ; i++) {
+        for (let i = 0; i < results.length; i++) {
             let stat = results[i];
-            if(!stat.hasOwnProperty('time_endorse')) {
+            if (!stat.hasOwnProperty('time_endorse')) {
                 hasValue = false;
                 break;
             }
-            if(stat.status === 'success') {
-                let delayC2E = (stat.time_endorse - stat.time_create)/1000;
-                let delayE2O = (stat.time_order - stat.time_endorse)/1000;
-                let delayO2V = (stat.time_valid - stat.time_order)/1000;
+            if (stat.status === 'success') {
+                let delayC2E = (stat.time_endorse - stat.time_create) / 1000;
+                let delayE2O = (stat.time_order - stat.time_endorse) / 1000;
+                let delayO2V = (stat.time_valid - stat.time_order) / 1000;
 
-                if(delayC2E < minDelayC2E) {
+                if (delayC2E < minDelayC2E) {
                     minDelayC2E = delayC2E;
                 }
-                if(delayC2E > maxDelayC2E) {
+                if (delayC2E > maxDelayC2E) {
                     maxDelayC2E = delayC2E;
                 }
                 sumDelayC2E += delayC2E;
 
-                if(delayE2O < minDelayE2O) {
+                if (delayE2O < minDelayE2O) {
                     minDelayE2O = delayE2O;
                 }
-                if(delayE2O > maxDelayE2O) {
+                if (delayE2O > maxDelayE2O) {
                     maxDelayE2O = delayE2O;
                 }
                 sumDelayE2O += delayE2O;
 
-                if(delayO2V < minDelayO2V) {
+                if (delayO2V < minDelayO2V) {
                     minDelayO2V = delayO2V;
                 }
-                if(delayO2V > maxDelayO2V) {
+                if (delayO2V > maxDelayO2V) {
                     maxDelayO2V = delayO2V;
                 }
                 sumDelayO2V += delayO2V;
             }
         }
 
-        if(hasValue) {
+        if (hasValue) {
             stats.delayC2E = {'min': minDelayC2E, 'max': maxDelayC2E, 'sum': sumDelayC2E};
             stats.delayE2O = {'min': minDelayE2O, 'max': maxDelayE2O, 'sum': sumDelayE2O};
             stats.delayO2V = {'min': minDelayO2V, 'max': maxDelayO2V, 'sum': sumDelayO2V};
         }
     }
 }
+
 module.exports = Zig;

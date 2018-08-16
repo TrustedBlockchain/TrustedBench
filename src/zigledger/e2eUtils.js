@@ -549,26 +549,27 @@ module.exports.releasecontext = releasecontext;
  * @param {string} version The version of the chaincode.
  * @param {string[]} args The arguments to pass to the chaincode.
  * @param {number} timeout The timeout for the transaction invocation.
- * @param {object} transfer The args for transfer
+ * @param {object} ext The args for transfer
  * @return {Promise<object>} The result and stats of the transaction invocation.
  */
-async function invokebycontext(context, id, version, args, timeout, transfer) {
+async function invokebycontext(context, id, version, args, timeout, ext) {
     const TxErrorEnum = require('./constant.js').TxErrorEnum;
     const TxErrorIndex = require('./constant.js').TxErrorIndex;
 
     const channel = context.channel;
     const eventHubs = context.eventhubs;
     const startTime = Date.now();
-    const txIdObject = context.client.newTransactionID();
+    let txIdObject;
     let senderSpec;
     let signature;
-    if (transfer) {
-        txIdObject.setTransactionID(transfer.tx_id);
-        txIdObject.setNonce(Buffer.from(transfer.nonce, 'hex'));
-        senderSpec = transfer.senderSpec;
-        signature = transfer.signature;
+    if (ext) {
+        txIdObject = ext.txIdObject;
+        senderSpec = ext.senderSpec;
+        signature = ext.signature;
+    } else {
+        txIdObject = context.client.newTransactionID();
     }
-    const txId = txIdObject.getTransactionID().toString();
+    const txId = txIdObject.getTransactionID();
 
     // timestamps are recorded for every phase regardless of success/failure
     let invokeStatus = {

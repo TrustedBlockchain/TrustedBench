@@ -268,8 +268,10 @@ function defaultTest(args, clientArgs, final) {
  * Start a default test flow to run the tests
  * @param {String} configFile path of the test configuration file
  * @param {String} networkFile path of the blockchain configuration file
+ * @param {Boolean} skipInit if skip init phase
+ * @param {Boolean} skipInstall skip install phase
  */
-module.exports.run = function(configFile, networkFile) {
+module.exports.run = function (configFile, networkFile, skipInit = false, skipInstall = false) {
     test('#######Caliper Test######', (t) => {
         global.tapeObj = t;
         absConfigFile  = configFile;
@@ -298,11 +300,19 @@ module.exports.run = function(configFile, networkFile) {
         });
 
         startPromise.then(() => {
-            return blockchain.init();
-        }).then( () => {
-            return blockchain.installSmartContract();
-        }).then( () => {
-            return client.init().then((number)=>{
+            if (skipInit) {
+                return Promise.resolve();
+            } else {
+                return blockchain.init();
+            }
+        }).then(() => {
+            if (skipInstall) {
+                return Promise.resolve();
+            } else {
+                return blockchain.installSmartContract();
+            }
+        }).then(() => {
+            return client.init().then((number) => {
                 return blockchain.prepareClients(number);
             });
         }).then( (clientArgs) => {

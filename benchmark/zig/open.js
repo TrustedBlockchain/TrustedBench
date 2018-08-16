@@ -1,9 +1,9 @@
 /**
- * Copyright 2017 HUAWEI. All Rights Reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- */
+* Copyright 2017 HUAWEI. All Rights Reserved.
+*
+* SPDX-License-Identifier: Apache-2.0
+*
+*/
 
 'use strict';
 
@@ -54,7 +54,7 @@ function generateAccount() {
 module.exports.run = function() {
     let newAcc = generateAccount();
     accounts.push(newAcc);
-    return bc.invokeSmartContract(contx, 'token', 'v0', {verb: 'open', account: newAcc, money: initMoney}, 30,{});
+    return bc.invokeSmartContract(contx, 'simple', 'v0', {verb: 'open', account: newAcc, money: initMoney}, 30);
 };
 
 module.exports.end = function(results) {
