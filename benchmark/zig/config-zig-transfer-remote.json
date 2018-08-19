@@ -1,32 +1,97 @@
 {
   "blockchain": {
     "type": "zigledger",
-    "config": "benchmark/zig/zigledger-remote.json"
+    "config": "benchmark/zig/zig-transfer-remote.json"
   },
   "test": {
     "clients": {
       "type": "local",
       "number": 6
     },
-    "rounds": [{
-      "label" : "open",
-      "txNumber" : [20000, 15000, 15000],
-      "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 500}}, {"type": "fixed-rate", "opts": {"tps" : 600}}, {"type": "fixed-rate", "opts": {"tps" : 700}}],
-      "arguments": {  "money": 10000 },
-      "callback" : "benchmark/zig/open.js"
-    },
+    "rounds": [
       {
-        "label" : "query",
-        "txNumber" : [15000, 15000],
-        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 700}}, {"type": "fixed-rate", "opts": {"tps" : 800}}],
-        "callback" : "benchmark/zig/query.js"
+        "label": "open",
+        "txNumber": [
+          20000,
+          15000,
+          15000
+        ],
+        "rateControl": [
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 500
+            }
+          },
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 600
+            }
+          },
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 700
+            }
+          }
+        ],
+        "arguments": {
+          "money": 10000
+        },
+        "callback": "benchmark/zig/open.js"
+      },
+      {
+        "label": "query",
+        "txNumber": [
+          15000,
+          15000
+        ],
+        "rateControl": [
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 700
+            }
+          },
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 800
+            }
+          }
+        ],
+        "callback": "benchmark/zig/query.js"
+      },
+      {
+        "label": "transfer",
+        "txNumber": [
+          20000
+        ],
+        "rateControl": [
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 700
+            }
+          }
+        ],
+        "arguments": {
+          "path": "sign.json",
+          "amount": 100
+        },
+        "callback": "benchmark/zig/transfer.js"
       }
     ]
   },
   "monitor": {
-    "type": ["docker", "process"],
-    "docker":{
-      "name": ["http://192.168.0.30:2375/multiplehostsnetwork_orderer.example.com_1",
+    "type": [
+      "docker",
+      "process"
+    ],
+    "docker": {
+      "name": [
+        "http://192.168.0.30:2375/multiplehostsnetwork_orderer.example.com_1",
         "http://192.168.0.30:2375/multiplehostsnetwork_kafka0_1",
         "http://192.168.0.30:2375/multiplehostsnetwork_zookeeper0_1",
         "http://192.168.0.31:2375/multiplehostsnetwork_kafka1_1",
@@ -39,13 +104,14 @@
         "http://192.168.0.34:2375/multiplehostsnetwork_ca0_1",
         "http://192.168.0.34:2375/multiplehostsnetwork_peer0.org1.example.com_1",
         "http://192.168.0.35:2375/multiplehostsnetwork_ca1_1",
-        "http://192.168.0.35:2375/multiplehostsnetwork_peer0.org2.example.com_1"]
+        "http://192.168.0.35:2375/multiplehostsnetwork_peer0.org2.example.com_1"
+      ]
     },
     "process": [
       {
-        "command" : "node",
-        "arguments" : "local-client.js",
-        "multiOutput" : "avg"
+        "command": "node",
+        "arguments": "local-client.js",
+        "multiOutput": "avg"
       }
     ],
     "interval": 1

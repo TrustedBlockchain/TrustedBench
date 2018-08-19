@@ -440,6 +440,7 @@ function getcontext(channelConfig) {
     let data = fs.readFileSync(path.join(__dirname, rootPath, caRootsPath));
     let caroots = Buffer.from(data).toString();
 
+    ORGS.orderer
     channel.addOrderer(
         client.newOrderer(
             ORGS.orderer.url,

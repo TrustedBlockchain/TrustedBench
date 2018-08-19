@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  zigerface-listener.org1:
+    hostname: zigerface-listener-org1
+    image: zhigui/zigerface-listener:x86_64-0.1.2
+    network_mode: "host"
+    volumes:
+      - ./:/work/config/artifacts
+      - ./network-config.json:/work/config/network-config.json
+      - ./config.json:/work/config/config.json
+      - ./zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
+
+  zig-explorer:
+    hostname: zig-explorer
+    image: zhigui/zig-explorer:x86_64-0.1.1
+    network_mode: "host"
+    ports:
+      - 80:80
+    volumes:
+      - ./explore.conf:/etc/nginx/conf.d/explore.conf

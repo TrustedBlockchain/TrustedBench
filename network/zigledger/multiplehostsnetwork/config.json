@@ -63,7 +63,7 @@
   "peerName": "peer1",
   "userName": "user2",
   "orgName": "org1",
-  "tx_timeout": "10000",
+  "tx_timeout": "100000",
   "resend": false,
   "resend_count": 10,
   "accessControl": false,
