@@ -12,7 +12,7 @@
     },
     "rounds": [{
       "label" : "transfer",
-      "txNumber" : [500],
+      "txNumber" : [1500],
       "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 100}}],
       "arguments": {  "path": "sign.json", "amount": 100},
       "callback" : "benchmark/zig/transfer.js"
