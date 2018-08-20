@@ -78,7 +78,7 @@ class BlockchainInterface {
      * @param {Array} args array of JSON formatted arguments for multiple transactions
      * @param {Number} timeout request timeout, in second
      */
-    invokeSmartContract(context, contractID, contractVer, args, timeout) {
+    invokeSmartContract(context, contractID, contractVer, args, timeout, ext) {
         throw new Error('invokeSmartContract is not implemented for this blockchain system');
     }
 

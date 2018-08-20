@@ -120,7 +120,7 @@ class Blockchain {
      * @param {Number} timeout request timeout, in second
      * @return {Promise} txStatus object or an array of txStatus objects
      */
-    invokeSmartContract(context, contractID, contractVer, args, timeout) {
+    invokeSmartContract(context, contractID, contractVer, args, timeout, ext) {
         let arg, time;    // compatible with old version
         if(Array.isArray(args)) {
             arg = args;
@@ -139,7 +139,7 @@ class Blockchain {
             time = timeout;
         }
 
-        return this.bcObj.invokeSmartContract(context, contractID, contractVer, arg, time);
+        return this.bcObj.invokeSmartContract(context, contractID, contractVer, arg, time, ext);
     }
 
     /**
