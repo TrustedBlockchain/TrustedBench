@@ -77,10 +77,10 @@ services:
       - ZIGLEDGER_CA_HOME=/etc/zhigui/fabric-ca-server
       - ZIGLEDGER_CA_SERVER_CA_NAME=ca-org3
       - ZIGLEDGER_CA_SERVER_CA_CERTFILE=/etc/zhigui/fabric-ca-server-config/ca.org3.example.com-cert.pem
-      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/zhigui/fabric-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
+      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/zhigui/fabric-ca-server-config/5cac5c0f081422be27b91a228076766cdcf7536261b4651b83be3978422d40a7_sk
       - ZIGLEDGER_CA_SERVER_TLS_ENABLED=true
       - ZIGLEDGER_CA_SERVER_TLS_CERTFILE=/etc/zhigui/fabric-ca-server-config/ca.org3.example.com-cert.pem
-      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/zhigui/fabric-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
+      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/zhigui/fabric-ca-server-config/5cac5c0f081422be27b91a228076766cdcf7536261b4651b83be3978422d40a7_sk
       - GODEBUG=netdns=go
     ports:
       - "7054:7054"

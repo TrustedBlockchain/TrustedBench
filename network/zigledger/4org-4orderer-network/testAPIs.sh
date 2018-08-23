@@ -24,7 +24,7 @@ curl -s -X POST \
   -d '{
 	"channelName":"mychannel",
     "org":"org1",
-	"peers":["peer1", "peer2"]
+	"peers":["peer1", "peer2", "peer3"]
 }' | jq '.'
 
 echo
@@ -39,13 +39,35 @@ curl -s -X POST \
 }' | jq '.'
 
 echo
+echo "POST request Join channel on Org3"
+curl -s -X POST \
+  http://zigerface-fullserver.org1:8081/join-channel \
+  -H "content-type: application/json" \
+  -d '{
+	"channelName":"mychannel",
+    "org":"org3",
+	"peers":["peer1","peer2"]
+}' | jq '.'
+
+echo
+echo "POST request Join channel on Org4"
+curl -s -X POST \
+  http://zigerface-fullserver.org1:8081/join-channel \
+  -H "content-type: application/json" \
+  -d '{
+	"channelName":"mychannel",
+    "org":"org4",
+	"peers":["peer1","peer2"]
+}' | jq '.'
+
+echo
 echo "POST request Install chaincode on Org1"
 curl -s -X POST \
   http://zigerface-fullserver.org1:8081/install-cc \
   -H "content-type: application/json" \
   -d '{
   	"org":"org1",
-	"peers":["peer1","peer2"],
+	"peers":["peer1","peer2","peer3"],
 	"chaincodeName":"token",
 	"chaincodePath":"github.com/token",
 	"chaincodeVersion":"1.0"
@@ -58,6 +80,32 @@ curl -s -X POST \
   -H "content-type: application/json" \
   -d '{
   	"org":"org2",
+	"peers":["peer1","peer2"],
+	"chaincodeName":"token",
+	"chaincodePath":"github.com/token",
+	"chaincodeVersion":"1.0"
+}' | jq '.'
+
+echo
+echo "POST request Install chaincode on Org3"
+curl -s -X POST \
+  http://zigerface-fullserver.org1:8081/install-cc \
+  -H "content-type: application/json" \
+  -d '{
+  	"org":"org3",
+	"peers":["peer1","peer2"],
+	"chaincodeName":"token",
+	"chaincodePath":"github.com/token",
+	"chaincodeVersion":"1.0"
+}' | jq '.'
+
+echo
+echo "POST request Install chaincode on Org4"
+curl -s -X POST \
+  http://zigerface-fullserver.org1:8081/install-cc \
+  -H "content-type: application/json" \
+  -d '{
+  	"org":"org4",
 	"peers":["peer1","peer2"],
 	"chaincodeName":"token",
 	"chaincodePath":"github.com/token",

@@ -3,7 +3,6 @@ version: '3.1'
 services:
   kafka0:
     image: zhigui/zigledger-kafka:x86_64-0.4.6
-    restart: always
     hostname: kafka0
     network_mode: "host"
     ports:
