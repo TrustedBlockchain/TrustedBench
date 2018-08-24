@@ -1,27 +1,11 @@
 {
   "network-config": {
-    "orderers": [
+    "orderers":
       {
         "url": "grpcs://orderer0.example.com:7050",
         "server-hostname": "orderer0.example.com",
         "tls_cacerts": "../../config/artifacts/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
       },
-      {
-        "url": "grpcs://orderer1.example.com:7050",
-        "server-hostname": "orderer1.example.com",
-        "tls_cacerts": "../../config/artifacts/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
-      },
-      {
-        "url": "grpcs://orderer2.example.com:7050",
-        "server-hostname": "orderer2.example.com",
-        "tls_cacerts": "../../config/artifacts/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
-      },
-      {
-        "url": "grpcs://orderer3.example.com:7050",
-        "server-hostname": "orderer3.example.com",
-        "tls_cacerts": "../../config/artifacts/crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
-      }
-    ],
     "org1": {
       "name": "peerOrg1",
       "mspid": "Org1MSP",

@@ -1,0 +1,188 @@
+{
+  "zigledger": {
+    "cryptodir": "network/zigledger/4org-4orderer-network/crypto-config",
+    "network": {
+      "orderer": [
+        {
+        "url": "grpcs://192.168.0.69:7050",
+        "mspid": "OrdererMSP",
+        "user": {
+          "key": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/60d32b42745c47b2bb97f81cf43c67276d341fe6a660f4bfef73fb82d8b8e62b_sk",
+          "cert": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+        },
+        "server-hostname": "orderer0.example.com",
+        "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/ca.crt"
+      },
+        {
+          "url": "grpcs://192.168.0.70:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/60d32b42745c47b2bb97f81cf43c67276d341fe6a660f4bfef73fb82d8b8e62b_sk",
+            "cert": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer1.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpcs://192.168.0.71:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/60d32b42745c47b2bb97f81cf43c67276d341fe6a660f4bfef73fb82d8b8e62b_sk",
+            "cert": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer2.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpcs://192.168.0.72:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/60d32b42745c47b2bb97f81cf43c67276d341fe6a660f4bfef73fb82d8b8e62b_sk",
+            "cert": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer3.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/ca.crt"
+        }
+      ],
+      "org1": {
+        "name": "peerOrg1",
+        "mspid": "Org1MSP",
+        "user": {
+          "key": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/55efd6d92d79cc952d8037feacee579d34a3cec6d482a2783548b2b549c20189_sk",
+          "cert": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem"
+        },
+        "ca": {
+          "url": "https://192.168.0.73:7054",
+          "name": "ca-org1"
+        },
+        "peer1": {
+          "requests": "grpcs://192.168.0.73:7051",
+          "events": "grpcs://192.168.0.73:7053",
+          "server-hostname": "peer0.org1.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpcs://192.168.0.73:7057",
+          "events": "grpcs://192.168.0.73:7059",
+          "server-hostname": "peer1.org1.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt"
+        }
+      },
+      "org2": {
+        "name": "peerOrg2",
+        "mspid": "Org2MSP",
+        "ca": {
+          "url": "https://192.168.0.74:7054",
+          "name": "ca-org2"
+        },
+        "peer1": {
+          "requests": "grpcs://192.168.0.74:7051",
+          "events": "grpcs://192.168.0.74:7053",
+          "server-hostname": "peer0.org2.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpcs://192.168.0.74:7057",
+          "events": "grpcs://192.168.0.74:7059",
+          "server-hostname": "peer1.org2.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt"
+        }
+      },
+      "org3": {
+        "name": "peerOrg3",
+        "mspid": "Org3MSP",
+        "ca": {
+          "url": "https://192.168.0.72:7054",
+          "name": "ca-org3"
+        },
+        "peer1": {
+          "requests": "grpcs://192.168.0.72:7051",
+          "events": "grpcs://192.168.0.72:7053",
+          "server-hostname": "peer0.org3.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpcs://192.168.0.72:7057",
+          "events": "grpcs://192.168.0.72:7059",
+          "server-hostname": "peer1.org3.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/tls/ca.crt"
+        }
+      },
+      "org4": {
+        "name": "peerOrg4",
+        "mspid": "Org4MSP",
+        "ca": {
+          "url": "https://192.168.0.71:7054",
+          "name": "ca-org4"
+        },
+        "peer1": {
+          "requests": "grpcs://192.168.0.71:7051",
+          "events": "grpcs://192.168.0.71:7053",
+          "server-hostname": "peer0.org4.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpcs://192.168.0.71:7057",
+          "events": "grpcs://192.168.0.71:7059",
+          "server-hostname": "peer1.org4.example.com",
+          "tls_cacerts": "network/zigledger/4org-4orderer-network/crypto-config/peerOrganizations/org4.example.com/peers/peer1.org4.example.com/tls/ca.crt"
+        }
+      }
+    },
+    "channel": [
+      {
+        "name": "mychannel",
+        "config": "network/zigledger/4org-4orderer-network/mychannel.tx",
+        "organizations": ["org1", "org2"],
+        "deployed": true
+      }
+    ],
+    "chaincodes": [{"id": "simple", "path": "contract/zigledger/simple", "language":"golang", "version": "v0", "channel": "mychannel"}],
+    "endorsement-policy": {
+      "identities": [
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org1MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org2MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org3MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org4MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "admin",
+            "mspId": "Org1MSP"
+          }
+        }
+      ],
+      "policy": { "4-of": [{"signed-by": 0}, {"signed-by": 1}, {"signed-by": 2}, {"signed-by": 3}]}
+    },
+    "context": {
+      "open": "mychannel",
+      "query": "mychannel",
+      "transfer": "mychannel"
+    }
+  },
+  "info" : {
+    "Version": "1.1.0",
+    "Size": "4 Peers",
+    "Orderer": "Solo",
+    "Distribution": "Single Host"
+  }
+}

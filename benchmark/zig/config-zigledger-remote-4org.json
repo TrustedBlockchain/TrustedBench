@@ -1,0 +1,74 @@
+{
+  "blockchain": {
+    "type": "zigledger",
+    "config": "benchmark/zig/zigledger-remote-4org.json"
+  },
+  "test": {
+    "clients": {
+      "type": "local",
+      "number": 6
+    },
+    "rounds": [
+      {
+        "label": "transfer",
+        "txNumber": [
+          20000
+        ],
+        "rateControl": [
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 700
+            }
+          }
+        ],
+        "arguments": {
+          "path": "sign.json",
+          "amount": 100
+        },
+        "callback": "benchmark/zig/transfer.js"
+      }
+    ]
+  },
+  "monitor": {
+    "type": [
+      "docker",
+      "process"
+    ],
+    "docker": {
+      "name": [
+        "http://192.168.0.69:2375/multiplehostsnetwork_orderer0.example.com_1",
+        "http://192.168.0.70:2375/multiplehostsnetwork_orderer1.example.com_1",
+        "http://192.168.0.71:2375/multiplehostsnetwork_orderer2.example.com_1",
+        "http://192.168.0.72:2375/multiplehostsnetwork_orderer3.example.com_1",
+        "http://192.168.0.69:2375/multiplehostsnetwork_kafka0_1",
+        "http://192.168.0.69:2375/multiplehostsnetwork_zookeeper0_1",
+        "http://192.168.0.70:2375/multiplehostsnetwork_kafka1_1",
+        "http://192.168.0.70:2375/multiplehostsnetwork_zookeeper1_1",
+        "http://192.168.0.74:2375/multiplehostsnetwork_peer1.org2.example.com_1",
+        "http://192.168.0.71:2375/multiplehostsnetwork_kafka2_1",
+        "http://192.168.0.71:2375/multiplehostsnetwork_zookeeper2_1",
+        "http://192.168.0.73:2375/multiplehostsnetwork_peer1.org1.example.com_1",
+        "http://192.168.0.72:2375/multiplehostsnetwork_kafka3_1",
+        "http://192.168.0.73:2375/multiplehostsnetwork_ca0_1",
+        "http://192.168.0.73:2375/multiplehostsnetwork_peer0.org1.example.com_1",
+        "http://192.168.0.74:2375/multiplehostsnetwork_ca1_1",
+        "http://192.168.0.74:2375/multiplehostsnetwork_peer0.org2.example.com_1",
+        "http://192.168.0.72:2375/multiplehostsnetwork_peer0.org3.example.com_1",
+        "http://192.168.0.72:2375/multiplehostsnetwork_peer1.org3.example.com_1",
+        "http://192.168.0.71:2375/multiplehostsnetwork_peer0.org4.example.com_1",
+        "http://192.168.0.71:2375/multiplehostsnetwork_peer1.org4.example.com_1",
+        "http://192.168.0.72:2375/multiplehostsnetwork_ca2_1",
+        "http://192.168.0.71:2375/multiplehostsnetwork_ca3_1"
+      ]
+    },
+    "process": [
+      {
+        "command": "node",
+        "arguments": "local-client.js",
+        "multiOutput": "avg"
+      }
+    ],
+    "interval": 1
+  }
+}
