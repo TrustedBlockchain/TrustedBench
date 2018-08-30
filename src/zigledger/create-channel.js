@@ -54,7 +54,8 @@ function run(config_path) {
     return new Promise(function(resolve, reject) {
         const t = global.tapeObj;
         let ORGS = zigledger.network;
-        let caRootsPath = ORGS.orderer.tls_cacerts;
+        let selectedOrderer = ORGS.orderer[Math.floor(Math.random() * ORGS.orderer.length)];
+        let caRootsPath = selectedOrderer.tls_cacerts;
         let data = fs.readFileSync(path.join(__dirname, '../..', caRootsPath));
         let caroots = Buffer.from(data).toString();
         utils.setConfigSetting('key-value-store', 'zig-client/lib/impl/FileKeyValueStore.js');
@@ -71,10 +72,10 @@ function run(config_path) {
                 let client = new Client();
                 let org = channel.organizations[0];
                 let orderer = client.newOrderer(
-                    ORGS.orderer.url,
+                    selectedOrderer.url,
                     {
                         'pem': caroots,
-                        'ssl-target-name-override': ORGS.orderer['server-hostname']
+                        'ssl-target-name-override': selectedOrderer['server-hostname']
                     }
                 );
 

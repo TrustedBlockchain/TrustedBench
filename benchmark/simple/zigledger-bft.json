@@ -2,7 +2,7 @@
   "zigledger": {
     "cryptodir": "network/zigledger/bftnetwork/crypto-config",
     "network": {
-      "orderer": {
+      "orderer": [{
         "url": "grpcs://localhost:7050",
         "mspid": "OrdererMSP",
         "user": {
@@ -11,7 +11,7 @@
         },
         "server-hostname": "orderer0.example.com",
         "tls_cacerts": "network/zigledger/bftnetwork/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/ca.crt"
-      },
+      }],
       "org1": {
         "name": "peerOrg1",
         "mspid": "Org1MSP",

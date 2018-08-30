@@ -45,7 +45,7 @@ services:
   orderer0.example.com:
     container_name: orderer0.example.com
 #    image: zhigui/zigledger-orderer
-    image: zhigui/zigledger-orderer:x86_64-1.1.7
+    image: zhigui/zigledger-orderer:x86_64-1.2.5
     environment:
 #      - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -78,7 +78,7 @@ services:
   orderer1.example.com:
     container_name: orderer1.example.com
 #    image: zhigui/zigledger-orderer
-    image: zhigui/zigledger-orderer:x86_64-1.1.7
+    image: zhigui/zigledger-orderer:x86_64-1.2.5
     environment:
 #      - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -111,7 +111,7 @@ services:
   orderer2.example.com:
     container_name: orderer2.example.com
 #    image: zhigui/zigledger-orderer
-    image: zhigui/zigledger-orderer:x86_64-1.1.7
+    image: zhigui/zigledger-orderer:x86_64-1.2.5
     environment:
 #      - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -144,7 +144,7 @@ services:
   orderer3.example.com:
     container_name: orderer3.example.com
 #    image: zhigui/zigledger-orderer
-    image: zhigui/zigledger-orderer:x86_64-1.1.7
+    image: zhigui/zigledger-orderer:x86_64-1.2.5
     environment:
 #      - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -176,7 +176,7 @@ services:
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
-    image: zhigui/zigledger-peer:x86_64-1.1.2
+    image: zhigui/zigledger-peer:x86_64-1.2.5
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.org1.example.com
@@ -210,7 +210,7 @@ services:
 
   peer1.org1.example.com:
     container_name: peer1.org1.example.com
-    image: zhigui/zigledger-peer:x86_64-1.1.2
+    image: zhigui/zigledger-peer:x86_64-1.2.5
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer1.org1.example.com
@@ -245,7 +245,7 @@ services:
 
   peer0.org2.example.com:
     container_name: peer0.org2.example.com
-    image: zhigui/zigledger-peer:x86_64-1.1.2
+    image: zhigui/zigledger-peer:x86_64-1.2.5
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.org2.example.com
@@ -278,7 +278,7 @@ services:
 
   peer1.org2.example.com:
     container_name: peer1.org2.example.com
-    image: zhigui/zigledger-peer:x86_64-1.1.2
+    image: zhigui/zigledger-peer:x86_64-1.2.5
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer1.org2.example.com
