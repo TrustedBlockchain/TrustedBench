@@ -49,8 +49,8 @@ module.exports.run = function (config_path) {
             return prev.then(() => {
                 return e2eUtils.instantiateChaincode(chaincode, policy, false).then(() => {
                     t.pass('Instantiated chaincode ' + chaincode.id + ' successfully ');
-                    t.comment('Sleep 10s...');
-                    return commUtils.sleep(10000);
+                    t.comment('Sleep 30s...');
+                    return commUtils.sleep(30000);
                 });
             });
         }, Promise.resolve())
