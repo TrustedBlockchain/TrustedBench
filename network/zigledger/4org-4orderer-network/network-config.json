@@ -93,8 +93,8 @@
           "tls_cacerts": "../../config/artifacts/crypto-config/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/msp/tlscacerts/tlsca.org4.example.com-cert.pem"
         },
         "peer2": {
-          "requests": "grpcs://peer1.org3.example.com:7057",
-          "events": "grpcs://peer1.org3.example.com:7059",
+          "requests": "grpcs://peer1.org4.example.com:7057",
+          "events": "grpcs://peer1.org4.example.com:7059",
           "server-hostname": "peer1.org4.example.com",
           "tls_cacerts": "../../config/artifacts/crypto-config/peerOrganizations/org4.example.com/peers/peer1.org4.example.com/msp/tlscacerts/tlsca.org4.example.com-cert.pem"
         }
