@@ -10,14 +10,14 @@
         "type": "zookeeper",
         "zoo" : {
           "server": "127.0.0.1:12181",
-          "clientsPerHost": 2
+          "clientsPerHost": 1
         }
       },
       "rounds": [
         {
-          "label": "create-account",
+          "label": "open-account",
           "txDuration": [
-            60
+            300
           ],
           "rateControl": [
             {
@@ -27,7 +27,7 @@
               }
             }
           ],
-          "callback": "benchmark/sinochain/create.js"
+          "callback": "benchmark/sinochain/open.js"
         }
       ]
     },
