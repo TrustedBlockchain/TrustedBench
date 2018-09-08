@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.info = 'create account';
+module.exports.info = 'open account';
 
 let bc, ctx;
 
@@ -20,7 +20,7 @@ module.exports.init = function(blockchain, context, args) {
 module.exports.run = function() {
     return bc.bcObj.sinoSendToCloud(ctx, {
         Seqnum: (++seqnum),
-        Payload: new Buffer('{"name": "mycc", "args": ["create", "' + seqnum + '", "10"]}')
+        Payload: new Buffer('{"name": "simple", "args": ["open", "' + seqnum + '", "10"]}')
     });
 };
 
