@@ -32,7 +32,7 @@
       }
     ],
     "policy": {
-      "1-of": [
+      "2-of": [
         {
           "signed-by": 0
         },
@@ -63,7 +63,7 @@
   "peerName": "peer1",
   "userName": "user2",
   "orgName": "org1",
-  "tx_timeout": "100000",
+  "tx_timeout": "1000000",
   "resend": false,
   "resend_count": 10,
   "accessControl": false,

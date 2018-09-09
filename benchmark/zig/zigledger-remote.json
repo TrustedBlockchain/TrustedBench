@@ -3,7 +3,7 @@
     "cryptodir": "network/zigledger/multiplehostsnetwork/crypto-config",
     "network": {
       "orderer": {
-        "url": "grpcs://192.168.0.30:7050",
+        "url": "grpcs://192.168.0.77:7050",
         "mspid": "OrdererMSP",
         "user": {
           "key": "network/zigledger/multiplehostsnetwork/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/be595291403ff68280a724d7e868521815ad9e2fc8c5486f6d7ce6b62d6357cd_sk",
@@ -20,18 +20,18 @@
           "cert": "network/zigledger/multiplehostsnetwork/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem"
         },
         "ca": {
-          "url": "https://192.168.0.34:7054",
+          "url": "https://192.168.0.81:7054",
           "name": "ca-org1"
         },
         "peer1": {
-          "requests": "grpcs://192.168.0.34:7051",
-          "events": "grpcs://192.168.0.34:7053",
+          "requests": "grpcs://192.168.0.81:7051",
+          "events": "grpcs://192.168.0.81:7053",
           "server-hostname": "peer0.org1.example.com",
           "tls_cacerts": "network/zigledger/multiplehostsnetwork/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
         },
         "peer2": {
-          "requests": "grpcs://192.168.0.33:7051",
-          "events": "grpcs://192.168.0.33:7053",
+          "requests": "grpcs://192.168.0.80:7051",
+          "events": "grpcs://192.168.0.80:7053",
           "server-hostname": "peer1.org1.example.com",
           "tls_cacerts": "network/zigledger/multiplehostsnetwork/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt"
         }
@@ -40,18 +40,18 @@
         "name": "peerOrg2",
         "mspid": "Org2MSP",
         "ca": {
-          "url": "https://192.168.0.35:7054",
+          "url": "https://192.168.0.82:7054",
           "name": "ca-org2"
         },
         "peer1": {
-          "requests": "grpcs://192.168.0.35:7051",
-          "events": "grpcs://192.168.0.35:7053",
+          "requests": "grpcs://192.168.0.82:7051",
+          "events": "grpcs://192.168.0.82:7053",
           "server-hostname": "peer0.org2.example.com",
           "tls_cacerts": "network/zigledger/multiplehostsnetwork/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"
         },
         "peer2": {
-          "requests": "grpcs://192.168.0.32:7051",
-          "events": "grpcs://192.168.0.32:7053",
+          "requests": "grpcs://192.168.0.79:7051",
+          "events": "grpcs://192.168.0.79:7053",
           "server-hostname": "peer1.org2.example.com",
           "tls_cacerts": "network/zigledger/multiplehostsnetwork/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt"
         }
@@ -87,7 +87,7 @@
           }
         }
       ],
-      "policy": { "1-of": [{"signed-by": 0}, {"signed-by": 1}]}
+      "policy": { "2-of": [{"signed-by": 0}, {"signed-by": 1}]}
     },
     "context": {
       "open": "mychannel",

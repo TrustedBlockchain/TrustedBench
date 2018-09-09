@@ -4,11 +4,11 @@ services:
   peer0.org1.example.com:
     hostname: peer0.org1.example.com
     network_mode: "host"
-    image: zhigui/zigledger-peer:x86_64-1.2.2
+    image: zhigui/zigledger-peer:x86_64-1.2.12
     environment:
      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
      - CORE_PEER_ID=peer0.org1.example.com
-#      - CORE_LOGGING_PEER=debug
+     - CORE_LOGGING_LEVEL=WARNING
      - CORE_PEER_ENDORSER_ENABLED=true
      - CORE_PEER_LOCALMSPID=Org1MSP
      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
@@ -18,6 +18,8 @@ services:
      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
      - CORE_PEER_TLS_ENABLED=true
      - CORE_PEER_PROFILE_ENABLED=true
+     - CORE_PEER_EVENTS_BUFFERSIZE=5000
+     - CORE_PEER_EVENTS_TIMEOUT=200ms
      - CORE_PEER_SIMPLEFEEK=0
      - CORE_PEER_SIMPLEFEEX0=0
      - CORE_PEER_SIMPLEFEEB=0

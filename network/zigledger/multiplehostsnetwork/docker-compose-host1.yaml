@@ -4,9 +4,9 @@ services:
   orderer.example.com:
     hostname: orderer.example.com
     network_mode: "host"
-    image: zhigui/zigledger-orderer:x86_64-1.2.2
+    image: zhigui/zigledger-orderer:x86_64-1.2.12
     environment:
-#      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LOGLEVEL=WARNING
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/twoorgs.genesis.block
