@@ -4,7 +4,7 @@ services:
   peer0.org1.example.com:
     hostname: peer0.org1.example.com
     network_mode: "host"
-    image: zhigui/zigledger-peer:x86_64-1.2.12
+    image: zhigui/zigledger-peer:x86_64-1.2.4
     environment:
      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
      - CORE_PEER_ID=peer0.org1.example.com
@@ -20,6 +20,9 @@ services:
      - CORE_PEER_PROFILE_ENABLED=true
      - CORE_PEER_EVENTS_BUFFERSIZE=5000
      - CORE_PEER_EVENTS_TIMEOUT=200ms
+     - CORE_PEER_GOSSIP_SENDBUFFSIZE=500
+     - CORE_PEER_GOSSIP_RECVBUFFSIZE=100
+     - CORE_PEER_GOSSIP_SKIPBLOCKVERIFICATION=true
      - CORE_PEER_SIMPLEFEEK=0
      - CORE_PEER_SIMPLEFEEX0=0
      - CORE_PEER_SIMPLEFEEB=0

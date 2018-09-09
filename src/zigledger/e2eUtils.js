@@ -644,19 +644,19 @@ async function invokebycontext(context, id, version, args, timeout, ext) {
             allGood = allGood && one_good;
         }
 
-        if (allGood) {
-            // check all the read/write sets to see if the same, verify that each peer
-            // got the same results on the proposal
-            allGood = channel.compareProposalResponseResults(proposalResponses);
-            if (!allGood) {
-                let err = new Error('Read/Write set mismatch between endorsements');
-                invokeStatus.error_flags |= TxErrorEnum.BadProposalResponseError;
-                invokeStatus.error_messages[TxErrorIndex.BadProposalResponseError] = err.toString();
-                // r/w set mismatch, early life-cycle termination, definitely failed
-                invokeStatus.verified = true;
-                throw err;
-            }
-        }
+        // if (allGood) {
+        //     // check all the read/write sets to see if the same, verify that each peer
+        //     // got the same results on the proposal
+        //     allGood = channel.compareProposalResponseResults(proposalResponses);
+        //     if (!allGood) {
+        //         let err = new Error('Read/Write set mismatch between endorsements');
+        //         invokeStatus.error_flags |= TxErrorEnum.BadProposalResponseError;
+        //         invokeStatus.error_messages[TxErrorIndex.BadProposalResponseError] = err.toString();
+        //         // r/w set mismatch, early life-cycle termination, definitely failed
+        //         invokeStatus.verified = true;
+        //         throw err;
+        //     }
+        // }
 
         invokeStatus.result = proposalResponses[0].response.payload;
 

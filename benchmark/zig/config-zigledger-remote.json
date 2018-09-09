@@ -6,7 +6,7 @@
   "test": {
     "clients": {
       "type": "local",
-      "number": 6
+      "number": 8
     },
     "rounds": [
       {
@@ -37,20 +37,20 @@
     ],
     "docker": {
       "name": [
-        "http://192.168.0.30:2375/multiplehostsnetwork_orderer.example.com_1",
-        "http://192.168.0.30:2375/multiplehostsnetwork_kafka0_1",
-        "http://192.168.0.30:2375/multiplehostsnetwork_zookeeper0_1",
-        "http://192.168.0.31:2375/multiplehostsnetwork_kafka1_1",
-        "http://192.168.0.31:2375/multiplehostsnetwork_zookeeper1_1",
-        "http://192.168.0.32:2375/multiplehostsnetwork_peer1.org2.example.com_1",
-        "http://192.168.0.32:2375/multiplehostsnetwork_kafka2_1",
-        "http://192.168.0.32:2375/multiplehostsnetwork_zookeeper2_1",
-        "http://192.168.0.33:2375/multiplehostsnetwork_peer1.org1.example.com_1",
-        "http://192.168.0.33:2375/multiplehostsnetwork_kafka3_1",
-        "http://192.168.0.34:2375/multiplehostsnetwork_ca0_1",
-        "http://192.168.0.34:2375/multiplehostsnetwork_peer0.org1.example.com_1",
-        "http://192.168.0.35:2375/multiplehostsnetwork_ca1_1",
-        "http://192.168.0.35:2375/multiplehostsnetwork_peer0.org2.example.com_1"
+        "http://192.168.0.77:2375/multiplehostsnetwork_orderer.example.com_1",
+        "http://192.168.0.77:2375/multiplehostsnetwork_kafka0_1",
+        "http://192.168.0.77:2375/multiplehostsnetwork_zookeeper0_1",
+        "http://192.168.0.78:2375/multiplehostsnetwork_kafka1_1",
+        "http://192.168.0.78:2375/multiplehostsnetwork_zookeeper1_1",
+        "http://192.168.0.79:2375/multiplehostsnetwork_peer1.org2.example.com_1",
+        "http://192.168.0.79:2375/multiplehostsnetwork_kafka2_1",
+        "http://192.168.0.79:2375/multiplehostsnetwork_zookeeper2_1",
+        "http://192.168.0.80:2375/multiplehostsnetwork_peer1.org1.example.com_1",
+        "http://192.168.0.80:2375/multiplehostsnetwork_kafka3_1",
+        "http://192.168.0.81:2375/multiplehostsnetwork_ca0_1",
+        "http://192.168.0.81:2375/multiplehostsnetwork_peer0.org1.example.com_1",
+        "http://192.168.0.82:2375/multiplehostsnetwork_ca1_1",
+        "http://192.168.0.82:2375/multiplehostsnetwork_peer0.org2.example.com_1"
       ]
     },
     "process": [
