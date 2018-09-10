@@ -48,10 +48,10 @@ services:
       - ZIGLEDGER_CA_HOME=/etc/hyperledger/fabric-ca-server
       - ZIGLEDGER_CA_SERVER_CA_NAME=ca-org1
       - ZIGLEDGER_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
-      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
+      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/baea95d3ab8980ef702aff4875c408be385469bf8569f37314aae2b8532253e4_sk
       - ZIGLEDGER_CA_SERVER_TLS_ENABLED=true
       - ZIGLEDGER_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
-      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2fbb10374113397e45316b7487a605f800a1a4883e769b3ade3c65b903ae48fc_sk
+      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/baea95d3ab8980ef702aff4875c408be385469bf8569f37314aae2b8532253e4_sk
       - GODEBUG=netdns=go
     ports:
       - "7054:7054"
