@@ -125,19 +125,6 @@ class Blockchain {
     }
 
     /**
-     * send nothing, return a default tx status
-     * @param {Object} context context object
-     * @param {string} txHash transaction hash.
-     * @return {TxStatus} he txStatus for the transaction
-     */
-    sendNon(context, txHash) {
-        if (context.engine) {
-            context.engine.submitCallback(1);
-        }
-        return Promise.resolve(new TxStatus(txHash));
-    }
-
-    /**
      * wait a block to catch up destHeight, if arg destHeight not defined, wait a block generate
      * @param {int} destHeight start height
      * @return {Promise} bcObj.waitABlock()

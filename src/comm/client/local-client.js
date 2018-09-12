@@ -12,6 +12,7 @@ const bc = require('../blockchain.js');
 const RateControl = require('../rate-control/rateControl.js');
 const Util = require('../util.js');
 const log = Util.log;
+const TxStatus = require('../transaction');
 
 let blockchain;
 let results = [];
@@ -139,36 +140,43 @@ async function runFixedNumber(msg, cb, context) {
 
     msg.args.txNum = msg.numb;
     msg.args.clientIndex = msg.clientIdx;
-    await cb.init(blockchain, context, msg.args);
-    startTime = Date.now();
+    let shouldSendTx = false;
+    await cb.init(blockchain, context, msg.args).then((sendTx) => {
+        shouldSendTx = sendTx;
+    });
 
-    let promises = [];
-    let currentHeight = await blockchain.getHeight();
-    log('start send tx, current height is ', currentHeight);
-    while (txNum < msg.numb) {
-        promises.push(cb.run().then((result) => {
-            if (blockchain.getType() === 'ontology') {
-                if (result.GetStatus() !== 'failed') { // tx has not been confirmed yet
-                    notSureTxStatus.set(result.GetID(), result);
-                } else {
-                    addResult(result);
+    if (shouldSendTx) {
+        let promises = [];
+        let currentHeight = await blockchain.getHeight();
+        log('start send tx, current height is ', currentHeight);
+        startTime = Date.now();
+        while (txNum < msg.numb) {
+            promises.push(cb.run().then((result) => {
+                if (blockchain.getType() === 'ontology') {
+                    if (result.GetStatus() !== 'failed') { // tx has not been confirmed yet
+                        notSureTxStatus.set(result.GetID(), result);
+                    } else {
+                        addResult(result);
+                    }
                 }
+                return Promise.resolve();
+            }));
+            // applyRateControl per second
+            if (txNum % (tps / 10) === 0) {
+                // log('wait net req end, txNum is %d, req Num is %d', txNum, promises.length);
+                await Promise.all(promises);
+                promises = [];
+                txUpdate();
+                await rateControl.applyRateControl(startTime, txNum, results);
             }
-            return Promise.resolve();
-        }));
-        // applyRateControl per second
-        if (txNum % (tps / 10) === 0) {
-            // log('wait net req end, txNum is %d, req Num is %d', txNum, promises.length);
-            await Promise.all(promises);
-            promises = [];
-            txUpdate();
-            await rateControl.applyRateControl(startTime, txNum, results);
         }
-    }
 
-    await Promise.all(promises);
-    // wait all tx processed
-    log('all tx has been sended, remain notSureTxStatus length is ', notSureTxStatus.size);
+        await Promise.all(promises);
+        // wait all tx processed
+        log('all tx has been sended, remain notSureTxStatus length is ', notSureTxStatus.size);
+    } else {
+        notSureTxStatus.set('', new TxStatus());
+    }
     while (emptyBlockNum < 2 && notSureTxStatus.size > 0) {
         await Util.sleep(1000).then(() => {
         });
@@ -199,37 +207,43 @@ async function runDuration(msg, cb, context) {
     log('duration is %d, tps is %d', duration, tps);
     msg.args.txNum = duration * tps;
     msg.args.clientIndex = msg.clientIdx;
+    let shouldSendTx = false;
+    await cb.init(blockchain, context, msg.args).then((sendTx) => {
+        shouldSendTx = sendTx;
+    });
+    if (shouldSendTx) {
+        let promises = [];
+        let currentHeight = await blockchain.getHeight();
 
-    await cb.init(blockchain, context, msg.args);
-    startTime = Date.now();
-
-    let promises = [];
-    let currentHeight = await blockchain.getHeight();
-    log('start send tx, current height is ', currentHeight);
-    while ((Date.now() - startTime) / 1000 < duration) {
-        promises.push(cb.run().then((result) => {
-            if (blockchain.getType() === 'ontology') {
-                if (result.GetStatus() !== 'failed') { // tx has not been confirmed yet
-                    notSureTxStatus.set(result.GetID(), result);
-                } else {
-                    addResult(result);
+        log('start send tx, current height is ', currentHeight);
+        startTime = Date.now();
+        while ((Date.now() - startTime) / 1000 < duration) {
+            promises.push(cb.run().then((result) => {
+                if (blockchain.getType() === 'ontology') {
+                    if (result.GetStatus() !== 'failed') { // tx has not been confirmed yet
+                        notSureTxStatus.set(result.GetID(), result);
+                    } else {
+                        addResult(result);
+                    }
                 }
+                return Promise.resolve();
+            }));
+            // applyRateControl per second
+            if (txNum % (tps / 10) === 0) {
+                // log('wait net req end, txNum is %d, req Num is %d', txNum, promises.length);
+                await Promise.all(promises);
+                promises = [];
+                txUpdate();
+                await rateControl.applyRateControl(startTime, txNum, results);
             }
-            return Promise.resolve();
-        }));
-        // applyRateControl per second
-        if (txNum % (tps / 10) === 0) {
-            // log('wait net req end, txNum is %d, req Num is %d', txNum, promises.length);
-            await Promise.all(promises);
-            promises = [];
-            txUpdate();
-            await rateControl.applyRateControl(startTime, txNum, results);
         }
-    }
 
-    await Promise.all(promises);
-    // wait all tx processed
-    log('all tx has been sended, remain notSureTxStatus length is ', notSureTxStatus.size);
+        await Promise.all(promises);
+        // wait all tx processed
+        log('all tx has been sended, remain notSureTxStatus length is ', notSureTxStatus.size);
+    } else {
+        notSureTxStatus.set('', new TxStatus());
+    }
     while (emptyBlockNum < 2 && notSureTxStatus.size > 0) {
         await Util.sleep(1000).then(() => {
         });
@@ -324,12 +338,15 @@ process.on('message', function(message) {
             case 'txHashes':{
                 let txHashes = message.txHashes;
                 let txNum = txHashes.length;
-                if (txNum === 0 || notSureTxStatus.size === 0) {
+                if (txNum === 0) {
                     emptyBlockNum++;
                     log('insure tx, receive a empty block, height %d', message.height);
+                } else if (notSureTxStatus.size === 0) {
+                    emptyBlockNum++;
+                    log('insure tx, this client all tx has been confirmed, height %d', message.height);
                 } else {
                     emptyBlockNum = 0;
-                    let timestamp  = message.time;
+                    let timestamp = message.time;
                     lastNoEmptyBlockTime = timestamp;
                     let confirmedNum = 0;
                     txHashes.forEach((txHash, index) => {
