@@ -1,9 +1,9 @@
 {
   "network-config": {
     "orderer": {
-      "url": "grpcs://orderer.example.com:7050",
-      "server-hostname": "orderer.example.com",
-      "tls_cacerts": "../../config/artifacts/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+      "url": "grpcs://orderer0.example.com:7050",
+      "server-hostname": "orderer0.example.com",
+      "tls_cacerts": "../../config/artifacts/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
     },
     "org1": {
       "name": "peerOrg1",
