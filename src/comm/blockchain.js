@@ -297,6 +297,7 @@ class Blockchain {
      * send data to cloud
      * @param {Object} context context object
      * @param {Object} payload data send to sinochain cloud
+     * @returns {Promise} promiseObject
      */
     sinoSendToCloud(context, payload) {
         return this.bcObj.sinoSendToCloud(context, payload);
@@ -311,9 +312,18 @@ class Blockchain {
 
     /**
      * whether the cloud connection is opened
+     * @returns {boolean} the cloud connection is opened
      */
     sinoIsConnectionOpen() {
         return this.bcObj.sinoIsConnectionOpen();
+    }
+
+    /**
+     * wait for recived
+     * @returns {Promise} promiseObject
+     */
+    sinoWaitRecv() {
+        return this.bcObj.sinoWaitRecv();
     }
 }
 

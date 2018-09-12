@@ -141,6 +141,11 @@ class Client{
         this.results = [];
         this.updates.data = [];
         this.updates.id++;
+        // sinochain: add unfinished control
+        message.unfinished = -1;
+        if (this.config.unfinished && this.config.unfinished > 0) {
+            message.unfinished = this.config.unfinished;
+        }
         switch(this.type) {
         case CLIENT_LOCAL:
             p = this._startLocalTest(message, clientArgs);
