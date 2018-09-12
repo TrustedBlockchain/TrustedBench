@@ -141,6 +141,8 @@ function update() {
     timelength++;
     if (typeof client === 'undefined') {
         demoRefreshData([]);
+        // sinochain: use setTimeout instead
+        demoInterObj = setTimeout(update, demoInterval * 1000);
         return;
     }
     var updates = client.getUpdates();
@@ -155,6 +157,8 @@ function update() {
         updateTail = len;
     }
     demoRefreshData(data);
+    // sinochain: use setTimeout instead
+    demoInterObj = setTimeout(update, demoInterval * 1000);
 }
 function demoStartWatch(clientObj) {
     //demoProcesses = processes.slice();
@@ -165,7 +169,9 @@ function demoStartWatch(clientObj) {
         updateTail = 0;
         updateID   = 0;
         // start a interval to query updates
-        demoInterObj = setInterval(update, demoInterval * 1000);
+        // demoInterObj = setInterval(update, demoInterval * 1000);
+        // sinochain: use setTimeout instead
+        demoInterObj = setTimeout(update, demoInterval * 1000);
     }
 }
 module.exports.startWatch = demoStartWatch;
@@ -180,7 +186,9 @@ module.exports.pauseWatch = demoPauseWatch;
 
 function demoStopWatch(output) {
     if(demoInterObj) {
-        clearInterval(demoInterObj);
+        // sinochain: use setTimeout instead
+        // clearInterval(demoInterObj);
+        clearTimeout(demoInterObj);
         demoInterObj = null;
     }
     demoData.report = output;

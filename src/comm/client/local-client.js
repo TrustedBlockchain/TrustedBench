@@ -22,6 +22,7 @@ let txUpdateTime = 1000;
 let trimType = 0;
 let trim = 0;
 let startTime = 0;
+let resultNum = 0;
 
 /**
  * Calculate realtime transaction statistics and send the txUpdated message
@@ -82,9 +83,11 @@ function addResult(result) {
         for(let i = 0 ; i < result.length ; i++) {
             results.push(result[i]);
         }
+        resultNum += result.length;
     }
     else {
         results.push(result);
+        resultNum += 1;
     }
 }
 
@@ -146,15 +149,30 @@ async function runFixedNumber(msg, cb, context) {
     startTime = Date.now();
 
     let promises = [];
-    while(txNum < msg.numb) {
-        promises.push(cb.run().then((result) => {
-            addResult(result);
-            return Promise.resolve();
-        }));
-        await rateControl.applyRateControl(startTime, txNum, results);
+    while (txNum < msg.numb) {
+        if (blockchain.gettype() === 'sinochain') {
+            cb.run().then((result) => {
+                return Promise.resolve(); // sinochain: use event add result
+            });
+        } else {
+            promises.push(cb.run().then((result) => {
+                addResult(result);
+                return Promise.resolve();
+            }));
+        }
+
+        if (msg.unfinished > 0 && txNum - resultNum > msg.unfinished) {
+            await Util.sleep(5000);
+        } else {
+            await rateControl.applyRateControl(startTime, txNum, results);
+        }
     }
 
-    await Promise.all(promises);
+    if (blockchain.gettype() === 'sinochain') {
+        await blockchain.sinoWaitRecv();
+    } else {
+        await Promise.all(promises);
+    }
     await rateControl.end();
     return await blockchain.releaseContext(context);
 }
@@ -187,15 +205,30 @@ async function runDuration(msg, cb, context) {
     startTime = Date.now();
 
     let promises = [];
+    // let submitResults = [];
     while ((Date.now() - startTime)/1000 < duration) {
-        promises.push(cb.run().then((result) => {
-            addResult(result);
-            return Promise.resolve();
-        }));
-        await rateControl.applyRateControl(startTime, txNum, results);
-    }
+        if (blockchain.gettype() === 'sinochain') {
+            cb.run().then((result) => {
+                return Promise.resolve(); // sinochain: use event add result
+            });
+        } else {
+            promises.push(cb.run().then((result) => {
+                addResult(result);
+                return Promise.resolve();
+            }));
+        }
 
-    await Promise.all(promises);
+        if (msg.unfinished > 0 && txNum - resultNum > msg.unfinished) {
+            await Util.sleep(5000);
+        } else {
+            await rateControl.applyRateControl(startTime, txNum, results);
+        }
+    }
+    if (blockchain.gettype() === 'sinochain') {
+        await blockchain.sinoWaitRecv();
+    } else {
+        await Promise.all(promises);
+    }
     await rateControl.end();
     return await blockchain.releaseContext(context);
 }
@@ -229,13 +262,15 @@ function doTest(msg) {
         if(typeof context === 'undefined') {
             context = {
                 engine : {
-                    submitCallback : submitCallback
+                    submitCallback : submitCallback,
+                    addResult : addResult
                 }
             };
         }
         else {
             context.engine = {
-                submitCallback : submitCallback
+                submitCallback : submitCallback,
+                addResult : addResult
             };
         }
         if (msg.txDuration) {

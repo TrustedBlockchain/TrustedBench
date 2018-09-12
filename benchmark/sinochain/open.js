@@ -10,6 +10,7 @@ module.exports.init = function(blockchain, context, args) {
 
     bc = blockchain;
     ctx = context;
+    ctx.txNum = args.txNum;
     let startIndex = args.txNum * args.clientIndex;
     // let endIndex = args.txNum * (args.clientIndex + 1);
     seqnum = startIndex;

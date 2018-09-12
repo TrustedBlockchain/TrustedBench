@@ -8,6 +8,7 @@
       "description": "Sinochain test!",
       "clients": {
         "type": "zookeeper",
+        "unfinished": 50000,
         "zoo" : {
           "server": "127.0.0.1:12181",
           "clientsPerHost": 1
@@ -17,7 +18,7 @@
         {
           "label": "open-account",
           "txNumber": [
-            10000
+            100000
           ],
           "rateControl": [
             {
