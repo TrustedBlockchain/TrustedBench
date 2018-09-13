@@ -4,7 +4,7 @@ services:
   peer0.org2.example.com:
     hostname: peer0.org2.example.com
     network_mode: "host"
-    image: zhigui/zigledger-peer:x86_64-1.2.4
+    image: zhigui/zigledger-peer:x86_64-1.2.12
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=WARNING
@@ -16,12 +16,10 @@ services:
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
-      - CORE_PEER_EVENTS_BUFFERSIZE=5000
-      - CORE_PEER_EVENTS_TIMEOUT=200ms
-      - CORE_PEER_GOSSIP_SENDBUFFSIZE=500
-      - CORE_PEER_GOSSIP_RECVBUFFSIZE=100
+      - CORE_PEER_EVENTS_BUFFERSIZE=50000
       - CORE_PEER_GOSSIP_SKIPBLOCKVERIFICATION=true
-      - CORE_PEER_TLS_ENABLED=true
+#      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_ENABLED=false
       - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_SIMPLEFEEK=0
       - CORE_PEER_SIMPLEFEEX0=0
@@ -49,7 +47,8 @@ services:
       - ZIGLEDGER_CA_SERVER_CA_NAME=ca-org2
       - ZIGLEDGER_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
       - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/cd37b846313fea84b93c62bb2a8281c8e183c1def75262fed03c10506b1c7c9d_sk
-      - ZIGLEDGER_CA_SERVER_TLS_ENABLED=true
+#      - ZIGLEDGER_CA_SERVER_TLS_ENABLED=true
+      - ZIGLEDGER_CA_SERVER_TLS_ENABLED=false
       - ZIGLEDGER_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
       - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/cd37b846313fea84b93c62bb2a8281c8e183c1def75262fed03c10506b1c7c9d_sk
       - GODEBUG=netdns=go

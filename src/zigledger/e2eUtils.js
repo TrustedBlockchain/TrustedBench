@@ -622,27 +622,27 @@ async function invokebycontext(context, id, version, args, timeout, ext) {
         const proposalResponses = proposalResponseObject[0];
         const proposal = proposalResponseObject[1];
 
-        let allGood = true;
-        for (let i in proposalResponses) {
-            let one_good = false;
-            let proposal_response = proposalResponses[i];
-            if (proposal_response.response && proposal_response.response.status === 200) {
-                // TODO: the CPU cost of verifying response is too high.
-                // Now we ignore this step to improve concurrent capacity for the client
-                // so a client can initialize multiple concurrent transactions
-                // Is it a reasonable way?
-                // one_good = channel.verifyProposalResponse(proposal_response);
-                one_good = true;
-            } else {
-                let err = new Error('Endorsement denied with status code: ' + proposal_response.response.status);
-                invokeStatus.error_flags |= TxErrorEnum.BadProposalResponseError;
-                invokeStatus.error_messages[TxErrorIndex.BadProposalResponseError] = err.toString();
-                // explicit rejection, early life-cycle termination, definitely failed
-                invokeStatus.verified = true;
-                throw err;
-            }
-            allGood = allGood && one_good;
-        }
+        // let allGood = true;
+        // for (let i in proposalResponses) {
+        //     let one_good = false;
+        //     let proposal_response = proposalResponses[i];
+        //     if (proposal_response.response && proposal_response.response.status === 200) {
+        //         // TODO: the CPU cost of verifying response is too high.
+        //         // Now we ignore this step to improve concurrent capacity for the client
+        //         // so a client can initialize multiple concurrent transactions
+        //         // Is it a reasonable way?
+        //         // one_good = channel.verifyProposalResponse(proposal_response);
+        //         one_good = true;
+        //     } else {
+        //         let err = new Error('Endorsement denied with status code: ' + proposal_response.response.status);
+        //         invokeStatus.error_flags |= TxErrorEnum.BadProposalResponseError;
+        //         invokeStatus.error_messages[TxErrorIndex.BadProposalResponseError] = err.toString();
+        //         // explicit rejection, early life-cycle termination, definitely failed
+        //         invokeStatus.verified = true;
+        //         throw err;
+        //     }
+        //     allGood = allGood && one_good;
+        // }
 
         // if (allGood) {
         //     // check all the read/write sets to see if the same, verify that each peer

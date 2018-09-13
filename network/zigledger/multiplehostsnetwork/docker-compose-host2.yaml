@@ -4,15 +4,16 @@ services:
   orderer1.example.com:
     hostname: orderer1.example.com
     network_mode: "host"
-    image: zhigui/zigledger-orderer:x86_64-1.2.4
+    image: zhigui/zigledger-orderer:x86_64-1.2.12
     environment:
-      - ORDERER_GENERAL_LOGLEVEL=WARNING
+#      - ORDERER_GENERAL_LOGLEVEL=WARNING
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/twoorgs.genesis.block
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
-      - ORDERER_GENERAL_TLS_ENABLED=true
+#      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_ENABLED=false
       - ORDERER_GENERAL_PROFILE_ENABLED=true
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/msp/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/msp/orderer/tls/server.crt
