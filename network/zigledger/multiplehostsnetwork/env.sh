@@ -47,7 +47,7 @@ cat <<EOT >> /etc/hosts
 192.168.0.213    zookeeper0 kafka0 orderer0.example.com
 192.168.0.214    zookeeper1 kafka1 orderer1.example.com
 192.168.0.215   zookeeper2 kafka2 peer1.org2.example.com
-192.168.0.216    kafka3 peer1.org2.example.com
+192.168.0.216    kafka3 peer1.org1.example.com
 192.168.0.217    ca0 peer0.org1.example.com zigerface-fullserver.org1
 192.168.0.218   peer0.org2.example.com ca1
 EOT

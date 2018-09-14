@@ -7,7 +7,7 @@ services:
     network_mode: "host"
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-#      - CORE_LOGGING_LEVEL=WARNING
+      - CORE_LOGGING_LEVEL=WARNING
       - CORE_PEER_ID=peer1.org2.example.com
       - CORE_PEER_LOCALMSPID=Org2MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
