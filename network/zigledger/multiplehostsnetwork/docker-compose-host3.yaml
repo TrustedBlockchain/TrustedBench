@@ -35,5 +35,6 @@ services:
       - 7053:7053
       - 6060:6060
     volumes:
+        - ./peer:/var/zhigui/production
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/:/etc/hyperledger/msp/peer

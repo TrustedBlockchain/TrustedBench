@@ -21,3 +21,7 @@ services:
       KAFKA_LOG_RETENTION_MS: -1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
       KAFKA_ADVERTISED_HOST_NAME: kafka0
+      KAFKA_LOG_DIRS: "/tmp/kafka-logs/data"
+      KAFKA_LOG_DIR: "/tmp/kafka-logs/data"
+    volumes:
+        - ./kafka:/tmp/kafka-logs

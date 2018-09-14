@@ -35,6 +35,7 @@ services:
       - 7053:7053
       - 6060:6060
     volumes:
+        - ./peer:/var/zhigui/production
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/msp/peer
 
@@ -56,4 +57,5 @@ services:
       - "7054:7054"
     command: sh -c 'zigledger-ca-server start -b admin:adminpw -d'
     volumes:
+      - ./ca:/etc/zhigui/zigledger-ca-server
       - ./crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server-config

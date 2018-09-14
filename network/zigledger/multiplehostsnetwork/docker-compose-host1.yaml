@@ -25,6 +25,7 @@ services:
       - 7050:7050
       - 6060:6060
     volumes:
+        - ./orderer:/var/zhigui/production/orderer
         - ./:/etc/hyperledger/configtx
         - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/:/etc/hyperledger/msp/orderer
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
