@@ -8,10 +8,10 @@
       "description": "Sinochain test!",
       "clients": {
         "type": "zookeeper",
-        "unfinished": 50000,
+        "unfinished": 30000,
         "zoo" : {
           "server": "127.0.0.1:12181",
-          "clientsPerHost": 1
+          "clientsPerHost": 2
         }
       },
       "rounds": [
