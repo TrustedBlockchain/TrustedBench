@@ -1,0 +1,45 @@
+{
+    "blockchain": {
+      "type": "sinochain",
+      "config": "benchmark/sinochain/sinochain.json"
+    },
+    "test": {
+      "name": "sinochain test",
+      "description": "Sinochain test!",
+      "clients": {
+        "type": "local",
+        "unfinished": 30000,
+        "number": 2
+      },
+      "rounds": [
+        {
+          "label": "open-account",
+          "txNumber": [
+            100000
+          ],
+          "rateControl": [
+            {
+              "type": "fixed-rate",
+              "opts": {
+                "tps": 10000
+              }
+            }
+          ],
+          "callback": "benchmark/sinochain/open.js"
+        }
+      ]
+    },
+    "monitor": {
+      "type": [
+        
+      ],
+      "process": [
+        {
+          "command": "node",
+          "arguments": "main.js",
+          "multiOutput": "avg"
+        }
+      ],
+      "interval": 1
+    }
+  }
