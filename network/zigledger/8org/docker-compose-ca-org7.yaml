@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+
+  ca6:
+    image: zhigui/zigledger-ca:x86_64-1.1.1
+    hostname: ca6
+    network_mode: "host"
+    environment:
+      - ZIGLEDGER_CA_HOME=/etc/zhigui/fabric-ca-server
+      - ZIGLEDGER_CA_SERVER_CA_NAME=ca-org7
+      - ZIGLEDGER_CA_SERVER_CA_CERTFILE=/etc/zhigui/fabric-ca-server-config/ca.org7.example.com-cert.pem
+      - ZIGLEDGER_CA_SERVER_CA_KEYFILE=/etc/zhigui/fabric-ca-server-config/de1086ac878ae8ce16bd3c1f7b8656b95d53ede61573c872b699edfee821722b_sk
+      - ZIGLEDGER_CA_SERVER_TLS_ENABLED=false
+      - ZIGLEDGER_CA_SERVER_TLS_CERTFILE=/etc/zhigui/fabric-ca-server-config/ca.org7.example.com-cert.pem
+      - ZIGLEDGER_CA_SERVER_TLS_KEYFILE=/etc/zhigui/fabric-ca-server-config/de1086ac878ae8ce16bd3c1f7b8656b95d53ede61573c872b699edfee821722b_sk
+      - GODEBUG=netdns=go
+    ports:
+      - "7054:7054"
+    command: sh -c 'zigledger-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./ca:/etc/zhigui/zigledger-ca-server
+      - ./ca:/etc/zhigui/fabric-ca-server
+      - ./ca-config.yaml:/etc/zhigui/zigledger-ca-server/zigledger-ca-server-config.yaml
+      - ./ca-config.yaml:/etc/zhigui/fabric-ca-server/zigledger-ca-server-config.yaml
+      - ./crypto-config/peerOrganizations/org7.example.com/ca/:/etc/zhigui/fabric-ca-server-config

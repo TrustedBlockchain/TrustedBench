@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  zigerface-mysql:
+    hostname: zigerface-mysql
+    image: zhigui/zigerface-mysql:x86_64-0.1.0
+    network_mode: "host"
+    environment:
+      - MYSQL_ROOT_PASSWORD=zhigui
+    ports:
+      - 3306:3306
+    volumes:
+      - /tmp/data/mysql/:/var/lib/mysql
+      - ./explore.sql:/usr/local/work/explore.sql
+      - ./init_peer.sql:/usr/local/work/init_peer.sql
+
+  zigerface-fullserver.org1:
+      hostname: zigerface-fullserver.org1
+      network_mode: "host"
+      image: zhigui/zigerface-fullserver:x86_64-0.1.10
+      ports:
+        - 8081:8081
+      volumes:
+        - ./:/work/config/artifacts
+        - ./network-config.json:/work/config/network-config.json
+        - ./zigledger-client-kvs_peerOrg1:/tmp/zigledger-client-kvs_peerOrg1
+        - ./config.json:/work/config/config.json

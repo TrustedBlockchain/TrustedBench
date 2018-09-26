@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  peer0.org7.example.com:
+    hostname: peer0.org7.example.com
+    network_mode: "host"
+    image: zhigui/zigledger-peer:x86_64-1.2.12
+    environment:
+     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+     - CORE_PEER_ID=peer0.org7.example.com
+     - CORE_LOGGING_LEVEL=WARNING
+     - CORE_PEER_ENDORSER_ENABLED=true
+     - CORE_PEER_LOCALMSPID=Org7MSP
+     - CORE_PEER_MSPCONFIGPATH=/etc/zhigui/msp/peer/msp/
+     - CORE_PEER_ADDRESS=peer0.org7.example.com:7051
+     - CORE_PEER_GOSSIP_USELEADERELECTION=true
+     - CORE_PEER_GOSSIP_ORGLEADER=false
+     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org7.example.com:7051
+     - CORE_PEER_EVENTS_BUFFERSIZE=50000
+     - CORE_PEER_GOSSIP_SKIPBLOCKVERIFICATION=true
+     - CORE_PEER_TLS_ENABLED=false
+     - CORE_PEER_PROFILE_ENABLED=false
+     - CORE_PEER_SIMPLEFEEK=0
+     - CORE_PEER_SIMPLEFEEX0=0
+     - CORE_PEER_SIMPLEFEEB=0
+     - CORE_PEER_TLS_KEY_FILE=/etc/zhigui/msp/peer/tls/server.key
+     - CORE_PEER_TLS_CERT_FILE=/etc/zhigui/msp/peer/tls/server.crt
+     - CORE_PEER_TLS_ROOTCERT_FILE=/etc/zhigui/msp/peer/tls/ca.crt
+     - GODEBUG=netdns=go
+    working_dir: /opt/gopath/src/github.com/zhigui/zigledger/peer
+    command: peer node start
+    ports:
+     - 7051:7051
+     - 7053:7053
+#     - 6060:6060
+    volumes:
+       - ./peer:/var/zhigui/production
+       - /var/run/:/host/var/run/
+       - ./crypto-config/peerOrganizations/org7.example.com/peers/peer0.org7.example.com/:/etc/zhigui/msp/peer

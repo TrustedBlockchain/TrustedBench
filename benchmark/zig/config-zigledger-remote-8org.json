@@ -1,0 +1,90 @@
+{
+  "blockchain": {
+    "type": "zigledger",
+    "config": "benchmark/zig/zigledger-remote-8org.json"
+  },
+  "test": {
+    "clients": {
+      "type": "local",
+      "number": 24
+    },
+    "rounds": [
+      {
+        "label": "transfer",
+        "txDuration": [
+          120
+        ],
+        "rateControl": [
+          {
+            "type": "fixed-rate",
+            "opts": {
+              "tps": 100
+            }
+          }
+        ],
+        "arguments": {
+          "path": "sign.json",
+          "amount": 100
+        },
+        "callback": "benchmark/zig/transfer.js"
+      }
+    ]
+  },
+  "monitor": {
+    "type": [
+      "docker",
+      "process"
+    ],
+    "docker": {
+      "name": [
+        "http://172.24.20.56:2375/8org_orderer0.example.com_1",
+        "http://172.24.20.244:2375/8org_orderer1.example.com_1",
+        "http://172.24.20.214:2375/8org_orderer2.example.com_1",
+        "http://172.24.20.120:2375/8org_orderer3.example.com_1",
+        "http://172.24.20.79:2375/8org_orderer4.example.com_1",
+        "http://172.24.20.38:2375/8org_orderer5.example.com_1",
+        "http://172.24.20.39:2375/8org_orderer6.example.com_1",
+        "http://172.24.20.39:2375/8org_orderer7.example.com_1",
+        "http://172.24.20.82:2375/8org_kafka0_1",
+        "http://172.24.20.214:2375/8org_zookeeper0_1",
+        "http://172.24.20.39:2375/8org_kafka1_1",
+        "http://172.24.20.120:2375/8org_zookeeper1_1",
+        "http://172.24.20.48:2375/8org_peer1.org2.example.com_1",
+        "http://172.24.20.82:2375/8org_kafka2_1",
+        "http://172.24.20.79:2375/8org_zookeeper2_1",
+        "http://172.24.20.57:2375/8org_peer1.org1.example.com_1",
+        "http://172.24.20.59:2375/8org_kafka3_1",
+        "http://172.24.20.228:2375/8org_ca0_1",
+        "http://172.24.20.238:2375/8org_peer0.org1.example.com_1",
+        "http://172.24.20.127:2375/8org_ca1_1",
+        "http://172.24.20.50:2375/8org_peer0.org2.example.com_1",
+        "http://172.24.20.228:2375/8org_peer0.org3.example.com_1",
+        "http://172.24.20.127:2375/8org_peer1.org3.example.com_1",
+        "http://172.24.20.55:2375/8org_peer0.org4.example.com_1",
+        "http://172.24.20.88:2375/8org_peer1.org4.example.com_1",
+        "http://172.24.20.55:2375/8org_ca2_1",
+        "http://172.24.20.88:2375/8org_ca3_1",
+        "http://172.24.20.94:2375/8org_ca4_1",
+        "http://172.24.20.49:2375/8org_ca5_1",
+        "http://172.24.20.238:2375/8org_ca6_1",
+        "http://172.24.20.57:2375/8org_ca7_1",
+        "http://172.24.20.94:2375/8org_peer0.org5.example.com_1",
+        "http://172.24.20.49:2375/8org_peer1.org5.example.com_1",
+        "http://172.24.20.120:2375/8org_peer0.org6.example.com_1",
+        "http://172.24.20.79:2375/8org_peer1.org6.example.com_1",
+        "http://172.24.20.59:2375/8org_peer0.org7.example.com_1",
+        "http://172.24.20.56:2375/8org_peer1.org7.example.com_1",
+        "http://172.24.20.244:2375/8org_peer0.org8.example.com_1",
+        "http://172.24.20.214:2375/8org_peer1.org8.example.com_1"
+      ]
+    },
+    "process": [
+      {
+        "command": "node",
+        "arguments": "local-client.js",
+        "multiOutput": "avg"
+      }
+    ],
+    "interval": 1
+  }
+}

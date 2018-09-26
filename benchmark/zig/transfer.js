@@ -46,7 +46,7 @@ module.exports.run = function () {
         to: receiver.address,
         type: type,
         amount: amount
-    }, 30, {signature: signature, txIdObject: txIdObject, senderSpec: senderSpec});
+    }, 60, {signature: signature, txIdObject: txIdObject, senderSpec: senderSpec});
 };
 
 module.exports.end = function (results) {

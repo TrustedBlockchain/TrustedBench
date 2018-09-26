@@ -1,0 +1,332 @@
+{
+  "zigledger": {
+    "cryptodir": "network/zigledger/8org/crypto-config",
+    "network": {
+      "orderer": [
+        {
+        "url": "grpc://orderer0.example.com:7050",
+        "mspid": "OrdererMSP",
+        "user": {
+          "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+          "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+        },
+        "server-hostname": "orderer0.example.com",
+        "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/ca.crt"
+      },
+        {
+          "url": "grpc://orderer1.example.com:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+            "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer1.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpc://orderer2.example.com:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+            "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer2.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpc://orderer3.example.com:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+            "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer3.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpc://orderer4.example.com:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+            "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer4.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpc://orderer5.example.com:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+            "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer5.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpc://orderer6.example.com:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+            "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer6.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer6.example.com/tls/ca.crt"
+        },
+        {
+          "url": "grpc://orderer7.example.com:7050",
+          "mspid": "OrdererMSP",
+          "user": {
+            "key": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/92eddd9e7d5d2da2866be41d05001948578d2266c49ec662ceade22c56596713_sk",
+            "cert": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          },
+          "server-hostname": "orderer7.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/ordererOrganizations/example.com/orderers/orderer7.example.com/tls/ca.crt"
+        }
+      ],
+      "org1": {
+        "name": "peerOrg1",
+        "mspid": "Org1MSP",
+        "user": {
+          "key": "network/zigledger/8org/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/4d21743d288f556e0edf5c2f332030fc4e1d78ec00389783ad2c2e1882f99abf_sk",
+          "cert": "network/zigledger/8org/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem"
+        },
+        "ca": {
+          "url": "http://ca0:7054",
+          "name": "ca-org1"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org1.example.com:7051",
+          "events": "grpc://peer0.org1.example.com:7053",
+          "server-hostname": "peer0.org1.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org1.example.com:7051",
+          "events": "grpc://peer1.org1.example.com:7053",
+          "server-hostname": "peer1.org1.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt"
+        }
+      },
+      "org2": {
+        "name": "peerOrg2",
+        "mspid": "Org2MSP",
+        "ca": {
+          "url": "http://ca1:7054",
+          "name": "ca-org2"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org2.example.com:7051",
+          "events": "grpc://peer0.org2.example.com:7053",
+          "server-hostname": "peer0.org2.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org2.example.com:7051",
+          "events": "grpc://peer1.org2.example.com:7053",
+          "server-hostname": "peer1.org2.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt"
+        }
+      },
+      "org3": {
+        "name": "peerOrg3",
+        "mspid": "Org3MSP",
+        "ca": {
+          "url": "http://ca2:7054",
+          "name": "ca-org3"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org3.example.com:7051",
+          "events": "grpc://peer0.org3.example.com:7053",
+          "server-hostname": "peer0.org3.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org3.example.com:7051",
+          "events": "grpc://peer1.org3.example.com:7053",
+          "server-hostname": "peer1.org3.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/tls/ca.crt"
+        }
+      },
+      "org4": {
+        "name": "peerOrg4",
+        "mspid": "Org4MSP",
+        "ca": {
+          "url": "http://ca3:7054",
+          "name": "ca-org4"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org4.example.com:7051",
+          "events": "grpc://peer0.org4.example.com:7053",
+          "server-hostname": "peer0.org4.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org4.example.com:7051",
+          "events": "grpc://peer1.org4.example.com:7053",
+          "server-hostname": "peer1.org4.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org4.example.com/peers/peer1.org4.example.com/tls/ca.crt"
+        }
+      },
+      "org5": {
+        "name": "peerOrg5",
+        "mspid": "Org5MSP",
+        "ca": {
+          "url": "http://ca4:7054",
+          "name": "ca-org5"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org5.example.com:7051",
+          "events": "grpc://peer0.org5.example.com:7053",
+          "server-hostname": "peer0.org5.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org5.example.com/peers/peer0.org5.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org5.example.com:7051",
+          "events": "grpc://peer1.org5.example.com:7053",
+          "server-hostname": "peer1.org5.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org5.example.com/peers/peer1.org5.example.com/tls/ca.crt"
+        }
+      },
+      "org6": {
+        "name": "peerOrg6",
+        "mspid": "Org6MSP",
+        "ca": {
+          "url": "http://ca5:7054",
+          "name": "ca-org6"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org6.example.com:7051",
+          "events": "grpc://peer0.org6.example.com:7053",
+          "server-hostname": "peer0.org6.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org6.example.com/peers/peer0.org6.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org6.example.com:7051",
+          "events": "grpc://peer1.org6.example.com:7053",
+          "server-hostname": "peer1.org6.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org6.example.com/peers/peer1.org6.example.com/tls/ca.crt"
+        }
+      },
+      "org7": {
+        "name": "peerOrg7",
+        "mspid": "Org7MSP",
+        "ca": {
+          "url": "http://ca6:7054",
+          "name": "ca-org7"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org7.example.com:7051",
+          "events": "grpc://peer0.org7.example.com:7053",
+          "server-hostname": "peer0.org7.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org7.example.com/peers/peer0.org7.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org7.example.com:7051",
+          "events": "grpc://peer1.org7.example.com:7053",
+          "server-hostname": "peer1.org7.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org7.example.com/peers/peer1.org7.example.com/tls/ca.crt"
+        }
+      },
+      "org8": {
+        "name": "peerOrg8",
+        "mspid": "Org8MSP",
+        "ca": {
+          "url": "http://ca7:7054",
+          "name": "ca-org8"
+        },
+        "peer1": {
+          "requests": "grpc://peer0.org8.example.com:7051",
+          "events": "grpc://peer0.org8.example.com:7053",
+          "server-hostname": "peer0.org8.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org8.example.com/peers/peer0.org8.example.com/tls/ca.crt"
+        },
+        "peer2": {
+          "requests": "grpc://peer1.org8.example.com:7051",
+          "events": "grpc://peer1.org8.example.com:7053",
+          "server-hostname": "peer1.org8.example.com",
+          "tls_cacerts": "network/zigledger/8org/crypto-config/peerOrganizations/org8.example.com/peers/peer1.org8.example.com/tls/ca.crt"
+        }
+      }
+    },
+    "channel": [
+      {
+        "name": "mychannel",
+        "config": "network/zigledger/8org/mychannel.tx",
+        "organizations": ["org1", "org2"],
+        "deployed": true
+      }
+    ],
+    "chaincodes": [{"id": "simple", "path": "contract/zigledger/simple", "language":"golang", "version": "v0", "channel": "mychannel"}],
+    "endorsement-policy": {
+      "identities": [
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org1MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org2MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org3MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org4MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org5MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org6MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org7MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "member",
+            "mspId": "Org8MSP"
+          }
+        },
+        {
+          "role": {
+            "name": "admin",
+            "mspId": "Org1MSP"
+          }
+        }
+      ],
+      "policy": { "1-of": [{"signed-by": 0}, {"signed-by": 1}, {"signed-by": 2}, {"signed-by": 3}, {"signed-by": 4}, {"signed-by": 5}, {"signed-by": 6}, {"signed-by": 7}]}
+    },
+    "context": {
+      "open": "mychannel",
+      "query": "mychannel",
+      "transfer": "mychannel"
+    }
+  },
+  "info" : {
+    "Version": "1.1.0",
+    "Size": "4 Peers",
+    "Orderer": "Solo",
+    "Distribution": "Single Host"
+  }
+}
