@@ -122,16 +122,16 @@ async function runDuration(msg, cb, context) {
     await cb.init(blockchain, context, msg.args);
     const start = Date.now();
 
-    let promises = [];
+   // let promises = [];
     while ((Date.now() - start)/1000 < duration) {
-        promises.push(cb.run().then((result) => {
+        cb.run().then((result) => {
             addResult(result);
             return Promise.resolve();
-        }));
+        });
         await rateControl.applyRateControl(start, txNum, results);
     }
 
-    await Promise.all(promises);
+    //await Promise.all(promises);
     await rateControl.end();
     return await blockchain.releaseContext(context);
 }
