@@ -8,6 +8,7 @@
       "description": "Sinochain test!",
       "clients": {
         "type": "zookeeper",
+        "unfinished": 30000,
         "zoo" : {
           "server": "127.0.0.1:12181",
           "clientsPerHost": 2
@@ -15,19 +16,19 @@
       },
       "rounds": [
         {
-          "label": "create-account",
+          "label": "open-account",
           "txNumber": [
-            100
+            100000
           ],
           "rateControl": [
             {
               "type": "fixed-rate",
               "opts": {
-                "tps": 10
+                "tps": 10000
               }
             }
           ],
-          "callback": "benchmark/sinochain/create.js"
+          "callback": "benchmark/sinochain/open.js"
         }
       ]
     },

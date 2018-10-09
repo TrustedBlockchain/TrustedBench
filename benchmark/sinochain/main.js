@@ -43,7 +43,7 @@ function main() {
     const fs = require('fs-extra');
     let absConfigFile;
     if(typeof configFile === 'undefined') {
-        absConfigFile = path.join(__dirname, 'config.json');
+        absConfigFile = path.join(__dirname, 'config-local.json');
     }
     else {
         absConfigFile = path.join(__dirname, configFile);

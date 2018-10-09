@@ -23,28 +23,68 @@ class Sinochain extends BlockchainInterface {
         this.channel = this.config.sinochain.channel;
         this.client = new common_proto.CloudBD(this.getRandomServer(), grpc.credentials.createInsecure());
         this.deliver = this.client.deliver();
-
+        this.context = null;
         this.connected = true;
         this.results = {};
-
+        this.lastTimeout = null;
+        this.receivedEnd = false;
+        this.receivedCount = 0;
+        this.lastDataTime = null;
         let that = this;
         this.deliver.on('data', env => {
+            if (that.lastTimeout !== null) {
+                clearTimeout(that.lastTimeout);
+            }
+            that.receivedCount++;
             let invokeStatus = that.results[env.seqnum];
-            if (invokeStatus !== null) {
+            if (invokeStatus) {
                 if (env.status === 'SUCCESS') {
                     invokeStatus.SetStatusSuccess();
                     //invokeStatus.SetFinalTime(new Date());
                     invokeStatus.SetFinalTime(env.endTime);
                 } else {
                     invokeStatus.SetStatusFail();
+                    invokeStatus.SetFinalTime(env.endTime);
                 }
-                that.results[env.seqnum] = invokeStatus;
+                // that.results[env.seqnum] = invokeStatus;
+                if (that.context && that.context.engine) {
+                    that.context.engine.addResult(invokeStatus);
+                }
+                that.lastDataTime = env.endTime;
+                delete this.results[env.seqnum];
             }
+            if (that.context && that.context.txNum) {
+                if (that.receivedCount === that.context.txNum) {
+                    that.setToFail(that);
+                    return;
+                }
+            }
+            that.lastTimeout = setTimeout(function() {
+                that.setToFail(that);
+            }, 10000);
         }).on('end', function() {
             that.sinoDisconnectFromCloud();
         }).on('error', err => {
             that.sinoDisconnectFromCloud();
         });
+    }
+
+    /**
+     * set all not back to fail
+     * @param {Object} that this object
+     */
+    setToFail(that) {
+        for (let seqnum in that.results) {
+            let invokeStatus = that.results[seqnum];
+            if (invokeStatus) {
+                invokeStatus.SetStatusFail();
+                invokeStatus.SetFinalTime(that.lastDataTime);
+                if (that.context && that.context.engine) {
+                    that.context.engine.addResult(invokeStatus);
+                }
+            }
+        }
+        that.receivedEnd = true;
     }
 
     /**
@@ -90,7 +130,7 @@ class Sinochain extends BlockchainInterface {
      * @param {integer} checkTimes the result check times
      * @returns {Object<TxStatus>} the result wapper
      */
-    waitForInvokeBack(seqnum, checkTimes) {
+    /* waitForInvokeBack(seqnum, checkTimes) {
         return commUtil.sleep(1000).then(() => {
             if (this.results[seqnum]) {
                 if (this.results[seqnum].Get('status') !== 'submitted') {
@@ -111,7 +151,7 @@ class Sinochain extends BlockchainInterface {
                 return invokeStatus;
             }
         });
-    }
+    } */
 
     /**
      * send data to cloud
@@ -120,8 +160,8 @@ class Sinochain extends BlockchainInterface {
      * @returns {Object} the invoke result
      */
     sinoSendToCloud(context, payload) {
-        if (context.engine) {
-            context.engine.submitCallback(1);
+        if (this.context === null) {
+            this.context = context;
         }
         let env = new common_proto.Envelope();
         env.seqnum = payload.Seqnum;
@@ -131,14 +171,20 @@ class Sinochain extends BlockchainInterface {
         invokeStatus.Set('status', 'submitted');
         if (this.sinoIsConnectionOpen()) {
             this.deliver.write(env);
+            if (context.engine) {
+                context.engine.submitCallback(1);
+            }
             invokeStatus.Set('status', 'submitted');
             this.results[env.seqnum] = invokeStatus;
-            invokeStatus = this.waitForInvokeBack(env.seqnum, 1);
+            // invokeStatus = this.waitForInvokeBack(env.seqnum, 1);
             return Promise.resolve(invokeStatus);
         } else {
             //invokeStatus.SetFlag();
             invokeStatus.SetErrMsg('Connection is closed.');
             invokeStatus.SetStatusFail();
+            if (context.engine) {
+                context.engine.addResult(invokeStatus);
+            }
             return Promise.resolve(invokeStatus);
         }
     }
@@ -158,6 +204,24 @@ class Sinochain extends BlockchainInterface {
         if (this.connected) {
             this.deliver.end();
         }
+    }
+
+    /**
+     * wait for sinochain cloud data
+     * @returns {Promise} the Promise
+     */
+    async sinoWaitRecv() {
+        while(!this.receivedEnd) {
+            await commUtil.sleep(1000);
+        }
+        return Promise.resolve();
+        /* if (this.receivedEnd) {
+            return Promise.resolve();
+        }
+        return commUtil.sleep(1000).then(() => {
+            // commUtil.log('wait for received end...');
+            return this.sinoWaitRecv();
+        }); */
     }
 
     /**

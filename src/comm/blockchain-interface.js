@@ -124,6 +124,13 @@ class BlockchainInterface {
     sinoIsConnectionOpen() {
         throw new Error('sinoIsConnectionOpen is not implemented for this blockchain system');
     }
+
+    /**
+     * wait for recived
+     */
+    sinoWaitRecv() {
+        throw new Error('sinoWaitRecv is not implemented for this blockchain system');
+    }
 }
 
 module.exports = BlockchainInterface;
