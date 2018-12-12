@@ -16,6 +16,7 @@
 const RateInterface = require('./rateInterface.js');
 const RateControl = require('./rateControl.js');
 const Util = require('../util');
+const logger = Util.getLogger('compositeRate.js');
 
 /**
  * Encapsulates a controller and its scheduling information.
@@ -162,7 +163,7 @@ class CompositeRateController extends RateInterface{
         active.firstTxIndex = idx;
         active.startTimeDifference = Date.now() - start;
         if (this.logControllerChange) {
-            Util.log(`[CompositeRateController] Switching controller in Client#${this.clientIdx} at Tx#${idx} after ${active.startTimeDifference}ms.`);
+            logger.debug(`[CompositeRateController] Switching controller in Client#${this.clientIdx} at Tx#${idx} after ${active.startTimeDifference}ms.`);
         }
     }
 
@@ -185,7 +186,7 @@ class CompositeRateController extends RateInterface{
         active.firstTxIndex = idx ;
         active.startTimeDifference = Date.now() - start;
         if (this.logControllerChange) {
-            Util.log(`[CompositeRateController] Switching controller in Client#${this.clientIdx} at Tx#${idx} after ${active.startTimeDifference}ms.`);
+            logger.debug(`[CompositeRateController] Switching controller in Client#${this.clientIdx} at Tx#${idx} after ${active.startTimeDifference}ms.`);
         }
     }
 
@@ -243,17 +244,24 @@ class CompositeRateController extends RateInterface{
      * and switching controller (if necessary).
      * @param {number} start The epoch time at the start of the round (ms precision).
      * @param {number} idx Sequence number of the current transaction.
-     * @param {object[]} currentResults The list of results of finished transactions.
+     * @param {object[]} recentResults The list of results of recent transactions.
+     * @param {Array} resultStats, result status set
      * @return {Promise} A promise that will resolve after the necessary time to keep the defined Tx rate.
      */
-    async applyRateControl(start, idx, currentResults) {
+    async applyRateControl(start, idx, recentResults, resultStats) {
         await this.controllerSwitch(start, idx);
         const active = this.controllers[this.activeControllerIndex];
+        // NOTE: since we don't know much about the transaction indices corresponding to
+        // the recent results (the list is emptied periodically), pass it as it is
+
+        // if (idx - this.firstTxIndex + 1) >= recentResults.length  ==> everything is transparent, the rate controller
+        // has been running long enough, so every recent result belongs to it
+        // otherwise ==> some results MUST belong to the previous controller, but we dont't know which result index
+        // corresponds to active.firstTxIndex, maybe none of them, because this phase hasn't produced results yet
+
         // lie to the controller about the parameters to make this controller transparent
-        // NOTE: if the shallow copying of slice is too slow for higher TPS rates,
-        // consider making it configurable, maybe the underlying controllers do not need the results
         return active.controller.applyRateControl(start + active.startTimeDifference, idx - active.firstTxIndex,
-            currentResults.slice(active.firstTxIndex));
+            recentResults, resultStats);
     }
 
     /**

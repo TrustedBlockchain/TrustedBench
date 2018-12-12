@@ -19,46 +19,32 @@
 // in a happy-path scenario
 'use strict';
 
-//const utils = require('fabric-client/lib/utils.js');
-//const logger = utils.getLogger('E2E instantiate-chaincode');
-
-//const tape = require('tape');
-//const _test = require('tape-promise');
-//const test = _test(tape);
-
 const e2eUtils = require('./e2eUtils.js');
 const commUtils = require('../comm/util');
+const commLogger = commUtils.getLogger('instantiate-chaincode.js');
 
 const Client = require('fabric-client');
 
-module.exports.run = function (config_path) {
+module.exports.run = async function (config_path) {
     Client.addConfigFile(config_path);
     const fabricSettings = Client.getConfigSetting('fabric');
     const policy = fabricSettings['endorsement-policy'];  // TODO: support mulitple policies
     let chaincodes = fabricSettings.chaincodes;
     if(typeof chaincodes === 'undefined' || chaincodes.length === 0) {
-        return Promise.resolve();
+        return;
     }
 
-    return new Promise(function(resolve, reject) {
-        // test('\n\n***** instantiate chaincode *****\n\n', (t) => {
-        const t = global.tapeObj;
-        t.comment('Instantiate chaincode......');
-        chaincodes.reduce(function(prev, chaincode){
-            return prev.then(() => {
-                return e2eUtils.instantiateChaincode(chaincode, policy, false).then(() => {
-                    t.pass('Instantiated chaincode ' + chaincode.id + ' successfully ');
-                    t.comment('Sleep 5s...');
-                    return commUtils.sleep(5000);
-                });
-            });
-        }, Promise.resolve())
-            .then(() => {
-                return resolve();
-            })
-            .catch((err) => {
-                t.fail('Failed to instantiate chaincodes, ' + (err.stack?err.stack:err));
-                return reject(new Error('Fabric: instantiate chaincodes failed'));
-            });
-    });
+    try {
+        commLogger.info('Instantiating chaincodes...');
+        for (let chaincode of chaincodes) {
+            await e2eUtils.instantiateChaincode(chaincode, policy, false);
+            commLogger.info(`Instantiated chaincode ${chaincode.id} successfully`);
+        }
+
+        commLogger.info('Sleeping 5s...');
+        await commUtils.sleep(5000);
+    } catch (err) {
+        commLogger.error(`Failed to instantiate chaincodes: ${(err.stack ? err.stack : err)}`);
+        throw err;
+    }
 };

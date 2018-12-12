@@ -8,7 +8,7 @@
 
 'use strict';
 
-const log = require('../../src/comm/util.js').log;
+const Util = require('../../src/comm/util.js');
 let configFile;
 let networkFile;
 /**
@@ -42,15 +42,16 @@ function main() {
 
     let path = require('path');
     let fs = require('fs-extra');
+    let logger = Util.getLogger('benchamark/smallbank/main.js');
     let absConfigFile;
     if(typeof configFile === 'undefined') {
         absConfigFile = path.join(__dirname, 'config.json');
     }
     else {
-        absConfigFile = path.join(__dirname, configFile);
+        absConfigFile = path.isAbsolute(configFile) ? configFile : path.join(__dirname, configFile);
     }
     if(!fs.existsSync(absConfigFile)) {
-        log('file ' + absConfigFile + ' does not exist');
+        logger.error('file ' + absConfigFile + ' does not exist');
         return;
     }
 
@@ -58,25 +59,30 @@ function main() {
     let absCaliperDir = path.join(__dirname, '../..');
     if(typeof networkFile === 'undefined') {
         try{
-            let config = require(absConfigFile);
-            absNetworkFile = path.join(absCaliperDir, config.blockchain.config);
+            absNetworkFile = path.join(absCaliperDir, 'network/fabric/2org2peer/fabric-smallbank.json');
         }
         catch(err) {
-            log('failed to find blockchain.config in ' + absConfigFile);
+            logger.error('failed to find blockchain.config in ' + absConfigFile);
             return;
         }
     }
     else {
-        absNetworkFile = path.join(__dirname, networkFile);
+        absNetworkFile = path.isAbsolute(networkFile) ? networkFile : path.join(__dirname, networkFile);
     }
     if(!fs.existsSync(absNetworkFile)) {
-        log('file ' + absNetworkFile + ' does not exist');
+        logger.error('file ' + absNetworkFile + ' does not exist');
         return;
     }
 
 
     let framework = require('../../src/comm/bench-flow.js');
-    framework.run(absConfigFile, absNetworkFile);
+    (async () => {
+        try {
+            await framework.run(absConfigFile, absNetworkFile);
+        } catch (err) {
+            logger.error(`Error while executing the benchmark: ${err.stack ? err.stack : err}`);
+        }
+    })();
 }
 
 main();

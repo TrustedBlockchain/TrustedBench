@@ -8,17 +8,18 @@
 'use strict';
 
 // global variables
+const cfUtil = require('../config-util.js');
+const Util = require('../util.js');
+let logger = Util.getLogger('local-client.js');
 const bc   = require('../blockchain.js');
 const RateControl = require('../rate-control/rateControl.js');
-const Util = require('../util.js');
-const log  = Util.log;
 
 let blockchain;
 let results      = [];
 let txNum        = 0;
 let txLastNum    = 0;
 let resultStats  = [];
-let txUpdateTime = 1000;
+//let txUpdateTime = 1000;
 let trimType = 0;
 let trim = 0;
 let startTime = 0;
@@ -127,9 +128,9 @@ function submitCallback(count) {
  * @return {Promise} promise object
  */
 async function runFixedNumber(msg, cb, context) {
-    log('Info: client ' + process.pid +  ' start test runFixedNumber()' + (cb.info ? (':' + cb.info) : ''));
+    logger.debug('Info: client ' + process.pid +  ' start test runFixedNumber()' + (cb.info ? (':' + cb.info) : ''));
     let rateControl = new RateControl(msg.rateControl, blockchain);
-    rateControl.init(msg);
+    await rateControl.init(msg);
 
     await cb.init(blockchain, context, msg.args);
     startTime = Date.now();
@@ -140,7 +141,7 @@ async function runFixedNumber(msg, cb, context) {
             addResult(result);
             return Promise.resolve();
         }));
-        await rateControl.applyRateControl(startTime, txNum, results);
+        await rateControl.applyRateControl(startTime, txNum, results, resultStats);
     }
 
     await Promise.all(promises);
@@ -156,9 +157,9 @@ async function runFixedNumber(msg, cb, context) {
  * @return {Promise} promise object
  */
 async function runDuration(msg, cb, context) {
-    log('Info: client ' + process.pid +  ' start test runDuration()' + (cb.info ? (':' + cb.info) : ''));
+    logger.debug('Info: client ' + process.pid +  ' start test runDuration()' + (cb.info ? (':' + cb.info) : ''));
     let rateControl = new RateControl(msg.rateControl, blockchain);
-    rateControl.init(msg);
+    await rateControl.init(msg);
     const duration = msg.txDuration; // duration in seconds
 
     await cb.init(blockchain, context, msg.args);
@@ -170,7 +171,7 @@ async function runDuration(msg, cb, context) {
             addResult(result);
             return Promise.resolve();
         }));
-        await rateControl.applyRateControl(startTime, txNum, results);
+        await rateControl.applyRateControl(startTime, txNum, results, resultStats);
     }
 
     await Promise.all(promises);
@@ -183,13 +184,15 @@ async function runDuration(msg, cb, context) {
  * @param {JSON} msg start test message
  * @return {Promise} promise object
  */
-function doTest(msg) {
-    log('doTest() with:', msg);
+async function doTest(msg) {
+    logger.debug('doTest() with:', msg);
     let cb = require(Util.resolvePath(msg.cb));
     blockchain = new bc(Util.resolvePath(msg.config));
 
     beforeTest(msg);
     // start an interval to report results repeatedly
+    let txUpdateTime = cfUtil.getConfigSetting('core:tx-update-time', 1000);
+    logger.debug('txUpdateTime: ' + txUpdateTime);
     let txUpdateInter = setInterval(txUpdate, txUpdateTime);
     /**
      * Clear the update interval
@@ -203,7 +206,8 @@ function doTest(msg) {
         }
     };
 
-    return blockchain.getContext(msg.label, msg.clientargs).then((context) => {
+    try {
+        let context = await blockchain.getContext(msg.label, msg.clientargs);
         if(typeof context === 'undefined') {
             context = {
                 engine : {
@@ -216,55 +220,52 @@ function doTest(msg) {
                 submitCallback : submitCallback
             };
         }
+
         if (msg.txDuration) {
-            return runDuration(msg, cb, context);
+            await runDuration(msg, cb, context);
         } else {
-            return runFixedNumber(msg, cb, context);
+            await runFixedNumber(msg, cb, context);
         }
-    }).then(() => {
+
         clearUpdateInter();
-        return cb.end();
-    }).then(() => {
+        await cb.end();
+
         if (resultStats.length > 0) {
-            return Promise.resolve(resultStats[0]);
+            return resultStats[0];
         }
         else {
-            return Promise.resolve(bc.createNullDefaultTxStats());
+            return bc.createNullDefaultTxStats();
         }
-    }).catch((err) => {
+    } catch (err) {
         clearUpdateInter();
-        log('Client ' + process.pid + ': error ' + (err.stack ? err.stack : err));
-        return Promise.reject(err);
-    });
+        logger.error(`Client[${process.pid}] encountered an error: ${(err.stack ? err.stack : err)}`);
+        throw err;
+    }
 }
 
 /**
  * Message handler
  */
-process.on('message', function(message) {
-    if(message.hasOwnProperty('type')) {
-        try {
-            switch(message.type) {
-            case 'test': {
-                let result;
-                doTest(message).then((output) => {
-                    result = output;
-                    return Util.sleep(200);
-                }).then(() => {
-                    process.send({type: 'testResult', data: result});
-                });
-                break;
-            }
-            default: {
-                process.send({type: 'error', data: 'unknown message type'});
-            }
-            }
+process.on('message', async (message) => {
+    if (!message.hasOwnProperty('type')) {
+        process.send({type: 'error', data: 'unknown message type'});
+        return;
+    }
+
+    try {
+        switch (message.type) {
+        case 'test': {
+            let result = await doTest(message);
+            await Util.sleep(200);
+            process.send({type: 'testResult', data: result});
+            break;
         }
-        catch(err) {
-            process.send({type: 'error', data: err.toString()});
+        default: {
+            process.send({type: 'error', data: 'unknown message type'});
+        }
         }
     }
-    else {
-        process.send({type: 'error', data: 'unknown message type'});
+    catch (err) {
+        process.send({type: 'error', data: err.toString()});
     }
 });

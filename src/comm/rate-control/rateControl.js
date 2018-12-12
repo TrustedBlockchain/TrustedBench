@@ -14,6 +14,7 @@
 
 'use strict';
 const Util = require('../util');
+let logger = Util.getLogger('rateControl.js');
 
 let RateControl = class {
 
@@ -23,7 +24,7 @@ let RateControl = class {
      * @param {Object} blockchain the blockcahin under test
      */
     constructor(rateControl, blockchain) {
-        Util.log('*****', rateControl);
+        logger.debug('*****', rateControl);
         switch (rateControl.type) {
         case 'fixed-rate': {
             let interval = require('./fixedRate.js');
@@ -60,6 +61,11 @@ let RateControl = class {
             this.controller = new LinearRateController(blockchain, rateControl.opts);
             break;
         }
+        case 'fixed-feedback-rate': {
+            const FixedFeedbackRateController = require('./fixedFeedbackRate.js');
+            this.controller = new FixedFeedbackRateController(blockchain, rateControl.opts);
+            break;
+        }
         default:
             throw new Error('Unknown rate control type ' + rateControl.type);
         }
@@ -79,10 +85,11 @@ let RateControl = class {
      * @param {Number} start the start time
      * @param {Number} idx current transaction index
      * @param {Object[]} results current array of results
+     * @param {Array} resultStats, result status set
      * @return {Promise} the return promise
      */
-    applyRateControl(start, idx, results) {
-        return this.controller.applyRateControl(start, idx, results);
+    applyRateControl(start, idx, results, resultStats) {
+        return this.controller.applyRateControl(start, idx, results, resultStats);
     }
 
     /**

@@ -14,7 +14,10 @@ const CLIENT_ZOO   = 'zookeeper';
 const zkUtil  = require('./zoo-util.js');
 const ZooKeeper = require('node-zookeeper-client');
 const clientUtil = require('./client-util.js');
-const log = require('../util').log;
+
+const util = require('../util');
+const logger = util.getLogger('client.js');
+
 
 /**
  * Callback function to handle messages received from zookeeper clients
@@ -32,7 +35,7 @@ function zooMessageCallback(data, updates, results) {
         stop = true;   // stop watching
         break;
     case 'error':
-        log('Client encountered error, ' + msg.data);
+        logger.error('Client encountered error, ' + msg.data);
         stop = true;   // stop watching
         break;
     case 'txUpdated':
@@ -40,7 +43,7 @@ function zooMessageCallback(data, updates, results) {
         stop = false;
         break;
     default:
-        log('Unknown message type: ' + msg.type);
+        logger.warn('Unknown message type: ' + msg.type);
         stop = false;
         break;
     }
@@ -64,8 +67,7 @@ function zooStartWatch(zoo, updates, results) {
             path,
             (data)=>{
                 return zooMessageCallback(data, updates, results).catch((err) => {
-                    log('Exception encountered when watching message from zookeeper, due to:');
-                    log(err);
+                    logger.error('Exception encountered when watching message from zookeeper, due to:' + err);
                     return Promise.resolve(true);
                 });
             },
@@ -95,7 +97,7 @@ class Client{
     * Initialise client object
     * @return {Promise} promise object
     */
-    init() {
+    async init() {
         if(this.config.hasOwnProperty('type')) {
             switch(this.config.type) {
             case CLIENT_LOCAL:
@@ -106,15 +108,15 @@ class Client{
                 else {
                     this.number = 1;
                 }
-                return Promise.resolve(this.number);
+                return this.number;
             case CLIENT_ZOO:
-                return this._initZoo();
+                return await this._initZoo();
             default:
-                return Promise.reject(new Error('Unknown client type, should be local or zookeeper'));
+                throw new Error('Unknown client type, should be local or zookeeper');
             }
         }
         else {
-            return Promise.reject(new Error('Failed to find client type in config file'));
+            throw new Error('Failed to find client type in config file');
         }
     }
 
@@ -132,51 +134,27 @@ class Client{
     *            };
     * @param {JSON} message start message
     * @param {Array} clientArgs each element of the array contains arguments that should be passed to corresponding test client
-    * @param {Object} finishCB callback after the test finished
+    * @param {function} finishCB callback after the test finished
     * @param {any} finishArgs arguments that should be passed to finishCB, the callback is invoke as finishCB(this.results, finshArgs)
-    * @return {Promise} promise object
+     * @async
     */
-    startTest(message, clientArgs, finishCB, finishArgs) {
-        let p;
+    async startTest(message, clientArgs, finishCB, finishArgs) {
         this.results = [];
         this.updates.data = [];
         this.updates.id++;
-        switch(this.type) {
-        case CLIENT_LOCAL:
-            p = this._startLocalTest(message, clientArgs);
-            break;
-        case CLIENT_ZOO:
-            p = this._startZooTest(message, clientArgs);
-            break;
-        default:
-            return Promise.reject(new Error('Unknown client type: ' + this.type));
-        }
-        return p.then(()=>{
-            return finishCB(this.results, finishArgs);
-        }).then(()=>{
-            return Promise.resolve();
-        }).catch((err)=>{
-            return Promise.reject(err);
-        });
-    }
 
-    /**
-    * Send message to actual clients
-    * @param {JSON} message JSON message
-    * @return {Number} actual number of sent messages
-    */
-    sendMessage(message) {
         switch(this.type) {
         case CLIENT_LOCAL:
-            return this._sendLocalMessage(message);
+            await this._startLocalTest(message, clientArgs);
+            break;
         case CLIENT_ZOO:
-            return this._sendZooMessage(message).catch((err) => {
-                return 0;
-            });
+            await this._startZooTest(message, clientArgs);
+            break;
         default:
-            log('Unknown client type: ' + this.type);
-            return 0;
+            throw new Error(`Unknown client type: ${this.type}`);
         }
+
+        await finishCB(this.results, finishArgs);
     }
 
     /**
@@ -203,11 +181,6 @@ class Client{
         return this.updates;
     }
 
-
-    /**
-    * pseudo private functions
-    */
-
     /**
     * functions for CLIENT_LOCAL
     */
@@ -217,19 +190,11 @@ class Client{
      * @param {JSON} message start messages
      * @param {Array} clientArgs arguments for the test clients
      * @return {Promise} promise object
+     * @async
      */
-    _startLocalTest(message, clientArgs) {
+    async _startLocalTest(message, clientArgs) {
         message.totalClients = this.number;
-        return clientUtil.startTest(this.number, message, clientArgs, this.updates.data, this.results);
-    }
-
-    /**
-     * Send message to local clients
-     * @param {JSON} message JSON message
-     * @return {Number} number of sent messages
-     */
-    _sendLocalMessage(message) {
-        return clientUtil.sendMessage(message);
+        return await clientUtil.startTest(this.number, message, clientArgs, this.updates.data, this.results);
     }
 
     /**
@@ -285,12 +250,12 @@ class Client{
         this.zoo.zk = zk;
         let zoo = this.zoo;
         let connectHandle = setTimeout(()=>{
-            log('Could not connect to ZooKeeper');
+            logger.error('Could not connect to ZooKeeper');
             Promise.reject('Could not connect to ZooKeeper');
         }, TIMEOUT+100);
         let p = new Promise((resolve, reject) => {
             zk.once('connected', () => {
-                log('Connected to ZooKeeper');
+                logger.info('Connected to ZooKeeper');
                 clearTimeout(connectHandle);
                 zkUtil.existsP(zk, zkUtil.NODE_CLIENT, 'Failed to find clients due to').then((found)=>{
                     if(!found) {
@@ -305,7 +270,7 @@ class Client{
                         'Failed to list clients due to');
                 }).then((clients) => {
                     // TODO: not support add/remove zookeeper clients now
-                    log('get zookeeper clients:' + clients);
+                    logger.info('get zookeeper clients:' + clients);
                     for (let i = 0 ; i < clients.length ; i++) {
                         let clientID = clients[i];
                         zoo.hosts.push({
@@ -321,7 +286,7 @@ class Client{
                 });
             });
         });
-        log('Connecting to ZooKeeper......');
+        logger.info('Connecting to ZooKeeper......');
         zk.connect();
         return p;
     }
@@ -361,7 +326,7 @@ class Client{
                 return Promise.reject(new Error('Failed to start the remote test'));
             }
         }).catch((err)=>{
-            log('Failed to start the remote test');
+            logger.error('Failed to start the remote test');
             return Promise.reject(err);
         });
     }

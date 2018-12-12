@@ -17,6 +17,7 @@
 const RateInterface = require('./rateInterface.js');
 const fs = require('fs');
 const util = require('../util');
+const logger = util.getLogger('replayRate.js');
 
 const TEXT_FORMAT = 'TEXT';
 const BINARY_BE_FORMAT = 'BIN_BE';
@@ -58,12 +59,12 @@ class ReplayRateController extends RateInterface{
 
         // check for supported input formats
         if (typeof opts.inputFormat === 'undefined') {
-            util.log(`[ReplayRateController] Input format is undefined. Defaulting to ${TEXT_FORMAT} format`);
+            logger.warn(`[ReplayRateController] Input format is undefined. Defaulting to ${TEXT_FORMAT} format`);
             this.inputFormat = TEXT_FORMAT;
         } else if (supportedFormats.includes(opts.inputFormat.toUpperCase())) {
             this.inputFormat = opts.inputFormat.toUpperCase();
         } else {
-            util.log(`[ReplayRateController] Input format ${opts.inputFormat} is not supported. Defaulting to CSV format`);
+            logger.warn(`[ReplayRateController] Input format ${opts.inputFormat} is not supported. Defaulting to CSV format`);
             this.inputFormat = TEXT_FORMAT;
         }
     }
@@ -119,16 +120,16 @@ class ReplayRateController extends RateInterface{
      * Perform the rate control by sleeping through the round.
      * @param {number} start The epoch time at the start of the round (ms precision).
      * @param {number} idx Sequence number of the current transaction.
-     * @param {object[]} currentResults The list of results of finished transactions.
+     * @param {object[]} recentResults The list of results of recent transactions.
      * @return {Promise} The return promise.
      */
-    async applyRateControl(start, idx, currentResults) {
+    async applyRateControl(start, idx, recentResults) {
         if (idx <= this.records.length - 1) {
             let sleepTime = this.records[idx] - (Date.now() - start);
             return sleepTime > 5 ? util.sleep(sleepTime) : Promise.resolve();
         } else {
             if (this.logWarnings) {
-                util.log(`[ReplayRateController] Using default sleep time of ${this.defaultSleepTime}ms for Tx#${idx}`);
+                logger.warn(`[ReplayRateController] Using default sleep time of ${this.defaultSleepTime}ms for Tx#${idx}`);
             }
             return util.sleep(this.defaultSleepTime);
         }

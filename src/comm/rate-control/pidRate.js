@@ -16,7 +16,7 @@
 
 const RateInterface = require('./rateInterface.js');
 const Sleep = require('../util').sleep;
-const Log = require('../util').log;
+const Logger = require('../util').getLogger('pidRate.js');
 
 /**
  * Basic PID Controller for driving at a target loading (backlog transactions). This controller will aim to maintain a defined backlog
@@ -65,20 +65,20 @@ class PidRate extends RateInterface {
     * - Sleep based on targetting a specific working load through a basic PID controller
     * @param {Number} start generation time of the first test transaction
     * @param {Number} idx sequence number of the current test transaction
-    * @param {Object[]} currentResults current result set
+    * @param {Object[]} unhandledResults current result set
     * @return {Promise} the return promise
     */
-    applyRateControl(start, idx, currentResults) {
+    applyRateControl(start, idx, unhandledResults) {
         // We steer the load by increasing/decreasing the sleep time to adjust the TPS using a basic PID controller
         // We will only observe currentResults growth once the txn is complete and a result is available
         // -at this point the txn will either be in state success/fail
 
         // Update current transaction backlog error
         // error = what you want - what you have
-        let error = this.targetLoad - (idx - currentResults.length);
+        let error = this.targetLoad - unhandledResults.length;
 
         if (this.showVars) {
-            Log('Current load error: ', error);
+            Logger.debug('Current load error: ', error);
         }
 
         // Determine Controller Coeffients
@@ -94,10 +94,10 @@ class PidRate extends RateInterface {
         this.sleep = this.sleep - (P + I + D);
 
         if (this.showVars) {
-            Log('Current P value: ', P);
-            Log('Current I value: ', I);
-            Log('Current D value: ', D);
-            Log('New sleep time: ', this.sleep);
+            Logger.debug('Current P value: ', P);
+            Logger.debug('Current I value: ', I);
+            Logger.debug('Current D value: ', D);
+            Logger.debug('New sleep time: ', this.sleep);
         }
 
         if (this.sleep > 5) {

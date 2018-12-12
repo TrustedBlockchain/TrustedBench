@@ -16,6 +16,7 @@ const impl_install = require('./install-chaincode.js');
 const impl_instantiate = require('./instantiate-chaincode.js');
 const BlockchainInterface = require('../comm/blockchain-interface.js');
 const commUtils = require('../comm/util');
+const commLogger = commUtils.getLogger('fabric.js');
 const TxStatus = require('../comm/transaction');
 
 /**
@@ -32,33 +33,33 @@ class Fabric extends BlockchainInterface{
 
     /**
      * Initialize the {Fabric} object.
-     * @return {Promise} The return promise.
+     * @async
      */
-    init() {
+    async init() {
         util.init(this.configPath);
         e2eUtils.init(this.configPath);
-        return impl_create.run(this.configPath).then(() => {
-            return impl_join.run(this.configPath);
-        })
-            .catch((err) => {
-                commUtils.log('fabric.init() failed, ' + (err.stack ? err.stack : err));
-                return Promise.reject(err);
-            });
+        try {
+            await impl_create.run(this.configPath);
+            await impl_join.run(this.configPath);
+        } catch (err) {
+            commLogger.error(`Fabric initialization failed: ${(err.stack ? err.stack : err)}`);
+            throw err;
+        }
     }
 
     /**
      * Deploy the chaincode specified in the network configuration file to all peers.
-     * @return {Promise} The return promise.
+     * @async
      */
-    installSmartContract() {
+    async installSmartContract() {
         // todo: now all chaincodes are installed and instantiated in all peers, should extend this later
-        return impl_install.run(this.configPath).then(() => {
-            return impl_instantiate.run(this.configPath);
-        })
-            .catch((err) => {
-                commUtils.log('fabric.installSmartContract() failed, ' + (err.stack ? err.stack : err));
-                return Promise.reject(err);
-            });
+        try {
+            await impl_install.run(this.configPath);
+            await impl_instantiate.run(this.configPath);
+        } catch (err) {
+            commLogger.error(`Fabric chaincode install failed: ${(err.stack ? err.stack : err)}`);
+            throw err;
+        }
     }
 
     /**
@@ -66,8 +67,9 @@ class Fabric extends BlockchainInterface{
      * @param {string} name The name of the callback module as defined in the configuration files.
      * @param {object} args Unused.
      * @return {object} The assembled Fabric context.
+     * @async
      */
-    getContext(name, args) {
+    async getContext(name, args) {
         util.init(this.configPath);
         e2eUtils.init(this.configPath);
 
@@ -82,22 +84,20 @@ class Fabric extends BlockchainInterface{
         }
 
         if(!channel) {
-            return Promise.reject(new Error('could not find context\'s information in config file'));
+            throw new Error('Could not find context information in the config file');
         }
 
-        return e2eUtils.getcontext(channel);
-
+        return await e2eUtils.getcontext(channel);
     }
 
     /**
      * Release the given Fabric context.
      * @param {object} context The Fabric context to release.
-     * @return {Promise} The return promise.
+     * @async
      */
-    releaseContext(context) {
-        return e2eUtils.releasecontext(context).then(() => {
-            return commUtils.sleep(1000);
-        });
+    async releaseContext(context) {
+        await e2eUtils.releasecontext(context);
+        await commUtils.sleep(1000);
     }
 
     /**
@@ -105,11 +105,11 @@ class Fabric extends BlockchainInterface{
      * @param {object} context The Fabric context returned by {getContext}.
      * @param {string} contractID The name of the chaincode.
      * @param {string} contractVer The version of the chaincode.
-     * @param {Array} args Array of JSON formatted arguments for transaction(s). Each element containts arguments (including the function name) passing to the chaincode. JSON attribute named transaction_type is used by default to specify the function name. If the attribute does not exist, the first attribute will be used as the function name.
+     * @param {Array} args Array of JSON formatted arguments for transaction(s). Each element contains arguments (including the function name) passing to the chaincode. JSON attribute named transaction_type is used by default to specify the function name. If the attribute does not exist, the first attribute will be used as the function name.
      * @param {number} timeout The timeout to set for the execution in seconds.
      * @return {Promise<object>} The promise for the result of the execution.
      */
-    invokeSmartContract(context, contractID, contractVer, args, timeout) {
+    async invokeSmartContract(context, contractID, contractVer, args, timeout) {
         let promises = [];
         args.forEach((item, index)=>{
             try {
@@ -129,13 +129,13 @@ class Fabric extends BlockchainInterface{
                 promises.push(e2eUtils.invokebycontext(context, contractID, contractVer, simpleArgs, timeout));
             }
             catch(err) {
-                commUtils.log(err);
+                commLogger.error(err);
                 let badResult = new TxStatus('artifact');
                 badResult.SetStatusFail();
                 promises.push(Promise.resolve(badResult));
             }
         });
-        return Promise.all(promises);
+        return await Promise.all(promises);
     }
 
     /**
@@ -144,11 +144,12 @@ class Fabric extends BlockchainInterface{
      * @param {string} contractID The name of the chaincode.
      * @param {string} contractVer The version of the chaincode.
      * @param {string} key The argument to pass to the chaincode query.
+     * @param {string} [fcn=query] The chaincode query function name.
      * @return {Promise<object>} The promise for the result of the execution.
      */
-    queryState(context, contractID, contractVer, key) {
+    async queryState(context, contractID, contractVer, key, fcn = 'query') {
         // TODO: change string key to general object
-        return e2eUtils.querybycontext(context, contractID, contractVer, key.toString());
+        return await e2eUtils.querybycontext(context, contractID, contractVer, key.toString(), fcn);
     }
 }
 module.exports = Fabric;
